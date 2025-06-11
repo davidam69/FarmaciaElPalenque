@@ -12,5 +12,10 @@
 11. En PrincipalController.cs creamos un using para el espacio de nombres FarmaciaElPalenque.Models.
 12. En PrincipalController.cs creamos un método llamado Index que retorne una vista.
 13. en este metodo Index creamos una lista de productos y la pasamos a la vista.
-14. En la carpeta Views creamos una carpeta llamada Farmacia.
+14. En la carpeta Views creamos una carpeta llamada Principal.
 15. En la carpeta Farmacia creamos un archivo llamado Index.cshtml.
+16. En Index.cshtml creamos un título y una lista de productos que se muestre en la vista.
+17. En la carpeta Views/Shared en el archivo llamado _Layout.cshtml cambiamos donde decia "Home" por "Principal".
+18. lo mismo hacemos en el archivo Program.cs, cambiamos donde decia "Home" por "Principal".
+19. una vez que anduvo bien hicimos un commit con el mensaje "primer commit".
+20. Subimos la rama "master" al el repositorio remoto de Github.
