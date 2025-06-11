@@ -1,0 +1,21 @@
+﻿@model List<FarmaciaElPalenque.Models.Productos>
+
+<h2>Productos</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Producto</th>
+			<th>Precio</th>
+			<th>Categoria</th>
+		</tr>
+		@foreach (var productos in Model)
+		{
+			<tr>
+				<td>@productos.nombre</td>
+				<td>@productos.precio</td>
+				<td>@productos.categoriaId.nombre</td>
+			</tr>
+		}
+	</thead>
+</table>
