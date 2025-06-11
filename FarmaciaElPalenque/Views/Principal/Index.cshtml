@@ -12,9 +12,13 @@
 		@foreach (var productos in Model)
 		{
 			<tr>
-				<td>@productos.nombre</td>
+				<td>
+					<a asp-action="Detalle" asp-route-id="@productos.id">
+						@productos.nombre
+					</a>
+				</td>
 				<td>@productos.precio</td>
-				<td>@productos.categoriaId.nombre</td>
+				<td>@productos.categoriaId?.nombre</td>
 			</tr>
 		}
 	</thead>

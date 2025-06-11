@@ -1,0 +1,9 @@
+﻿@model FarmaciaElPalenque.Models.Productos
+
+<h2>Detalle del Producto</h2>
+
+<p><strong>Nombre:</strong> @Model.nombre</p>
+<p><strong>Precio:</strong> $@Model.precio</p>
+<p><strong>Categoria:</strong> @Model?.categoriaId?.nombre</p>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">← Volver al catálogo</a>

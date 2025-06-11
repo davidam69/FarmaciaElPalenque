@@ -19,3 +19,6 @@
 18. lo mismo hacemos en el archivo Program.cs, cambiamos donde decia "Home" por "Principal".
 19. una vez que anduvo bien hicimos un commit con el mensaje "primer commit".
 20. Subimos la rama "master" al el repositorio remoto de Github.
+21. Se agrego un metodo llamado "Detalle" en el controlador PrincipalController.cs que recibe un id de producto y retorna una vista con los detalles del producto."
+22. En la carpeta Views/Principal creamos un archivo llamado Detalle.cshtml.
+23. En Detalle.cshtml mostramos los detalles del producto seleccionado, incluyendo nombre, precio y categoría.
