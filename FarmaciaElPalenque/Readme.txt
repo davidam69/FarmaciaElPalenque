@@ -22,3 +22,10 @@
 21. Se agrego un metodo llamado "Detalle" en el controlador PrincipalController.cs que recibe un id de producto y retorna una vista con los detalles del producto."
 22. En la carpeta Views/Principal creamos un archivo llamado Detalle.cshtml.
 23. En Detalle.cshtml mostramos los detalles del producto seleccionado, incluyendo nombre, precio y categoría.
+24. Se agrego en Productos.cs una propiedad llamada imagenUrl para almacenar la URL de la imagen del producto.
+25. En PrincipalController.cs, se completaron las Urls de imagenes para cada producto, simulando portadas de medicamentos y perfumeria.
+26. En Detalle.cshtml, se agregó un elemento <img> para mostrar la imagen del producto utilizando la propiedad imagenUrl.
+27. En Index.cshtml, se agregó un elemento <img> para mostrar la imagen del producto en la lista de productos.
+28. se creo el archivo estilos.css en la carpeta wwwroot/css y se agregaron estilos básicos para mejorar la apariencia de la aplicación.
+29. en Index.cshtml y Detalle.cshtml se incluyó el archivo estilos.css para aplicar los estilos a las vistas.
+30 En _layout.cshtml, se agrego @RenderSection("Styles", required: false) para permitir la inclusión de estilos específicos en las vistas.

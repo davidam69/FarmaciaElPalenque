@@ -1,10 +1,15 @@
 ﻿@model List<FarmaciaElPalenque.Models.Productos>
 
+@section Styles {
+	<link rel="stylesheet" href="~/css/estilos.css" />
+}
+
 <h2>Productos</h2>
 
 <table class="table">
 	<thead>
 		<tr>
+			<th>Imagen</th>
 			<th>Producto</th>
 			<th>Precio</th>
 			<th>Categoria</th>
@@ -13,11 +18,14 @@
 		{
 			<tr>
 				<td>
+					<img src="@productos.imagenUrl" alt="@productos.nombre" style="width: 100px; height: 100px;" />
+				</td>
+				<td>
 					<a asp-action="Detalle" asp-route-id="@productos.id">
 						@productos.nombre
 					</a>
 				</td>
-				<td>@productos.precio</td>
+				<td>@productos.precio.ToString("N2", new System.Globalization.CultureInfo("es-AR"))</td>
 				<td>@productos.categoriaId?.nombre</td>
 			</tr>
 		}
