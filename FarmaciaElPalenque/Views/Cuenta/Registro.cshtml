@@ -1,0 +1,63 @@
+﻿@model Usuario
+
+@{
+	ViewData["Title"] = "Registro";
+}
+
+<h2>Registro de Usuario</h2>
+
+<form asp-action="Registro" method="post">
+
+	<div class="mb-3">
+		<label asp-for="nombreCompleto">Nombre completo</label>
+		<input asp-for="nombreCompleto" class="form-control"/>
+		<span asp-validation-for="nombreCompleto" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="email">Email</label>
+		<input asp-for="email" class="form-control"/>
+		<span asp-validation-for="email" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="confirmarEmail">confirmar email</label>
+		<input asp-for="confirmarEmail" class="form-control" />
+		<span asp-validation-for="confirmarEmail" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="passwordHash">Contraseña</label>
+		<input asp-for="passwordHash" class="form-control" />
+		<span asp-validation-for="passwordHash" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="confirmarPasswordHash">confirmar contraseña</label>
+		<input asp-for="confirmarPasswordHash" class="form-control" />
+		<span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="nombreUsuario">Usuario</label>
+		<input asp-for="nombreUsuario" class="form-control" />
+		<span asp-validation-for="nombreUsuario" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="rol">Rol</label>
+		<select asp-for="rol" class="form-select">
+			<option value="cliente">Cliente</option>
+			<option value="administrador">Administrador</option>
+		</select>
+		<span asp-validation-for="rol" class="text-danger"></span>
+	</div>
+
+	<button class="btn btn-primary">
+		<i class="bi bi-person-plus"></i>Registrarse
+	</button>
+</form>
+
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

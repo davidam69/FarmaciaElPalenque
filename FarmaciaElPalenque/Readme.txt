@@ -28,4 +28,5 @@
 27. En Index.cshtml, se agregó un elemento <img> para mostrar la imagen del producto en la lista de productos.
 28. se creo el archivo estilos.css en la carpeta wwwroot/css y se agregaron estilos básicos para mejorar la apariencia de la aplicación.
 29. en Index.cshtml y Detalle.cshtml se incluyó el archivo estilos.css para aplicar los estilos a las vistas.
-30 En _layout.cshtml, se agrego @RenderSection("Styles", required: false) para permitir la inclusión de estilos específicos en las vistas.
+30. En _layout.cshtml, se agrego @RenderSection("Styles", required: false) para permitir la inclusión de estilos específicos en las vistas.
+31. 

@@ -1,0 +1,30 @@
+﻿@model FarmaciaElPalenque.Models.Usuario
+
+@{
+	var title = "Iniciar sesión";
+}
+
+<h2>@title</h2>
+
+@if (ViewBag.Error != null)
+{
+	<div class="alert alert-danger">
+		@ViewBag.Error
+	</div>
+}
+
+<form asp-action="Login" method="post">
+	<div class="mb-3">
+		<label asp-for="nombreUsuario">Usuario</label>
+		<input asp-for="nombreUsuario" class="form-control" />
+		<span asp-validation-for="nombreUsuario" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="passwordHash">Contraseña</label>
+		<input asp-for="passwordHash" type="password" class="form-control" />
+		<span asp-validation-for="passwordHash" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-primary">
+		Iniciar sesión
+	</button>
+</form>
