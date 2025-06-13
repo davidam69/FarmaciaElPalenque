@@ -34,18 +34,24 @@ namespace FarmaciaElPalenque.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string nombreUsuario, string passwordHash)
+        public IActionResult Login(Usuario modelo)
         {
             // Verificar si el usuario existe
-            var usuario = listaUsuarios.FirstOrDefault(u => u.nombreUsuario == nombreUsuario && u.passwordHash == passwordHash);
+            var usuario = listaUsuarios.FirstOrDefault(u => u.nombreUsuario == modelo.nombreUsuario && u.passwordHash == modelo.passwordHash);
             if (usuario == null)
             {
                 ModelState.AddModelError("", "Nombre de usuario o contraseña incorrectos.");
                 return View();
             }
-
+            // Validar que usuario.nombreUsuario y usuario.rol no sean nulos antes de usarlos
+            if (string.IsNullOrEmpty(usuario.nombreUsuario) || string.IsNullOrEmpty(usuario.rol) || string.IsNullOrEmpty(usuario.nombreCompleto))
+            {
+                ModelState.AddModelError("", "Error interno: datos del usuario incompletos.");
+                return View();
+            }
             HttpContext.Session.SetString("Usuario", usuario.nombreUsuario);
             HttpContext.Session.SetString("Rol", usuario.rol);
+            HttpContext.Session.SetString("NombreCompleto", usuario.nombreCompleto ?? "");
 
             TempData["Mensaje"] = $"Bienvenido {usuario.nombreCompleto}";
             return RedirectToAction("Index", "Principal");
@@ -55,7 +61,7 @@ namespace FarmaciaElPalenque.Controllers
         {
             HttpContext.Session.Clear();
             TempData["Mensaje"] = "Has cerrado sesión correctamente.";
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Principal");
         }
     }
 }
