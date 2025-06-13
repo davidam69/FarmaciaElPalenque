@@ -29,4 +29,15 @@
 28. se creo el archivo estilos.css en la carpeta wwwroot/css y se agregaron estilos básicos para mejorar la apariencia de la aplicación.
 29. en Index.cshtml y Detalle.cshtml se incluyó el archivo estilos.css para aplicar los estilos a las vistas.
 30. En _layout.cshtml, se agrego @RenderSection("Styles", required: false) para permitir la inclusión de estilos específicos en las vistas.
-31. 
+31. Se modifico agregó en la carpeta models un archivo llamado Usuario.cs con las propiedades id, nombreCompleto, email, passwordHash y rol.
+32. Tambien se agrego confirmarEmail y confirmarPasswordHash en Usuario.cs, se agrego un conjunto de atributos "Data Annotations" para validar las propiedades del modelo Usuario.
+33. En la carpeta Controllers, se creó un archivo llamado CuentaController.cs con los metodos Registro, Login y Logout.
+34. En CuentaController.cs, se implementó el método Registro que maneja el registro de nuevos usuarios, incluyendo la validación de datos y el almacenamiento seguro de contraseñas.
+35. En CuentaController.cs, se implementó el método Login que maneja el inicio de sesión de usuarios, incluyendo la validación de credenciales y la autenticación.
+36. En CuentaController.cs, se implementó el método Logout que maneja el cierre de sesión de usuarios.
+37. En la carpeta Views se creo un directorio llamado Cuenta.
+38. En la carpeta Views/Cuenta se crearon los archivos Registro.cshtml y Login.cshtml.
+39. En Registro.cshtml, se creó un formulario para que los usuarios puedan registrarse, incluyendo campos para nombre completo, email, contraseña y confirmación de contraseña.
+40. En Login.cshtml, se creó un formulario para que los usuarios puedan iniciar sesión, incluyendo campos para email y contraseña.
+41. En _Layout.cshtml, se agregó un menú de navegación que incluye enlaces a las páginas de registro y login.
+42. En _Layout.cshtml, se agregó un enlace de cierre de sesión que llama al método Logout del CuentaController.
