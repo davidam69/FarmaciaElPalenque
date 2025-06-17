@@ -26,7 +26,7 @@
 					</a>
 				</td>
 				<td>@productos.precio.ToString("N2", new System.Globalization.CultureInfo("es-AR"))</td>
-				<td>@productos.categoriaId?.nombre</td>
+				<td>@productos?.Categoria?.nombre</td>
 			</tr>
 		}
 	</thead>

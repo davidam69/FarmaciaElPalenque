@@ -1,11 +1,17 @@
 ﻿using FarmaciaElPalenque.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FarmaciaElPalenque.Controllers
 {
     public class CuentaController : Controller
     {
-        public static List<Usuario> listaUsuarios = new List<Usuario>();
+        private readonly AppDbContext _context;
+
+        public CuentaController(AppDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult Registro()
@@ -20,10 +26,9 @@ namespace FarmaciaElPalenque.Controllers
             {
                 return View(usuario);
             }
+            _context.Usuarios.Add(usuario);
+            _context.SaveChanges();
 
-            usuario.id = listaUsuarios.Count + 1; // Asignar un ID único al usuario
-            // Agregar el nuevo usuario a la lista
-            listaUsuarios.Add(usuario);
             return RedirectToAction("Login");
         }
 
@@ -37,17 +42,18 @@ namespace FarmaciaElPalenque.Controllers
         public IActionResult Login(Usuario modelo)
         {
             // Verificar si el usuario existe
-            var usuario = listaUsuarios.FirstOrDefault(u => u.nombreUsuario == modelo.nombreUsuario && u.passwordHash == modelo.passwordHash);
+            var usuario = _context.Usuarios 
+                .FirstOrDefault(u => u.nombreUsuario == modelo.nombreUsuario && u.passwordHash == modelo.passwordHash);
             if (usuario == null)
             {
                 ModelState.AddModelError("", "Nombre de usuario o contraseña incorrectos.");
-                return View();
+                return View(modelo);
             }
             // Validar que usuario.nombreUsuario y usuario.rol no sean nulos antes de usarlos
             if (string.IsNullOrEmpty(usuario.nombreUsuario) || string.IsNullOrEmpty(usuario.rol) || string.IsNullOrEmpty(usuario.nombreCompleto))
             {
                 ModelState.AddModelError("", "Error interno: datos del usuario incompletos.");
-                return View();
+                return View(modelo);
             }
             HttpContext.Session.SetString("Usuario", usuario.nombreUsuario);
             HttpContext.Session.SetString("Rol", usuario.rol);

@@ -42,3 +42,6 @@
 41. En _Layout.cshtml, se agregó un menú de navegación que incluye enlaces a las páginas de registro y login.
 42. En _Layout.cshtml, se agregó un enlace de cierre de sesión que llama al método Logout del CuentaController.
 43. En CuentaController.cs en el metodo Login se agrego un if para validar que usuario.nombreUsuario y usuario.rol no sean nulos antes de usarlos.
+44. Instalación de Micerosoft.EntityFrameworkCore y configuración de la base de datos.
+45. Instalación de Microsoft.EntityFrameworkCore.sqlserver.
+46. Instalación de Microsoft.EntityFrameworkCore.Tools.

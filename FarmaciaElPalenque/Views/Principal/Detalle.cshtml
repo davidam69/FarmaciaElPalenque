@@ -4,5 +4,5 @@
 <img src="@Model.imagenUrl" width="150" />
 <p><strong>Nombre:</strong> @Model.nombre</p>
 <p><strong>Precio:</strong> $@Model.precio.ToString("N2", new System.Globalization.CultureInfo("es-AR"))</p>
-<p><strong>Categoria:</strong> @Model?.categoriaId?.nombre</p>
+<p><strong>Categoria:</strong> @Model?.Categoria?.nombre</p>
 <a asp-action="Index" class="btn btn-secondary mt-3">← Volver al catálogo</a>
