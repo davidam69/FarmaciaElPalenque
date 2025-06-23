@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmaciaElPalenque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250617034035_SeedInicialConStockYPrecio")]
-    partial class SeedInicialConStockYPrecio
+    [Migration("20250623021111_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,15 +134,15 @@ namespace FarmaciaElPalenque.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nombreCompleto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("nombreUsuario")
+                    b.Property<string>("nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -151,7 +151,6 @@ namespace FarmaciaElPalenque.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("rol")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
@@ -162,90 +161,90 @@ namespace FarmaciaElPalenque.Migrations
                         new
                         {
                             id = 1,
+                            apellido = "General",
                             email = "admin@palenque.com",
-                            nombreCompleto = "Admin General",
-                            nombreUsuario = "admin",
+                            nombre = "admin",
                             passwordHash = "admin123",
                             rol = "Administrador"
                         },
                         new
                         {
                             id = 2,
+                            apellido = "Perez",
                             email = "juan@correo.com",
-                            nombreCompleto = "Juan Pérez",
-                            nombreUsuario = "juanperez",
+                            nombre = "Juan",
                             passwordHash = "1234",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 3,
+                            apellido = "Garcia",
                             email = "maria@correo.com",
-                            nombreCompleto = "María García",
-                            nombreUsuario = "mariagarcia",
+                            nombre = "Maria",
                             passwordHash = "clave123",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 4,
+                            apellido = "Lopez",
                             email = "carlos@correo.com",
-                            nombreCompleto = "Carlos López",
-                            nombreUsuario = "carloslopez",
+                            nombre = "Carlos",
                             passwordHash = "qwerty",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 5,
+                            apellido = "Gonzalez",
                             email = "laura@correo.com",
-                            nombreCompleto = "Laura González",
-                            nombreUsuario = "lauragonzalez",
+                            nombre = "Laura",
                             passwordHash = "pass1234",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 6,
+                            apellido = "Fernandez",
                             email = "ana@correo.com",
-                            nombreCompleto = "Ana Fernández",
-                            nombreUsuario = "anafernandez",
+                            nombre = "Ana",
                             passwordHash = "abc123",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 7,
+                            apellido = "Alvarez",
                             email = "roberto@palenque.com",
-                            nombreCompleto = "Roberto Álvarez",
-                            nombreUsuario = "robertoalvarez",
+                            nombre = "Roberto",
                             passwordHash = "adminadmin",
                             rol = "Administrador"
                         },
                         new
                         {
                             id = 8,
+                            apellido = "Martinez",
                             email = "camila@correo.com",
-                            nombreCompleto = "Camila Martínez",
-                            nombreUsuario = "camilamartinez",
+                            nombre = "Camila",
                             passwordHash = "cami321",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 9,
+                            apellido = "Ruiz",
                             email = "luciano@correo.com",
-                            nombreCompleto = "Luciano Ruiz",
-                            nombreUsuario = "lucianoruiz",
+                            nombre = "Luciano",
                             passwordHash = "123456",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 10,
+                            apellido = "Mendez",
                             email = "carolina@correo.com",
-                            nombreCompleto = "Carolina Méndez",
-                            nombreUsuario = "carolinamendez",
+                            nombre = "Carolina",
                             passwordHash = "securepass",
                             rol = "Cliente"
                         });
