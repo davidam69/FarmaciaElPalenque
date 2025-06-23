@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FarmaciaElPalenque.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class PrincipalController : Controller
     {
