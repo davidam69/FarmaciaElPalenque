@@ -1,8 +1,4 @@
-﻿using FarmaciaElPalenque.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class CuentaController : Controller
     {
@@ -26,6 +22,12 @@ namespace FarmaciaElPalenque.Controllers
             {
                 return View(usuario);
             }
+
+            if (string.IsNullOrEmpty(usuario.rol))
+            {
+                usuario.rol = "Cliente";
+            }
+
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
@@ -39,29 +41,23 @@ namespace FarmaciaElPalenque.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Usuario modelo)
+        public IActionResult Login(string email, string passwordHash)
         {
-            // Verificar si el usuario existe
-            var usuario = _context.Usuarios 
-                .FirstOrDefault(u => u.nombreUsuario == modelo.nombreUsuario && u.passwordHash == modelo.passwordHash);
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email && u.passwordHash == passwordHash);
             if (usuario == null)
             {
-                ModelState.AddModelError("", "Nombre de usuario o contraseña incorrectos.");
-                return View(modelo);
+                ModelState.AddModelError("", "Email o contraseña incorrectos.");
+                return View();
             }
-            // Validar que usuario.nombreUsuario y usuario.rol no sean nulos antes de usarlos
-            if (string.IsNullOrEmpty(usuario.nombreUsuario) || string.IsNullOrEmpty(usuario.rol) || string.IsNullOrEmpty(usuario.nombreCompleto))
-            {
-                ModelState.AddModelError("", "Error interno: datos del usuario incompletos.");
-                return View(modelo);
-            }
-            HttpContext.Session.SetString("Usuario", usuario.nombreUsuario);
-            HttpContext.Session.SetString("Rol", usuario.rol);
-            HttpContext.Session.SetString("NombreCompleto", usuario.nombreCompleto ?? "");
 
-            TempData["Mensaje"] = $"Bienvenido {usuario.nombreCompleto}";
+            HttpContext.Session.SetString("Usuario", usuario.email ?? "");
+            HttpContext.Session.SetString("Rol", usuario.rol ?? "");
+            HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
+
+            TempData["Mensaje"] = $"Bienvenido {usuario.nombre} {usuario.apellido}";
             return RedirectToAction("Index", "Principal");
         }
+
 
         public IActionResult Logout()
         {

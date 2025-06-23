@@ -15,9 +15,9 @@
 
 <form asp-action="Login" method="post">
 	<div class="mb-3">
-		<label asp-for="nombreUsuario">Usuario</label>
-		<input asp-for="nombreUsuario" class="form-control" />
-		<span asp-validation-for="nombreUsuario" class="text-danger"></span>
+		<label asp-for="email">Email</label>
+		<input asp-for="email" type ="email" class="form-control" />
+		<span asp-validation-for="email" class="text-danger"></span>
 	</div>
 	<div class="mb-3">
 		<label asp-for="passwordHash">Contraseña</label>
