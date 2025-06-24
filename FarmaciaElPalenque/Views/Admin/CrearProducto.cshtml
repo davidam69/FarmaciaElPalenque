@@ -1,0 +1,28 @@
+﻿@model Productos
+
+<h2>Agregar Producto</h2>
+
+<form asp-action="CrearProducto" method="post">
+    <div class="mb-3">
+        <label asp-for="nombre"></label>
+        <input asp-for="nombre" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="precio"></label>
+        <input asp-for="precio" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Stock"></label>
+        <input asp-for="Stock" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="categoriaId"></label>
+        <input asp-for="categoriaId" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="imagenUrl"></label>
+        <input asp-for="imagenUrl" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+</form>
+

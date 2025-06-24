@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FarmaciaElPalenque.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+}
+
+<h2>Usuarios Registrados</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Rol</th>
+			<th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.nombre</td>
+                <td>@u.apellido</td>
+                <td>@u.email</td>
+                <td>@u.rol</td>
+                <td>
+                    @* No permitir que un admin se elimine a sí mismo *@
+                    @if (u.email != Context.Session.GetString("Usuario"))
+                    {
+                        <form asp-controller="Admin" asp-action="EliminarUsuario" asp-route-id="@u.id" method="post" onsubmit="return confirm('¿Estás seguro de eliminar a este usuario?');">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Eliminar
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No disponible</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

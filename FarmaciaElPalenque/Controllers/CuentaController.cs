@@ -37,6 +37,17 @@
         [HttpGet]
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetString("Usuario") != null)
+            {
+                // Si ya hay sesión activa, redirige según el rol
+                var rol = HttpContext.Session.GetString("Rol");
+                if (rol == "Administrador")
+                {
+                    return RedirectToAction("Panel", "Admin");
+                }
+
+                return RedirectToAction("Index", "Principal");
+            }
             return View();
         }
 
