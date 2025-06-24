@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmaciaElPalenque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250623021111_Inicial")]
+    [Migration("20250623183517_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
