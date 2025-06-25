@@ -118,6 +118,32 @@ namespace FarmaciaElPalenque.Controllers
             return View(productos);
         }
 
+        [HttpPost]
+        public IActionResult ActualizarLista(List<Productos> productos)
+        {
+            if (HttpContext.Session.GetString("Rol") != "Administrador")
+            {
+                TempData["Mensaje"] = "Acceso Denegado.";
+                return RedirectToAction("Index", "Principal");
+            }
+
+            foreach (var producto in productos)
+            {
+                var productoExistente = _context.Productos.Find(producto.id);
+                if (productoExistente != null)
+                {
+                    productoExistente.nombre = producto.nombre;
+                    productoExistente.precio = producto.precio;
+                    productoExistente.Stock = producto.Stock;
+                    productoExistente.categoriaId = producto.categoriaId;
+                    productoExistente.imagenUrl = producto.imagenUrl;
+                }
+            }
+
+            _context.SaveChanges();
+            TempData["Mensaje"] = "Productos actualizados correctamente.";
+            return RedirectToAction("ListaProductos");
+        }
 
     }
 }

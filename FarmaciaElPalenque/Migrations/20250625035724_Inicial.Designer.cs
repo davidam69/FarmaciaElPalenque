@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmaciaElPalenque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250623181454_ProductosExtraSeed")]
-    partial class ProductosExtraSeed
+    [Migration("20250625035724_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,8 +78,8 @@ namespace FarmaciaElPalenque.Migrations
                     b.Property<string>("nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("precio")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("precio")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -95,7 +95,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 1,
                             imagenUrl = "https://www.anikashop.com.ar/product_images/w/994/8024587__72227_zoom.jpg",
                             nombre = "Bayaspirina",
-                            precio = 5728m
+                            precio = 5728
                         },
                         new
                         {
@@ -104,7 +104,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 1,
                             imagenUrl = "https://www.centraloeste.com.ar/media/catalog/product/cache/9c821fce06d7004f361a4c419f8b1787/7/7/7790839980453.png",
                             nombre = "Ibu400",
-                            precio = 15000m
+                            precio = 15000
                         },
                         new
                         {
@@ -113,7 +113,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 2,
                             imagenUrl = "https://www.casaflorian.com.ar/wp-content/uploads/2023/03/391-525-01_C.jpg",
                             nombre = "Shampoo Pantene",
-                            precio = 20000m
+                            precio = 20000
                         },
                         new
                         {
@@ -122,97 +122,97 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 3,
                             imagenUrl = "https://industriaslitoral.com.ar/wp-content/uploads/2022/05/3011150_f.jpg",
                             nombre = "Jabón Rexona",
-                            precio = 5000m
+                            precio = 5000
                         },
                         new
                         {
                             id = 5,
                             Stock = 100,
                             categoriaId = 1,
-                            imagenUrl = "https://example.com/img/paracetamol.jpg",
+                            imagenUrl = "https://www.farmaciassanchezantoniolli.com.ar/10123-medium_default/tafirol-x30-comp.jpg",
                             nombre = "Paracetamol 500mg",
-                            precio = 4300.00m
+                            precio = 4300
                         },
                         new
                         {
                             id = 6,
                             Stock = 100,
                             categoriaId = 3,
-                            imagenUrl = "https://example.com/img/alcoholgel.jpg",
+                            imagenUrl = "https://farmacityar.vtexassets.com/arquivos/ids/207795/220120_alcohol-en-gel-bialcohol-con-glicerina-x-250-ml_imagen-1.jpg?v=637497071230100000",
                             nombre = "Alcohol en gel",
-                            precio = 2900.00m
+                            precio = 2900
                         },
                         new
                         {
                             id = 7,
                             Stock = 100,
                             categoriaId = 3,
-                            imagenUrl = "https://example.com/img/cepillo.jpg",
+                            imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/768123/Cepillo-Dental-Oral-b-Complete-1-Un-1-223926.jpg?v=638114674058130000",
                             nombre = "Cepillo Dental Oral-B",
-                            precio = 2200.00m
+                            precio = 2200
                         },
                         new
                         {
                             id = 8,
                             Stock = 100,
                             categoriaId = 3,
-                            imagenUrl = "https://example.com/img/toallitas.jpg",
+                            imagenUrl = "https://www.masfarmacias.com/wp-content/uploads/7500435148443.jpg",
                             nombre = "Toallitas Húmedas Pampers",
-                            precio = 7800.00m
+                            precio = 7800
                         },
                         new
                         {
                             id = 9,
                             Stock = 100,
                             categoriaId = 2,
-                            imagenUrl = "https://example.com/img/hugoboss.jpg",
+                            imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-oxxY1Y9TdkG8WTow2jN6IedoE1mp_ZCMBg&s",
                             nombre = "Perfume Hugo Boss",
-                            precio = 45200.00m
+                            precio = 45200
                         },
                         new
                         {
                             id = 10,
                             Stock = 100,
                             categoriaId = 2,
-                            imagenUrl = "https://example.com/img/dove.jpg",
+                            imagenUrl = "https://farmaciadelpuebloar.vtexassets.com/arquivos/ids/166590/desodorante-dove-men-care.png?v=638163070782970000",
                             nombre = "Desodorante Dove",
-                            precio = 6300.00m
+                            precio = 6300
                         },
                         new
                         {
                             id = 11,
                             Stock = 100,
                             categoriaId = 1,
-                            imagenUrl = "https://example.com/img/te_relax.jpg",
+                            imagenUrl = "https://images.precialo.com/products/te-en-saquitos-green-hills-blend-relax-x-20-saquitos/3d1dbd48-bcf7-4b67-82e3-e93ca551527d.jpeg",
                             nombre = "Té de Hierbas Relax",
-                            precio = 3600.00m
+                            precio = 3600
                         },
                         new
                         {
                             id = 12,
                             Stock = 100,
                             categoriaId = 2,
-                            imagenUrl = "https://example.com/img/nivea.jpg",
+                            imagenUrl = "https://getthelookar.vtexassets.com/arquivos/ids/180043-800-auto?v=638484443678830000&width=800&height=auto&aspect=true",
                             nombre = "Crema Nivea",
-                            precio = 5400.00m
+                            precio = 5400
                         },
                         new
                         {
                             id = 13,
                             Stock = 100,
                             categoriaId = 3,
-                            imagenUrl = "https://example.com/img/algodon.jpg",
+                            imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/178407-800-600?v=636383362696400000&width=800&height=600&aspect=true",
                             nombre = "Algodón Estéril 100g",
-                            precio = 2100.00m
+                            precio = 2100
                         },
                         new
                         {
                             id = 14,
                             Stock = 100,
                             categoriaId = 1,
-                            imagenUrl = "https://example.com/img/jarabe.jpg",
+                            imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTusKNNE2NSzobZCKl7bKeECu4bX403oEezKg&s",
                             nombre = "Jarabe para la Tos",
-                            precio = 8700.00m
+                            precio = 8700
                         });
                 });
 
