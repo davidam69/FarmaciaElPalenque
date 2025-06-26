@@ -13,7 +13,7 @@ namespace FarmaciaElPalenque.Controllers
 
         public IActionResult Panel()
         {
-             if (HttpContext.Session.GetString("Rol") != "Administrador")
+            if (HttpContext.Session.GetString("Rol") != "Administrador")
             {
                 TempData["Mensaje"] = "Acceso Denegado.";
                 return RedirectToAction("Index", "Principal");
