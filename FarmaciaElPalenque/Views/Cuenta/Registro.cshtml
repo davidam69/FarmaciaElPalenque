@@ -34,15 +34,27 @@
 
 	<div class="mb-3">
 		<label asp-for="passwordHash">Contraseña</label>
-		<input asp-for="passwordHash" type="password" class="form-control" />
+		<div class="input-group">
+			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
+			<span class="input-group-text">
+				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
+			</span>
+		</div>
 		<span asp-validation-for="passwordHash" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
 		<label asp-for="confirmarPasswordHash">Confirmar Contraseña</label>
-		<input asp-for="confirmarPasswordHash" type="password" class="form-control" />
+		<div class="input-group">
+			<input asp-for="confirmarPasswordHash" type="password" class="form-control" id="confirmarPasswordHash" />
+			<span class="input-group-text">
+				<i class="bi bi-eye-slash" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+			</span>
+		</div>
 		<span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
 	</div>
+
+
 
 	@* Solo se muestra si el usuario actual es administrador *@
 	@if (Context.Session.GetString("Rol") == "Administrador")
