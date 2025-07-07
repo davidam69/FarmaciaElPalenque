@@ -15,15 +15,23 @@
 
 <form asp-action="Login" method="post">
 	<div class="mb-3">
-		<label asp-for="nombreUsuario">Usuario</label>
-		<input asp-for="nombreUsuario" class="form-control" />
-		<span asp-validation-for="nombreUsuario" class="text-danger"></span>
+		<label asp-for="email">Email</label>
+		<input asp-for="email" type ="email" class="form-control" />
+		<span asp-validation-for="email" class="text-danger"></span>
 	</div>
+
 	<div class="mb-3">
 		<label asp-for="passwordHash">Contraseña</label>
-		<input asp-for="passwordHash" type="password" class="form-control" />
+		<div class="input-group">
+			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
+			<span class="input-group-text">
+				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
+			</span>
+		</div>
 		<span asp-validation-for="passwordHash" class="text-danger"></span>
 	</div>
+
+
 	<button type="submit" class="btn btn-primary">
 		Iniciar sesión
 	</button>

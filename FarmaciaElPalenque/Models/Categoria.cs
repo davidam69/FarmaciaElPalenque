@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace FarmaciaElPalenque.Models
+﻿namespace FarmaciaElPalenque.Models
 {
     public class Categoria
     {

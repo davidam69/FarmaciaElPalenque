@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FarmaciaElPalenque.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 	@RenderSection("Styles", required: false)
+
 </head>
 <body>
     <header>
@@ -27,25 +29,39 @@
                 </div>
 
                 <ul class="navbar-nav ms-auto">
-					@if (Context.Session.GetString("Usuario") == null)
-					{
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Cuenta" asp-action="Login">Login</a>
-						</li>
+                    @if (Context.Session.GetString("Usuario") == null)
+                    {
                         <li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Cuenta" asp-action="Registro">Registrate</a>
-						</li>
-					}
-					else
-					{
-						<li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cuenta" asp-action="Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cuenta" asp-action="Registro">Registrate</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
                             <span class="nav-link">Hola, @Context.Session.GetString("NombreCompleto")</span>
-						</li>
+                        </li>
+
+                        @* Mostrar panel solo si es administrador *@
+                        @if (Context.Session.GetString("Rol") == "Administrador")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Panel">Admin Panel</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="ListaProductos">Productos</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Cuenta" asp-action="Logout">Logout</a>
                         </li>
-					}
+                    }
                 </ul>
+
             </div>
         </nav>
     </header>
@@ -63,6 +79,30 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#passwordHash");
+
+        togglePassword.addEventListener("click", function () {
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            this.classList.toggle("bi-eye");
+            this.classList.toggle("bi-eye-slash");
+        });
+
+        const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
+        const confirmPassword = document.querySelector("#confirmarPasswordHash");
+
+        toggleConfirmPassword.addEventListener("click", function () {
+            const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
+            confirmPassword.setAttribute("type", type);
+            this.classList.toggle("bi-eye");
+            this.classList.toggle("bi-eye-slash");
+        });
+    </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FarmaciaElPalenque.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250617034035_SeedInicialConStockYPrecio")]
-    partial class SeedInicialConStockYPrecio
+    [Migration("20250625035724_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,8 +78,8 @@ namespace FarmaciaElPalenque.Migrations
                     b.Property<string>("nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("precio")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("precio")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -95,7 +95,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 1,
                             imagenUrl = "https://www.anikashop.com.ar/product_images/w/994/8024587__72227_zoom.jpg",
                             nombre = "Bayaspirina",
-                            precio = 5728m
+                            precio = 5728
                         },
                         new
                         {
@@ -104,7 +104,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 1,
                             imagenUrl = "https://www.centraloeste.com.ar/media/catalog/product/cache/9c821fce06d7004f361a4c419f8b1787/7/7/7790839980453.png",
                             nombre = "Ibu400",
-                            precio = 15000m
+                            precio = 15000
                         },
                         new
                         {
@@ -113,7 +113,7 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 2,
                             imagenUrl = "https://www.casaflorian.com.ar/wp-content/uploads/2023/03/391-525-01_C.jpg",
                             nombre = "Shampoo Pantene",
-                            precio = 20000m
+                            precio = 20000
                         },
                         new
                         {
@@ -122,7 +122,97 @@ namespace FarmaciaElPalenque.Migrations
                             categoriaId = 3,
                             imagenUrl = "https://industriaslitoral.com.ar/wp-content/uploads/2022/05/3011150_f.jpg",
                             nombre = "Jabón Rexona",
-                            precio = 5000m
+                            precio = 5000
+                        },
+                        new
+                        {
+                            id = 5,
+                            Stock = 100,
+                            categoriaId = 1,
+                            imagenUrl = "https://www.farmaciassanchezantoniolli.com.ar/10123-medium_default/tafirol-x30-comp.jpg",
+                            nombre = "Paracetamol 500mg",
+                            precio = 4300
+                        },
+                        new
+                        {
+                            id = 6,
+                            Stock = 100,
+                            categoriaId = 3,
+                            imagenUrl = "https://farmacityar.vtexassets.com/arquivos/ids/207795/220120_alcohol-en-gel-bialcohol-con-glicerina-x-250-ml_imagen-1.jpg?v=637497071230100000",
+                            nombre = "Alcohol en gel",
+                            precio = 2900
+                        },
+                        new
+                        {
+                            id = 7,
+                            Stock = 100,
+                            categoriaId = 3,
+                            imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/768123/Cepillo-Dental-Oral-b-Complete-1-Un-1-223926.jpg?v=638114674058130000",
+                            nombre = "Cepillo Dental Oral-B",
+                            precio = 2200
+                        },
+                        new
+                        {
+                            id = 8,
+                            Stock = 100,
+                            categoriaId = 3,
+                            imagenUrl = "https://www.masfarmacias.com/wp-content/uploads/7500435148443.jpg",
+                            nombre = "Toallitas Húmedas Pampers",
+                            precio = 7800
+                        },
+                        new
+                        {
+                            id = 9,
+                            Stock = 100,
+                            categoriaId = 2,
+                            imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-oxxY1Y9TdkG8WTow2jN6IedoE1mp_ZCMBg&s",
+                            nombre = "Perfume Hugo Boss",
+                            precio = 45200
+                        },
+                        new
+                        {
+                            id = 10,
+                            Stock = 100,
+                            categoriaId = 2,
+                            imagenUrl = "https://farmaciadelpuebloar.vtexassets.com/arquivos/ids/166590/desodorante-dove-men-care.png?v=638163070782970000",
+                            nombre = "Desodorante Dove",
+                            precio = 6300
+                        },
+                        new
+                        {
+                            id = 11,
+                            Stock = 100,
+                            categoriaId = 1,
+                            imagenUrl = "https://images.precialo.com/products/te-en-saquitos-green-hills-blend-relax-x-20-saquitos/3d1dbd48-bcf7-4b67-82e3-e93ca551527d.jpeg",
+                            nombre = "Té de Hierbas Relax",
+                            precio = 3600
+                        },
+                        new
+                        {
+                            id = 12,
+                            Stock = 100,
+                            categoriaId = 2,
+                            imagenUrl = "https://getthelookar.vtexassets.com/arquivos/ids/180043-800-auto?v=638484443678830000&width=800&height=auto&aspect=true",
+                            nombre = "Crema Nivea",
+                            precio = 5400
+                        },
+                        new
+                        {
+                            id = 13,
+                            Stock = 100,
+                            categoriaId = 3,
+                            imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/178407-800-600?v=636383362696400000&width=800&height=600&aspect=true",
+                            nombre = "Algodón Estéril 100g",
+                            precio = 2100
+                        },
+                        new
+                        {
+                            id = 14,
+                            Stock = 100,
+                            categoriaId = 1,
+                            imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTusKNNE2NSzobZCKl7bKeECu4bX403oEezKg&s",
+                            nombre = "Jarabe para la Tos",
+                            precio = 8700
                         });
                 });
 
@@ -134,15 +224,15 @@ namespace FarmaciaElPalenque.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nombreCompleto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("nombreUsuario")
+                    b.Property<string>("nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -151,7 +241,6 @@ namespace FarmaciaElPalenque.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("rol")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
@@ -162,90 +251,90 @@ namespace FarmaciaElPalenque.Migrations
                         new
                         {
                             id = 1,
+                            apellido = "General",
                             email = "admin@palenque.com",
-                            nombreCompleto = "Admin General",
-                            nombreUsuario = "admin",
+                            nombre = "admin",
                             passwordHash = "admin123",
                             rol = "Administrador"
                         },
                         new
                         {
                             id = 2,
+                            apellido = "Perez",
                             email = "juan@correo.com",
-                            nombreCompleto = "Juan Pérez",
-                            nombreUsuario = "juanperez",
+                            nombre = "Juan",
                             passwordHash = "1234",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 3,
+                            apellido = "Garcia",
                             email = "maria@correo.com",
-                            nombreCompleto = "María García",
-                            nombreUsuario = "mariagarcia",
+                            nombre = "Maria",
                             passwordHash = "clave123",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 4,
+                            apellido = "Lopez",
                             email = "carlos@correo.com",
-                            nombreCompleto = "Carlos López",
-                            nombreUsuario = "carloslopez",
+                            nombre = "Carlos",
                             passwordHash = "qwerty",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 5,
+                            apellido = "Gonzalez",
                             email = "laura@correo.com",
-                            nombreCompleto = "Laura González",
-                            nombreUsuario = "lauragonzalez",
+                            nombre = "Laura",
                             passwordHash = "pass1234",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 6,
+                            apellido = "Fernandez",
                             email = "ana@correo.com",
-                            nombreCompleto = "Ana Fernández",
-                            nombreUsuario = "anafernandez",
+                            nombre = "Ana",
                             passwordHash = "abc123",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 7,
+                            apellido = "Alvarez",
                             email = "roberto@palenque.com",
-                            nombreCompleto = "Roberto Álvarez",
-                            nombreUsuario = "robertoalvarez",
+                            nombre = "Roberto",
                             passwordHash = "adminadmin",
                             rol = "Administrador"
                         },
                         new
                         {
                             id = 8,
+                            apellido = "Martinez",
                             email = "camila@correo.com",
-                            nombreCompleto = "Camila Martínez",
-                            nombreUsuario = "camilamartinez",
+                            nombre = "Camila",
                             passwordHash = "cami321",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 9,
+                            apellido = "Ruiz",
                             email = "luciano@correo.com",
-                            nombreCompleto = "Luciano Ruiz",
-                            nombreUsuario = "lucianoruiz",
+                            nombre = "Luciano",
                             passwordHash = "123456",
                             rol = "Cliente"
                         },
                         new
                         {
                             id = 10,
+                            apellido = "Mendez",
                             email = "carolina@correo.com",
-                            nombreCompleto = "Carolina Méndez",
-                            nombreUsuario = "carolinamendez",
+                            nombre = "Carolina",
                             passwordHash = "securepass",
                             rol = "Cliente"
                         });
