@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Panel de Administrador";
+}
+
+<h2>Panel de Administración</h2>
+
+<p>Bienvenido, @Context.Session.GetString("NombreCompleto")</p>
+
+<ul>
+    <li><a asp-controller="Admin" asp-action="Usuarios">📋 Ver Usuarios Registrados</a></li>
+    <li><a asp-controller="Admin" asp-action="ListaProductos">🛒 Gestionar Productos</a></li>
+    <li><a asp-controller="Cuenta" asp-action="Registro">➕ Registrar Nuevo Usuario</a></li>
+    <li><a asp-controller="IA" asp-action="Resultados" class="btn btn-info">Ver Análisis IA</a></li>
+</ul>

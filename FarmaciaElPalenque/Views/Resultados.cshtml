@@ -1,0 +1,48 @@
+﻿@model List<(FarmaciaElPalenque.Models.Usuario Usuario, uint Cluster, bool DeberiaAvisarse)>
+
+@{
+    ViewData["Title"] = "Resultados de Clustering";
+}
+
+<h2>Segmentación de Usuarios</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Edad</th>
+            <th>Compras Mensuales</th>
+            <th>Monto Gastado</th>
+            <th>Días Sin Comprar</th>
+            <th>Cluster</th>
+            <th>Avisar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var usuario = item.Usuario;
+            <tr class="@(item.DeberiaAvisarse ? "table-warning" : "")">
+                <td>@usuario.nombre @usuario.apellido</td>
+                <td>@usuario.email</td>
+                <td>@usuario.Edad</td>
+                <td>@usuario.ComprasMensuales</td>
+                <td>$@usuario.MontoGastado.ToString("N0")</td>
+                <td>@usuario.DiasDesdeUltimaCompra</td>
+                <td>Cluster @item.Cluster</td>
+                <td>
+                    @if (item.DeberiaAvisarse)
+                    {
+                        <span class="text-danger">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="text-success">No</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FarmaciaElPalenque.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using FarmaciaElPalenque.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FarmaciaElPalenque.Controllers
 {
@@ -17,8 +15,8 @@ namespace FarmaciaElPalenque.Controllers
         public IActionResult Index()
         {
             var productos = _context.Productos
-                 .Include(p => p.Categoria) // Asegúrate de que la relación esté bien configurada
-                 .ToList();
+                .Include(p => p.Categoria) // Asegúrate de que la relación esté bien configurada
+                .ToList();
 
             return View(productos);
         }

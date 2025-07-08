@@ -1,4 +1,4 @@
-﻿Instructuvo proyecto de mvc e IA
+﻿﻿Instructuvo proyecto de mvc e IA
 1. Creamos un proyecto en visual studio de tipo ASP.NET Core Web Application.(Modelo-Vista-Controlador)
 2. Lo llamamos FarmaciaElPalenque.
 3. En la pestaña GIT seleccionamos la opción de crear un repositorio local.
@@ -45,3 +45,21 @@
 44. Instalación de Micerosoft.EntityFrameworkCore y configuración de la base de datos.
 45. Instalación de Microsoft.EntityFrameworkCore.sqlserver.
 46. Instalación de Microsoft.EntityFrameworkCore.Tools.
+47. En la carpeta models se creo un archivo llamado appDbContext.cs que hereda de DbContext y contiene las propiedades DbSet<Usuario> Usuarios, DbSet<Categoria> Categorias y DbSet<Producto> Productos.
+48. En models productos.cs se agrego la propiedad Categoria para establecer la relación entre Producto y Categoria y categoriaId sea una relación real de base de datos.
+49. Configuración de la cadena de conexión en appsettings.json para conectar a la base de datos SQL Server.
+50. En Program.cs se configuró el servicio de DbContext para usar la cadena de conexión definida en appsettings.json.
+51. Creamos una migración inicial usando el comando `Add-Migration Inicial` en la consola del administrador de paquetes y luego Update-Database para aplicar la migración a la base de datos.
+52. En CuentaController.cs, se modifico para usar el appDbContext para interactuar con la base de datos en lugar de una lista en memoria.
+53. Tambien PrincipalController.cs se modifico para usar el appDbContext para obtener la lista de productos desde la base de datos.
+54. en appDbContext.cs se agrego el método OnModelCreating para configurar las relaciones entre las entidades y establecer las restricciones de clave foránea.
+55. Se elimino public static List<Usuario> listaUsuarios = new List<Usuario>(); de CuentaController.cs y se reemplazo por el uso de appDbContext para acceder a los usuarios en la base de datos.
+56. Lo mismo se hizo con la lista de productos en PrincipalController.cs, eliminando la lista en memoria y utilizando appDbContext para acceder a los productos en la base de datos.
+57. Se agrego semillas de ejemplos de datos en el método OnModelCreating de appDbContext.cs para crear Usuarios, categorías y productos iniciales en la base de datos al iniciar la aplicación.
+58 Se ejecuto los comandos `Add-Migration Semillas` y `Update-Database` para aplicar las semillas a la base de datos.
+59. Se agrego el campo Stock a la clase Producto en models/Productos.cs para representar la cantidad disponible de cada producto.
+60. Se creo una nueva migracion llamada AgregarStockAProductos con el comando `Add-Migration AgregarStockAProductos` y se aplico a la base de datos con `Update-Database`.
+61. Desde sql server management studio se agregaron 100 productos de ejemplo con stock a la base de datos.
+62. Se borraron por error las migraciones y se volvio a crear la base de datos desde cero con el comando `Update-Database -Force` pero Stock nos marcaba error en la base de datos.
+63. se soluciono el error de stock con Ctrl + Shift + R en Visual Studio para actualizar el esquema de la base de datos.
+

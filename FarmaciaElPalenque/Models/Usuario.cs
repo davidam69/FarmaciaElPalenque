@@ -1,28 +1,33 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace FarmaciaElPalenque.Models
 {
     public class Usuario
     {
         public int id { get; set; }
 
-        [Required(ErrorMessage = "El nombre completo es obligatorio")]
-        [Display(Name = "Nombre Completo")]
-        public string? nombreCompleto { get; set; }
+        [Required(ErrorMessage = "El nombre es obligatorio")] // El atributo requerido garantiza que el campo no esté vacío
+        [Display(Name = "Nombre")] // Display(Name) se utiliza para mostrar un nombre más amigable en las vistas
+        public string? nombre { get; set; }
 
-        [Required(ErrorMessage = "El email es obligatorio")]
-        [EmailAddress(ErrorMessage = "El formato de email no es válido")]
+        [Required(ErrorMessage = "El apellido es obligatorio")]
+        [Display(Name = "Apellido")]
+        public string? apellido { get; set; }
+
+        [Required(ErrorMessage = "El email es obligatorio")] // ErrorMessage proporciona un mensaje personalizado si el campo no se completa    
+        [EmailAddress(ErrorMessage = "El formato de email no es válido")]// EmailAddress valida que el formato del email sea correcto
         public string? email { get; set; }
 
-        [NotMapped]
+        [NotMapped] // NotMapped indica que este campo no se debe mapear a la base de datos
         [Required(ErrorMessage = "La confirmacion del correo es obligatoria")]
-        [EmailAddress(ErrorMessage = "El formato de email no es válido")]
-        [Compare("email", ErrorMessage = "Los correos electrónicos no coinciden")]
+        [EmailAddress]
+        [Compare("email", ErrorMessage = "Los correos electrónicos no coinciden")] // Compare se utiliza para comparar dos campos, en este caso, el email y confirmarEmail
         [Display(Name = "Confirmar Email")]
         public string? confirmarEmail { get; set; }
 
         [Required(ErrorMessage = "La contraseña es obligatoria")]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password)] // DataType.Password indica que este campo es una contraseña y debe ocultar los caracteres ingresados
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         [Display(Name = "Contraseña")]
         public string? passwordHash { get; set; }
@@ -34,12 +39,13 @@ namespace FarmaciaElPalenque.Models
         [Display(Name = "Confirmar Contraseña")]
         public string? confirmarPasswordHash { get; set; }
 
-        [Required(ErrorMessage = "El nombre de usuario es obligatorio")]
-        [Display(Name = "Nombre de Usuario")]
-        public string? nombreUsuario { get; set; }
+        public int Edad { get; set; } = 30;
+        public int ComprasMensuales { get; set; } = 0;
+        public decimal MontoGastado { get; set; } = 0;
+        public int DiasDesdeUltimaCompra { get; set; } = 0;
 
-        [Required(ErrorMessage = "El rol es obligatorio")]
+
         [Display(Name = "Rol")]
-        public string? rol { get; set; }
+        public string? rol { get; set; } = "Cliente";
     }
 }

@@ -9,55 +9,70 @@
 <form asp-action="Registro" method="post">
 
 	<div class="mb-3">
-		<label asp-for="nombreCompleto">Nombre completo</label>
-		<input asp-for="nombreCompleto" class="form-control"/>
-		<span asp-validation-for="nombreCompleto" class="text-danger"></span>
+		<label asp-for="nombre">Nombre</label>
+		<input asp-for="nombre" class="form-control" />
+		<span asp-validation-for="nombre" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="apellido"></label>
+		<input asp-for="apellido" class="form-control" />
+		<span asp-validation-for="apellido" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
 		<label asp-for="email">Email</label>
-		<input asp-for="email" class="form-control"/>
+		<input asp-for="email" type="email" class="form-control" />
 		<span asp-validation-for="email" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="confirmarEmail">confirmar email</label>
-		<input asp-for="confirmarEmail" class="form-control" />
+		<label asp-for="confirmarEmail">Confirmar Email</label>
+		<input asp-for="confirmarEmail" type="email" class="form-control" />
 		<span asp-validation-for="confirmarEmail" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
 		<label asp-for="passwordHash">Contraseña</label>
-		<input asp-for="passwordHash" class="form-control" />
+		<div class="input-group">
+			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
+			<span class="input-group-text">
+				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
+			</span>
+		</div>
 		<span asp-validation-for="passwordHash" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="confirmarPasswordHash">confirmar contraseña</label>
-		<input asp-for="confirmarPasswordHash" class="form-control" />
+		<label asp-for="confirmarPasswordHash">Confirmar Contraseña</label>
+		<div class="input-group">
+			<input asp-for="confirmarPasswordHash" type="password" class="form-control" id="confirmarPasswordHash" />
+			<span class="input-group-text">
+				<i class="bi bi-eye-slash" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+			</span>
+		</div>
 		<span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
 	</div>
 
-	<div class="mb-3">
-		<label asp-for="nombreUsuario">Usuario</label>
-		<input asp-for="nombreUsuario" class="form-control" />
-		<span asp-validation-for="nombreUsuario" class="text-danger"></span>
-	</div>
 
-	<div class="mb-3">
-		<label asp-for="rol">Rol</label>
-		<select asp-for="rol" class="form-select">
-			<option value="cliente">Cliente</option>
-			<option value="administrador">Administrador</option>
-		</select>
-		<span asp-validation-for="rol" class="text-danger"></span>
-	</div>
+
+	@* Solo se muestra si el usuario actual es administrador *@
+	@if (Context.Session.GetString("Rol") == "Administrador")
+	{
+		<div class="mb-3">
+			<label asp-for="rol"></label>
+			<select asp-for="rol" class="form-control">
+				<option value="Cliente">Cliente</option>
+				<option value="Administrador">Administrador</option>
+			</select>
+		</div>
+	}
 
 	<button class="btn btn-primary">
 		<i class="bi bi-person-plus"></i>Registrarse
 	</button>
 </form>
 
-@section Scripts{
+@section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }

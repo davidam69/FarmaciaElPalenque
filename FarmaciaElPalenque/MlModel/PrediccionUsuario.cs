@@ -2,7 +2,7 @@
 
 namespace FarmaciaElPalenque.MlModel
 {
-    public class PrediccionCliente
+    public class PrediccionUsuario
     {
 
         [ColumnName("PredictedLabel")]

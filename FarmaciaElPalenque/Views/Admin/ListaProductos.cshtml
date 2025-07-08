@@ -1,0 +1,58 @@
+﻿@model List<Productos>
+
+<h2>Lista de Productos</h2>
+
+<p>
+    <a asp-action="CrearProducto" class="btn btn-primary">Agregar Producto</a>
+</p>
+
+<form asp-action="ActualizarLista" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @using System.Globalization
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input name="[@i].nombre" value="@Model[i].nombre" class="form-control" />
+                        <input type="hidden" name="[@i].id" value="@Model[i].id" />
+                    </td>
+
+                    <td>
+                        <input name="[@i].precio" type="number" value="@Model[i].precio" class="form-control" />
+                    </td>
+
+                    <td>
+                        <input name="[@i].Stock" value="@Model[i].Stock" class="form-control" />
+                    </td>
+                    <td>
+                        <select name="[@i].categoriaId" class="form-select">
+                            <option value="1" selected="@(Model[i].categoriaId == 1)">Medicamentos</option>
+                            <option value="2" selected="@(Model[i].categoriaId == 2)">Perfumería</option>
+                            <option value="3" selected="@(Model[i].categoriaId == 3)">Cuidado Personal</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input name="[@i].imagenUrl" value="@Model[i].imagenUrl" class="form-control" />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </td>
+                    <td>
+                        <a asp-action="EliminarProducto" asp-route-id="@Model[i].id" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
