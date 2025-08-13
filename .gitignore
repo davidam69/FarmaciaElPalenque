@@ -364,8 +364,5 @@ FodyWeavers.xsd
 /FarmaciaElPalenque/Migrations/20250623021111_Inicial.cs
 /FarmaciaElPalenque/Migrations/20250623021111_Inicial.Designer.cs
 
-# Ignorar configuración local
-appsettings.json
-
 # Ignorar migraciones
 Migrations/
