@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FarmaciaElPalenque.Controllers
 {
@@ -65,6 +66,13 @@ namespace FarmaciaElPalenque.Controllers
                 TempData["Mensaje"] = "Acceso denegado.";
                 return RedirectToAction("Index", "Principal");
             }
+            ViewBag.Categorias = _context.Categorias
+                .Select(c => new SelectListItem
+                {
+                    Value = c.id.ToString(),
+                    Text = c.nombre
+                })
+                .ToList();
 
             return View();
         }

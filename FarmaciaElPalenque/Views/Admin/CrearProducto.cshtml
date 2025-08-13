@@ -6,18 +6,24 @@
     <div class="mb-3">
         <label asp-for="nombre"></label>
         <input asp-for="nombre" class="form-control" />
+        <span asp-validation-for="nombre" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="precio"></label>
         <input asp-for="precio" class="form-control" />
+        <span asp-validation-for="precio" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Stock"></label>
         <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="categoriaId"></label>
-        <input asp-for="categoriaId" class="form-control" />
+        <label asp-for="categoriaId">Categoría</label>
+        <select asp-for="categoriaId" class="form-control" asp-items="@(ViewBag.Categorias)">
+            <option value="">Seleccione una categoría</option>
+        </select>
+        <span asp-validation-for="categoriaId" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="imagenUrl"></label>
@@ -25,3 +31,8 @@
     </div>
     <button type="submit" class="btn btn-success">Guardar</button>
 </form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

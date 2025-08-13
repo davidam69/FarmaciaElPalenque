@@ -18,7 +18,9 @@
 		{
 			<tr>
 				<td>
-					<img src="@productos.imagenUrl" alt="@productos.nombre" style="width: 100px; height: 100px;" />
+					<img src="@(!string.IsNullOrEmpty(productos.imagenUrl) ? productos.imagenUrl : "/Images/default.png")"
+						 alt="@productos.nombre"
+						 style="width: 100px; height: 100px;" />
 				</td>
 				<td>
 					<a asp-action="Detalle" asp-route-id="@productos.id">
