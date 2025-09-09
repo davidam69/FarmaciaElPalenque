@@ -42,16 +42,16 @@
 
             // Usuarios
             modelBuilder.Entity<Usuario>().HasData(
-            new Usuario { id = 1, nombre = "admin", apellido= "General", passwordHash = PasswordHasher.HashPassword("admin123"), rol = "Administrador", email = "admin@palenque.com" },
-            new Usuario { id = 2, nombre = "Juan", apellido="Perez", passwordHash = PasswordHasher.HashPassword("1234"), rol = "Cliente", email = "juan@correo.com" },
-            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = PasswordHasher.HashPassword("clave123"), rol = "Cliente", email = "maria@correo.com" },
-            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = PasswordHasher.HashPassword("qwerty"), rol = "Cliente", email = "carlos@correo.com" },
-            new Usuario { id = 5, nombre = "Laura", apellido="Gonzalez", passwordHash = PasswordHasher.HashPassword("pass1234"), rol = "Cliente", email = "laura@correo.com" },
-            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = PasswordHasher.HashPassword("abc123"), rol = "Cliente",  email = "ana@correo.com" },
-            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = PasswordHasher.HashPassword("adminadmin"), rol = "Administrador", email = "roberto@palenque.com" },
-            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = PasswordHasher.HashPassword("cami321"), rol = "Cliente", email = "camila@correo.com" },
-            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = PasswordHasher.HashPassword("123456"), rol = "Cliente", email = "luciano@correo.com" },
-            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = PasswordHasher.HashPassword("securepass"), rol = "Cliente", email = "carolina@correo.com" }
+            new Usuario { id = 1, nombre = "admin", apellido= "General", passwordHash = "admin123", rol = "Administrador", email = "admin@palenque.com" },
+            new Usuario { id = 2, nombre = "Juan", apellido="Perez", passwordHash = "1234", rol = "Cliente", email = "juan@correo.com" },
+            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = "clave123", rol = "Cliente", email = "maria@correo.com" },
+            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = "qwerty", rol = "Cliente", email = "carlos@correo.com" },
+            new Usuario { id = 5, nombre = "Laura", apellido="Gonzalez", passwordHash = "pass1234", rol = "Cliente", email = "laura@correo.com" },
+            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = "abc123", rol = "Cliente",  email = "ana@correo.com" },
+            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = "adminadmin", rol = "Administrador", email = "roberto@palenque.com" },
+            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = "cami321", rol = "Cliente", email = "camila@correo.com" },
+            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = "123456", rol = "Cliente", email = "luciano@correo.com" },
+            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = "securepass", rol = "Cliente", email = "carolina@correo.com" }
             );
 
 
