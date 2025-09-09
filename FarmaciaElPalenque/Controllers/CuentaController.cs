@@ -1,4 +1,6 @@
-﻿namespace FarmaciaElPalenque.Controllers
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace FarmaciaElPalenque.Controllers
 {
     public class CuentaController : Controller
     {
@@ -52,18 +54,21 @@
         }
 
         [HttpPost]
-        public IActionResult Login(string email, string passwordHash)
+        public IActionResult Login(string email, string password)
         {
-            var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email && u.passwordHash == passwordHash);
-            if (usuario == null)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email);
+            if (usuario == null || !PasswordHasher.VerifyPassword(password, usuario.passwordHash))
             {
                 ModelState.AddModelError("", "Email o contraseña incorrectos.");
                 return View();
             }
 
-            HttpContext.Session.SetString("Usuario", usuario.email ?? "");
-            HttpContext.Session.SetString("Rol", usuario.rol ?? "");
-            HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
+            if (HttpContext.Session != null)
+            {
+                HttpContext.Session.SetString("Usuario", usuario.email ?? "");
+                HttpContext.Session.SetString("Rol", usuario.rol ?? "");
+                HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
+            }
 
             TempData["Mensaje"] = $"Bienvenido {usuario.nombre} {usuario.apellido}";
             return RedirectToAction("Index", "Principal");
