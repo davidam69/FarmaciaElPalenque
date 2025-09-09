@@ -5,5 +5,3 @@ global using Microsoft.EntityFrameworkCore.Migrations;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Linq;
-global using System.Security.Cryptography;
-global using FarmaciaElPalenque.Utils;

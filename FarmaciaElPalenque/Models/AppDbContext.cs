@@ -39,23 +39,34 @@
                 new Productos { id = 13, nombre = "Algodón Estéril 100g", precio = 2100, categoriaId = 3, imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/178407-800-600?v=636383362696400000&width=800&height=600&aspect=true", Stock = 100 },
                 new Productos { id = 14, nombre = "Jarabe para la Tos", precio = 8700, categoriaId = 1, imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTusKNNE2NSzobZCKl7bKeECu4bX403oEezKg&s", Stock = 100 }
             );
-
+            /*
+            var adminPass = HashPassword("admin123");
+            var juanPass = HashPassword("1234");
+            var mariaPass = HashPassword("clave123");
+            var carlosPass = HashPassword("qwerty");
+            var lauraPass = HashPassword("pass1234");
+            var anaPass = HashPassword("abc123");
+            var robertoPass = HashPassword("adminadmin");
+            var camilaPass = HashPassword("cami321");
+            var lucianoPass = HashPassword("123456");
+            var carolinaPass = HashPassword("securepass");
+            
             // Usuarios
             modelBuilder.Entity<Usuario>().HasData(
-            new Usuario { id = 1, nombre = "admin", apellido= "General", passwordHash = PasswordHasher.HashPassword("admin123"), rol = "Administrador", email = "admin@palenque.com" },
-            new Usuario { id = 2, nombre = "Juan", apellido="Perez", passwordHash = PasswordHasher.HashPassword("1234"), rol = "Cliente", email = "juan@correo.com" },
-            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = PasswordHasher.HashPassword("clave123"), rol = "Cliente", email = "maria@correo.com" },
-            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = PasswordHasher.HashPassword("qwerty"), rol = "Cliente", email = "carlos@correo.com" },
-            new Usuario { id = 5, nombre = "Laura", apellido="Gonzalez", passwordHash = PasswordHasher.HashPassword("pass1234"), rol = "Cliente", email = "laura@correo.com" },
-            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = PasswordHasher.HashPassword("abc123"), rol = "Cliente",  email = "ana@correo.com" },
-            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = PasswordHasher.HashPassword("adminadmin"), rol = "Administrador", email = "roberto@palenque.com" },
-            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = PasswordHasher.HashPassword("cami321"), rol = "Cliente", email = "camila@correo.com" },
-            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = PasswordHasher.HashPassword("123456"), rol = "Cliente", email = "luciano@correo.com" },
-            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = PasswordHasher.HashPassword("securepass"), rol = "Cliente", email = "carolina@correo.com" }
+                new Usuario { id = 1, nombre = "admin", apellido = "General", passwordHash = adminPass, rol = "Administrador", email = "admin@palenque.com" },
+            new Usuario { id = 2, nombre = "Juan", apellido = "Perez", passwordHash = juanPass, rol = "Cliente", email = "juan@correo.com" },
+            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = mariaPass, rol = "Cliente", email = "maria@correo.com" },
+            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = carlosPass, rol = "Cliente", email = "carlos@correo.com" },
+            new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", passwordHash = lauraPass, rol = "Cliente", email = "laura@correo.com" },
+            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = anaPass, rol = "Cliente", email = "ana@correo.com" },
+            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = robertoPass, rol = "Administrador", email = "roberto@palenque.com" },
+            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = camilaPass, rol = "Cliente", email = "camila@correo.com" },
+            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = lucianoPass, rol = "Cliente", email = "luciano@correo.com" },
+            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = carolinaPass, rol = "Cliente", email = "carolina@correo.com" }
             );
 
 
-
+            */
             modelBuilder.Entity<Productos>()
             .HasOne(p => p.Categoria)
             .WithMany(c => c.Productos)

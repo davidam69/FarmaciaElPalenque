@@ -29,6 +29,9 @@
         [Display(Name = "Contraseña")]
         public string? passwordHash { get; set; }
 
+        [NotMapped] // EF no la mapea a la BD
+        public string? Password { get; set; }
+
         [NotMapped]
         [Required(ErrorMessage = "La confirmacion de la contraseña es obligatoria")]
         [DataType(DataType.Password)]

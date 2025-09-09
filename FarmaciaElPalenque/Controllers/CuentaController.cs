@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class CuentaController : Controller
     {
@@ -18,6 +16,7 @@ namespace FarmaciaElPalenque.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Registro(Usuario usuario)
         {
             if (!ModelState.IsValid)
@@ -25,16 +24,24 @@ namespace FarmaciaElPalenque.Controllers
                 return View(usuario);
             }
 
+            usuario.email = usuario.email?.Trim().ToLowerInvariant();
             if (string.IsNullOrEmpty(usuario.rol))
             {
                 usuario.rol = "Cliente";
             }
+
+            usuario.passwordHash = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
 
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
             return RedirectToAction("Login");
         }
+
+        private static bool IsBcrypt(string? h) =>
+        !string.IsNullOrWhiteSpace(h) &&
+        (h.StartsWith("$2a$") || h.StartsWith("$2b$") || h.StartsWith("$2y$"));
+
 
         [HttpGet]
         public IActionResult Login()
@@ -54,10 +61,12 @@ namespace FarmaciaElPalenque.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(string email, string password)
         {
+            var mail = email?.Trim().ToLowerInvariant();
             var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email);
-            if (usuario == null || !PasswordHasher.VerifyPassword(password, usuario.passwordHash))
+            if (usuario == null || !IsBcrypt(usuario.passwordHash) || !BCrypt.Net.BCrypt.Verify(password, usuario.passwordHash))
             {
                 ModelState.AddModelError("", "Email o contraseña incorrectos.");
                 return View();

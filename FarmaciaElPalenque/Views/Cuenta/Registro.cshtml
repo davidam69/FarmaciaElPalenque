@@ -33,14 +33,14 @@
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="passwordHash">Contraseña</label>
+		<label asp-for="Password">Contraseña</label>
 		<div class="input-group">
-			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
+			<input asp-for="Password" type="password" class="form-control" id="Password" />
 			<span class="input-group-text">
 				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
 			</span>
 		</div>
-		<span asp-validation-for="passwordHash" class="text-danger"></span>
+		<span asp-validation-for="Password" class="text-danger"></span>
 	</div>
 
 	<div class="mb-3">
