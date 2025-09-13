@@ -16,7 +16,6 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Registro(Usuario usuario)
         {
             if (!ModelState.IsValid)
@@ -24,24 +23,16 @@
                 return View(usuario);
             }
 
-            usuario.email = usuario.email?.Trim().ToLowerInvariant();
             if (string.IsNullOrEmpty(usuario.rol))
             {
                 usuario.rol = "Cliente";
             }
-
-            usuario.passwordHash = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
 
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
             return RedirectToAction("Login");
         }
-
-        private static bool IsBcrypt(string? h) =>
-        !string.IsNullOrWhiteSpace(h) &&
-        (h.StartsWith("$2a$") || h.StartsWith("$2b$") || h.StartsWith("$2y$"));
-
 
         [HttpGet]
         public IActionResult Login()
@@ -61,23 +52,18 @@
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(string email, string password)
+        public IActionResult Login(string email, string passwordHash)
         {
-            var mail = email?.Trim().ToLowerInvariant();
-            var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email);
-            if (usuario == null || !IsBcrypt(usuario.passwordHash) || !BCrypt.Net.BCrypt.Verify(password, usuario.passwordHash))
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.email == email && u.passwordHash == passwordHash);
+            if (usuario == null)
             {
                 ModelState.AddModelError("", "Email o contraseña incorrectos.");
                 return View();
             }
 
-            if (HttpContext.Session != null)
-            {
-                HttpContext.Session.SetString("Usuario", usuario.email ?? "");
-                HttpContext.Session.SetString("Rol", usuario.rol ?? "");
-                HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
-            }
+            HttpContext.Session.SetString("Usuario", usuario.email ?? "");
+            HttpContext.Session.SetString("Rol", usuario.rol ?? "");
+            HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
 
             TempData["Mensaje"] = $"Bienvenido {usuario.nombre} {usuario.apellido}";
             return RedirectToAction("Index", "Principal");
