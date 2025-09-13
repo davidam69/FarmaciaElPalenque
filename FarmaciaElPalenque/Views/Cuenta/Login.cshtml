@@ -20,14 +20,16 @@
 	</div>
 
 	<div class="mb-3">
-		<label for="Password">Contraseña</label>
+		<label asp-for="passwordHash">Contraseña</label>
 		<div class="input-group">
-			<input type="Password" class="form-control" id="Password" name="Password" />
+			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
 			<span class="input-group-text">
 				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
 			</span>
 		</div>
+		<span asp-validation-for="passwordHash" class="text-danger"></span>
 	</div>
+
 
 	<button type="submit" class="btn btn-primary">
 		Iniciar sesión
