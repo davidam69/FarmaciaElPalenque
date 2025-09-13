@@ -12,7 +12,7 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             base.OnModelCreating(modelBuilder);
 
             // Categorías
@@ -39,45 +39,21 @@
                 new Productos { id = 13, nombre = "Algodón Estéril 100g", precio = 2100, categoriaId = 3, imagenUrl = "https://jumboargentina.vtexassets.com/arquivos/ids/178407-800-600?v=636383362696400000&width=800&height=600&aspect=true", Stock = 100 },
                 new Productos { id = 14, nombre = "Jarabe para la Tos", precio = 8700, categoriaId = 1, imagenUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTusKNNE2NSzobZCKl7bKeECu4bX403oEezKg&s", Stock = 100 }
             );
-            /*
-            var adminPass = HashPassword("admin123");
-            var juanPass = HashPassword("1234");
-            var mariaPass = HashPassword("clave123");
-            var carlosPass = HashPassword("qwerty");
-            var lauraPass = HashPassword("pass1234");
-            var anaPass = HashPassword("abc123");
-            var robertoPass = HashPassword("adminadmin");
-            var camilaPass = HashPassword("cami321");
-            var lucianoPass = HashPassword("123456");
-            var carolinaPass = HashPassword("securepass");
-            
+
             // Usuarios
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { id = 1, nombre = "admin", apellido = "General", passwordHash = adminPass, rol = "Administrador", email = "admin@palenque.com" },
-            new Usuario { id = 2, nombre = "Juan", apellido = "Perez", passwordHash = juanPass, rol = "Cliente", email = "juan@correo.com" },
-            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = mariaPass, rol = "Cliente", email = "maria@correo.com" },
-            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = carlosPass, rol = "Cliente", email = "carlos@correo.com" },
-            new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", passwordHash = lauraPass, rol = "Cliente", email = "laura@correo.com" },
-            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = anaPass, rol = "Cliente", email = "ana@correo.com" },
-            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = robertoPass, rol = "Administrador", email = "roberto@palenque.com" },
-            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = camilaPass, rol = "Cliente", email = "camila@correo.com" },
-            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = lucianoPass, rol = "Cliente", email = "luciano@correo.com" },
-            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = carolinaPass, rol = "Cliente", email = "carolina@correo.com" }
+            new Usuario { id = 1, nombre = "admin", apellido = "General", passwordHash = "admin123", rol = "Administrador", email = "admin@palenque.com" },
+            new Usuario { id = 2, nombre = "Juan", apellido = "Perez", passwordHash = "1234", rol = "Cliente", email = "juan@correo.com" },
+            new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = "clave123", rol = "Cliente", email = "maria@correo.com" },
+            new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = "qwerty", rol = "Cliente", email = "carlos@correo.com" },
+            new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", passwordHash = "pass1234", rol = "Cliente", email = "laura@correo.com" },
+            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = "abc123", rol = "Cliente", email = "ana@correo.com" },
+            new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = "adminadmin", rol = "Administrador", email = "roberto@palenque.com" },
+            new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = "cami321", rol = "Cliente", email = "camila@correo.com" },
+            new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = "123456", rol = "Cliente", email = "luciano@correo.com" },
+            new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = "securepass", rol = "Cliente", email = "carolina@correo.com" }
             );
-            */
 
-            modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { id = 1, nombre = "admin", apellido = "General", email = "admin@palenque.com", rol = "Administrador", passwordHash = "$2b$10$YQuY.YtMhWqEaxorZ4kqFuL0LpbwEq5s3SkawEXg6FCRoVxK9kjwS" },
-                new Usuario { id = 2, nombre = "Juan", apellido = "Perez", email = "juan@correo.com", rol = "Cliente", passwordHash = "$2b$10$kH2D1DgoF8IfZKfWckcW8.ekp2rVt4G0r..HENyzU.ydmvx.6edY2" },
-                new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", email = "maria@correo.com", rol = "Cliente", passwordHash = "$2b$10$J0OpdIZF0x.sGVLml7y.Nu3gN53qpAlfN7cEYzXAIyI.NkAcvMKzW" },
-                new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", email = "carlos@correo.com", rol = "Cliente", passwordHash = "$2b$10$9rh3zAXnDr1nCqCPXoQFZ.0lDoFh20VvqT0t7wUgBpwPSxvU74qkG" },
-                new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", email = "laura@correo.com", rol = "Cliente", passwordHash = "$2b$10$zAHz0n1auT3nm0IVRXFhSe9Kdrs.ZD0n3e1bWthFyqN4WWz0dPtOS" },
-                new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", email = "ana@correo.com", rol = "Cliente", passwordHash = "$2b$10$5THFCbm.zvD4BzNqDuX52eCohzCOFFUr27X3AwDrGGbLx.DVKApKK" },
-                new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", email = "roberto@palenque.com", rol = "Administrador", passwordHash = "$2b$10$FuKsyObVDDd/hDVb5nXvX.Q5JZle0QkEZJghLBXq6T0xLqjH2lQnG" },
-                new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", email = "camila@correo.com", rol = "Cliente", passwordHash = "$2b$10$8V.wtTEZlwv2h0UeW3YqCejfwkMCWmsDNfF.3Ckz5XJK5kE4Z3YGG" },
-                new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", email = "luciano@correo.com", rol = "Cliente", passwordHash = "$2b$10$sbShXoIzngnEJdWl9RKhx.0uYvQK54mAkVXdk6cP2wmyf9r2JeoxC" },
-                new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", email = "carolina@correo.com", rol = "Cliente", passwordHash = "$2b$10$ZWWRFr5z7Vs0ZNOjz1LWeOxMQooMQeKkvFYdcjJR4Cshx80svmckK" }
-            );
 
 
             modelBuilder.Entity<Productos>()
@@ -95,4 +71,5 @@
         }
     }
 }
+
 
