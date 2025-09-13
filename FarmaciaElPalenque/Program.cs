@@ -16,13 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL")));
 
 var app = builder.Build();
-/*
-if (app.Environment.IsDevelopment())
-{
-    // GET: /dev/bcrypt?password=admin123
-    app.MapGet("/dev/bcrypt", (string password) =>
-        BCrypt.Net.BCrypt.HashPassword(password));
-}*/
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
