@@ -64,9 +64,22 @@
             new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = lucianoPass, rol = "Cliente", email = "luciano@correo.com" },
             new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", passwordHash = carolinaPass, rol = "Cliente", email = "carolina@correo.com" }
             );
-
-
             */
+
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario { id = 1, nombre = "admin", apellido = "General", email = "admin@palenque.com", rol = "Administrador", passwordHash = "$2b$10$YQuY.YtMhWqEaxorZ4kqFuL0LpbwEq5s3SkawEXg6FCRoVxK9kjwS" },
+                new Usuario { id = 2, nombre = "Juan", apellido = "Perez", email = "juan@correo.com", rol = "Cliente", passwordHash = "$2b$10$kH2D1DgoF8IfZKfWckcW8.ekp2rVt4G0r..HENyzU.ydmvx.6edY2" },
+                new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", email = "maria@correo.com", rol = "Cliente", passwordHash = "$2b$10$J0OpdIZF0x.sGVLml7y.Nu3gN53qpAlfN7cEYzXAIyI.NkAcvMKzW" },
+                new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", email = "carlos@correo.com", rol = "Cliente", passwordHash = "$2b$10$9rh3zAXnDr1nCqCPXoQFZ.0lDoFh20VvqT0t7wUgBpwPSxvU74qkG" },
+                new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", email = "laura@correo.com", rol = "Cliente", passwordHash = "$2b$10$zAHz0n1auT3nm0IVRXFhSe9Kdrs.ZD0n3e1bWthFyqN4WWz0dPtOS" },
+                new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", email = "ana@correo.com", rol = "Cliente", passwordHash = "$2b$10$5THFCbm.zvD4BzNqDuX52eCohzCOFFUr27X3AwDrGGbLx.DVKApKK" },
+                new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", email = "roberto@palenque.com", rol = "Administrador", passwordHash = "$2b$10$FuKsyObVDDd/hDVb5nXvX.Q5JZle0QkEZJghLBXq6T0xLqjH2lQnG" },
+                new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", email = "camila@correo.com", rol = "Cliente", passwordHash = "$2b$10$8V.wtTEZlwv2h0UeW3YqCejfwkMCWmsDNfF.3Ckz5XJK5kE4Z3YGG" },
+                new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", email = "luciano@correo.com", rol = "Cliente", passwordHash = "$2b$10$sbShXoIzngnEJdWl9RKhx.0uYvQK54mAkVXdk6cP2wmyf9r2JeoxC" },
+                new Usuario { id = 10, nombre = "Carolina", apellido = "Mendez", email = "carolina@correo.com", rol = "Cliente", passwordHash = "$2b$10$ZWWRFr5z7Vs0ZNOjz1LWeOxMQooMQeKkvFYdcjJR4Cshx80svmckK" }
+            );
+
+
             modelBuilder.Entity<Productos>()
             .HasOne(p => p.Categoria)
             .WithMany(c => c.Productos)

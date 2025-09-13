@@ -13,6 +13,7 @@
 }
 
 <form asp-action="Login" method="post">
+	@Html.AntiForgeryToken()
 	<div class="mb-3">
 		<label asp-for="email">Email</label>
 		<input asp-for="email" type="email" class="form-control" />
