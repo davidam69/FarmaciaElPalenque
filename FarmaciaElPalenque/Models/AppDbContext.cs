@@ -12,7 +12,7 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             base.OnModelCreating(modelBuilder);
 
             // Categorías
@@ -42,12 +42,12 @@
 
             // Usuarios
             modelBuilder.Entity<Usuario>().HasData(
-            new Usuario { id = 1, nombre = "admin", apellido= "General", passwordHash = "admin123", rol = "Administrador", email = "admin@palenque.com" },
-            new Usuario { id = 2, nombre = "Juan", apellido="Perez", passwordHash = "1234", rol = "Cliente", email = "juan@correo.com" },
+            new Usuario { id = 1, nombre = "admin", apellido = "General", passwordHash = "admin123", rol = "Administrador", email = "admin@palenque.com" },
+            new Usuario { id = 2, nombre = "Juan", apellido = "Perez", passwordHash = "1234", rol = "Cliente", email = "juan@correo.com" },
             new Usuario { id = 3, nombre = "Maria", apellido = "Garcia", passwordHash = "clave123", rol = "Cliente", email = "maria@correo.com" },
             new Usuario { id = 4, nombre = "Carlos", apellido = "Lopez", passwordHash = "qwerty", rol = "Cliente", email = "carlos@correo.com" },
-            new Usuario { id = 5, nombre = "Laura", apellido="Gonzalez", passwordHash = "pass1234", rol = "Cliente", email = "laura@correo.com" },
-            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = "abc123", rol = "Cliente",  email = "ana@correo.com" },
+            new Usuario { id = 5, nombre = "Laura", apellido = "Gonzalez", passwordHash = "pass1234", rol = "Cliente", email = "laura@correo.com" },
+            new Usuario { id = 6, nombre = "Ana", apellido = "Fernandez", passwordHash = "abc123", rol = "Cliente", email = "ana@correo.com" },
             new Usuario { id = 7, nombre = "Roberto", apellido = "Alvarez", passwordHash = "adminadmin", rol = "Administrador", email = "roberto@palenque.com" },
             new Usuario { id = 8, nombre = "Camila", apellido = "Martinez", passwordHash = "cami321", rol = "Cliente", email = "camila@correo.com" },
             new Usuario { id = 9, nombre = "Luciano", apellido = "Ruiz", passwordHash = "123456", rol = "Cliente", email = "luciano@correo.com" },
@@ -71,4 +71,5 @@
         }
     }
 }
+
 
