@@ -15,7 +15,7 @@
         [Required(ErrorMessage = "El email es obligatorio")] // ErrorMessage proporciona un mensaje personalizado si el campo no se completa    
         [EmailAddress(ErrorMessage = "El formato de email no es válido")]// EmailAddress valida que el formato del email sea correcto
         public string? email { get; set; }
-        
+
         [NotMapped] // NotMapped indica que este campo no se debe mapear a la base de datos
         [Required(ErrorMessage = "La confirmacion del correo es obligatoria")]
         [EmailAddress]
@@ -28,9 +28,6 @@
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         [Display(Name = "Contraseña")]
         public string? passwordHash { get; set; }
-
-        [NotMapped] // EF no la mapea a la BD
-        public string? Password { get; set; }
 
         [NotMapped]
         [Required(ErrorMessage = "La confirmacion de la contraseña es obligatoria")]
