@@ -9,7 +9,7 @@
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Productos> Productos { get; set; }
-
+         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -68,6 +68,7 @@
             modelBuilder.Entity<Productos>()
                 .Property(p => p.Stock)
                 .HasColumnType("int");
+
         }
     }
 }
