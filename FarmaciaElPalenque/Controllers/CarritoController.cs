@@ -30,16 +30,20 @@ namespace FarmaciaElPalenque.Controllers
 
 
             var p = _context.Productos.AsNoTracking().FirstOrDefault(x => x.id == id);
-            if (p == null) return NotFound("Producto no encontrado");
+            if (p == null)
+            {
+                TempData["Error"] = "El producto no existe o fue eliminado.";
+                return RedirectToAction("Index", "Principal");
+            }
 
-            var cart = HttpContext.Session.ObtenerCarrito();
+            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>(); ;
             var item = cart.FirstOrDefault(i => i.ProductoId == id);
             if (item == null)
             {
                 cart.Add(new Carrito
                 {
                     ProductoId = p.id,
-                    Nombre = p.nombre,
+                    Nombre = p.nombre ?? "Producto sin nombre",
                     Precio = p.precio,        // cambiá columna a decimal si puedes
                     Cantidad = cantidad,
                     ImagenUrl = p.imagenUrl
@@ -50,7 +54,7 @@ namespace FarmaciaElPalenque.Controllers
                 item.Cantidad += cantidad;
             }
             HttpContext.Session.GuardarCarrito(cart);
-            TempData["Mensaje"] = $"Agregado: {p.nombre}";
+            TempData["Mensaje"] = $"Agregado: {p.nombre ?? "(desconocido)"}";
 
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
