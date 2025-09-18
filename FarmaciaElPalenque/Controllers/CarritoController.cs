@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class CarritoController : Controller
     {
@@ -8,11 +6,12 @@ namespace FarmaciaElPalenque.Controllers
 
         public CarritoController(AppDbContext context) => _context = context;
 
+        #region Agregar al carrito
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(int id, int cantidad = 1, string? returnUrl = null)
         {
-            // ¿Está logueado?
+            // Requiere estar logueado para agregar al carrito
             var email = HttpContext.Session.GetString("Usuario");
             if (string.IsNullOrEmpty(email))
             {
@@ -21,23 +20,59 @@ namespace FarmaciaElPalenque.Controllers
                 var back = returnUrl ?? Request.Headers["Referer"].ToString();
                 return RedirectToAction("Login", "Cuenta", new { returnUrl = back });
             }
-
-            // Usuario logueado → agregar/sumar cantidad
-            var usuarioId = _context.Usuarios
+        
+            // no necesito el id del usuario por ahora solo para cuando necesite migrar el carrito a BD
+            /* var usuarioId = _context.Usuarios
                 .Where(u => u.email == email)
                 .Select(u => u.id)
-                .First();
+                .First(); */
 
-
+            // buscar productos
             var p = _context.Productos.AsNoTracking().FirstOrDefault(x => x.id == id);
             if (p == null)
             {
                 TempData["Error"] = "El producto no existe o fue eliminado.";
                 return RedirectToAction("Index", "Principal");
             }
+            if (p.Stock <= 0)
+            {
+                TempData["Error"] = $"No hay stock de {p.nombre}.";
+                return Redirect(returnUrl ?? Url.Action("Ver")!);
+            }
 
-            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>(); ;
+            // obtener carrito actual de sesión con su contenido existente
+            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             var item = cart.FirstOrDefault(i => i.ProductoId == id);
+
+            var yaEnCarrito = item?.Cantidad ?? 0;
+            var pedido = cantidad;
+
+            // Validar stock antes de agregar o actualizar
+            if (yaEnCarrito + pedido > p.Stock)
+            {
+                // Limitar el stock disponible
+                var disponible = p.Stock - yaEnCarrito;
+                if (disponible > 0)
+                {
+                    // Agregar solo la cantidad disponible
+                    if (item == null)
+                        cart.Add(new Carrito { ProductoId = p.id, Nombre = p.nombre!, Precio = p.precio, Cantidad = disponible, ImagenUrl = p.imagenUrl });
+                    else
+                        item.Cantidad = p.Stock; // tope
+
+                    HttpContext.Session.GuardarCarrito(cart);
+                    TempData["Error"] = $"Solo hay {p.Stock} unidades de {p.nombre}. Se ajustó al máximo disponible.";
+                }
+                else
+                {
+                    // No hay más stock para agregar
+                    TempData["Error"] = $"Ya tenés {yaEnCarrito} en el carrito y el stock es {p.Stock}. No se agregaron más.";
+                }
+
+                return Redirect(returnUrl ?? Url.Action("Ver")!);
+            }
+
+            // agregar nuevo o actualizar cantidad
             if (item == null)
             {
                 cart.Add(new Carrito
@@ -53,54 +88,106 @@ namespace FarmaciaElPalenque.Controllers
             {
                 item.Cantidad += cantidad;
             }
+
+            // guardar carrito actualizado en sesión
             HttpContext.Session.GuardarCarrito(cart);
             TempData["Mensaje"] = $"Agregado: {p.nombre ?? "(desconocido)"}";
 
+            // redirigir a donde vino o al carrito
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
             return RedirectToAction("Ver");
         }
+        #endregion
 
+        #region Ver carrito
         [HttpGet]
         public IActionResult Ver()
         {
+            // Requiere estar logueado para ver el carrito
             var cart = HttpContext.Session.ObtenerCarrito();
             ViewBag.Total = cart.Sum(i => i.Subtotal);
             return View(cart);
         }
+        #endregion
 
+        #region Cambiar cantidad, Quitar, Vaciar
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CambiarCantidad(int id, int cantidad)
         {
-            var cart = HttpContext.Session.ObtenerCarrito();
+            // carrito solo para usuarios logueados
+            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             var item = cart.FirstOrDefault(i => i.ProductoId == id);
-            if (item != null)
+
+            // no está en el carrito
+            if (item == null) return RedirectToAction("Ver");
+
+            // verificar stock actual
+            var p = _context.Productos.AsNoTracking().FirstOrDefault(x => x.id == id);
+            if (p == null)
             {
-                if (cantidad <= 0) cart.Remove(item);
-                else item.Cantidad = cantidad;
+                // producto ya no existe, lo saco del carrito
+                cart.Remove(item);
                 HttpContext.Session.GuardarCarrito(cart);
+                TempData["Error"] = "El producto ya no está disponible y fue quitado del carrito.";
+                return RedirectToAction("Ver");
             }
+
+            // validar cantidad
+            if (cantidad <= 0)
+            {
+                // saco del carrito
+                cart.Remove(item);
+                HttpContext.Session.GuardarCarrito(cart);
+                return RedirectToAction("Ver");
+            }
+
+            // sin stock
+            if (p.Stock <= 0)
+            {
+                cart.Remove(item);
+                HttpContext.Session.GuardarCarrito(cart);
+                TempData["Error"] = $"No hay stock de {p.nombre}. Se quitó del carrito.";
+                return RedirectToAction("Ver");
+            }
+
+            // pedir más del stock
+            if (cantidad > p.Stock)
+            {
+                // ajustar al máximo disponible
+                item.Cantidad = p.Stock;
+                HttpContext.Session.GuardarCarrito(cart);
+                TempData["Error"] = $"Cantidad ajustada: solo hay {p.Stock} unidades de {p.nombre}.";
+                return RedirectToAction("Ver");
+            }
+
+            // actualizar cantidad
+            item.Cantidad = cantidad;
+            HttpContext.Session.GuardarCarrito(cart);
             return RedirectToAction("Ver");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Quitar(int id)
         {
-            var cart = HttpContext.Session.ObtenerCarrito();
+            // Requiere estar logueado para modificar el carrito
+            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             cart.RemoveAll(i => i.ProductoId == id);
             HttpContext.Session.GuardarCarrito(cart);
             return RedirectToAction("Ver");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Vaciar()
         {
+            // Requiere estar logueado para modificar el carrito
             HttpContext.Session.BorrarCarrito();
             return RedirectToAction("Ver");
         }
-
-
-
+        #endregion
     }
 }
