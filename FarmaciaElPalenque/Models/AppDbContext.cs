@@ -9,7 +9,9 @@
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Productos> Productos { get; set; }
-         
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<PedidoDetalle> PedidoDetalles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -69,6 +71,16 @@
                 .Property(p => p.Stock)
                 .HasColumnType("int");
 
+            modelBuilder.Entity<Pedido>(e =>
+            {
+                e.Property(p => p.total).HasColumnType("decimal(18,2)");
+                e.HasMany(p => p.Detalles).WithOne(d => d.Pedido).HasForeignKey(d => d.pedidoId);
+            });
+
+            modelBuilder.Entity<PedidoDetalle>(e =>
+            {
+                e.Property(d => d.precioUnitario).HasColumnType("decimal(18,2)");
+            });
         }
     }
 }

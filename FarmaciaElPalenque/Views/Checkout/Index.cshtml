@@ -1,0 +1,66 @@
+﻿@model FarmaciaElPalenque.Models.PagoViewModel
+
+<h2>Pagar</h2>
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Pagar" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre del titular</label>
+                <input asp-for="NombreTitular" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Número de tarjeta (demo)</label>
+                <input asp-for="NumeroTarjeta" class="form-control" placeholder="4111 1111 1111 1111" />
+                <small class="text-muted">Usá un número de prueba (ej. 4111 1111 1111 1111).</small>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Mes</label>
+                    <input asp-for="MesVenc" class="form-control" placeholder="MM" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Año</label>
+                    <input asp-for="AnioVenc" class="form-control" placeholder="YYYY" />
+                </div>
+                <div class="col">
+                    <label class="form-label">CVV</label>
+                    <input asp-for="CVV" class="form-control" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Confirmar pago $ @Model.Total.ToString("N2")
+            </button>
+            <a asp-controller="Carrito" asp-action="Ver" class="btn btn-outline-secondary ms-2">Volver al carrito</a>
+        </form>
+    </div>
+
+    <div class="col-md-5">
+        <h5>Resumen</h5>
+        <table class="table table-sm">
+            <thead><tr><th>Producto</th><th class="text-end">Subtotal</th></tr></thead>
+            <tbody>
+                @foreach (var i in Model.Items)
+                {
+                    <tr>
+                        <td>@i.Nombre x @i.Cantidad</td>
+                        <td class="text-end">$ @i.Subtotal.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th class="text-end">$ @Model.Total.ToString("N2")</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
