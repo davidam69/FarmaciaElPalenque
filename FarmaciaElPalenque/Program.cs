@@ -1,3 +1,5 @@
+using FarmaciaElPalenque.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,3 +33,8 @@ app.MapControllerRoute(
     pattern: "{controller=Principal}/{action=Index}/{id?}");
 
 app.Run();
+
+// Registra el servicio de envio de correos
+builder.Services.AddScoped<IEmailSender, EmailSenderService>();
+// Registra el servicio en segundo plano que ejecuta la IA
+builder.Services.AddHostedService<ServicioAnalisisClientes>();
