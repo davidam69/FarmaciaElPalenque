@@ -13,14 +13,16 @@
 			<th>Producto</th>
 			<th>Precio</th>
 			<th>Categoria</th>
+            <th></th>
 		</tr>
+	</thead>
+	<tbody>
 		@foreach (var productos in Model)
 		{
 			<tr>
 				<td>
 					<img src="@(!string.IsNullOrEmpty(productos.imagenUrl) ? productos.imagenUrl : "/Images/default.png")"
-						 alt="@productos.nombre"
-						 style="width: 100px; height: 100px;" />
+						alt="@productos.nombre" style="width: 100px; height: 100px;" />
 				</td>
 				<td>
 					<a asp-action="Detalle" asp-route-id="@productos.id">
@@ -29,7 +31,26 @@
 				</td>
 				<td>$@productos.precio.ToString("N0")</td>
 				<td>@productos?.Categoria?.nombre</td>
+
+				<td>
+					@if (productos != null && productos.id > 0)
+					{
+						<form asp-controller="Carrito" asp-action="Agregar" method="post" class="d-inline">
+							<input type="hidden" name="id" value="@productos.id" />
+							<input type="hidden" name="cantidad" value="1" />
+							<button type="submit" class="btn btn-sm btn-primary">
+								<i class="bi bi-cart-plus"></i> Agregar
+							</button>
+						</form>
+					}
+                    else
+                    {
+						<button class="btn btn-sm btn-secondary" disabled>
+							<i class="bi bi-cart-x"></i> No disponible
+						</button>
+                    }
+				</td>
 			</tr>
 		}
-	</thead>
+	</tbody>
 </table>

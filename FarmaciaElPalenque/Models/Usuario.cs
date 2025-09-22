@@ -14,6 +14,7 @@
 
         [Required(ErrorMessage = "El email es obligatorio")] // ErrorMessage proporciona un mensaje personalizado si el campo no se completa    
         [EmailAddress(ErrorMessage = "El formato de email no es válido")]// EmailAddress valida que el formato del email sea correcto
+       // [RegularExpression(@"^[a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2}$", ErrorMessage = "El formato del email no es válido.")]
         public string? email { get; set; }
         
         [NotMapped] // NotMapped indica que este campo no se debe mapear a la base de datos
