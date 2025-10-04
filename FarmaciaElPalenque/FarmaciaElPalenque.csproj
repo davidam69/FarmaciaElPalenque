@@ -25,6 +25,7 @@
 
     <PackageReference Include="Microsoft.ML.FastTree" Version="4.0.2" />
     <PackageReference Include="MimeKit" Version="4.13.0" />
+    <PackageReference Include="QuestPDF" Version="2025.7.2" />
 
 
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />

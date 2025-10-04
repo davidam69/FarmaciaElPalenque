@@ -1,4 +1,5 @@
-﻿namespace FarmaciaElPalenque.Services
+﻿
+namespace FarmaciaElPalenque.Services
 {
     public class FacturaPdfService
     {
