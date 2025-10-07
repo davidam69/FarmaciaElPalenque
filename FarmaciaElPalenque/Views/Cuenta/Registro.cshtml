@@ -1,78 +1,98 @@
 ﻿@model Usuario
 
 @{
-	ViewData["Title"] = "Registro";
+    ViewData["Title"] = "Registro";
 }
 
 <h2>Registro de Usuario</h2>
 
-<form asp-action="Registro" method="post">
+<form asp-action="Registro" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-	<div class="mb-3">
-		<label asp-for="nombre">Nombre</label>
-		<input asp-for="nombre" class="form-control"/>
-		<span asp-validation-for="nombre" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="nombre" class="form-label">Nombre</label>
+        <input asp-for="nombre" class="form-control" autocomplete="given-name" />
+        <span asp-validation-for="nombre" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="apellido"></label>
-		<input asp-for="apellido" class="form-control" />
-		<span asp-validation-for="apellido" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="apellido" class="form-label">Apellido</label>
+        <input asp-for="apellido" class="form-control" autocomplete="family-name" />
+        <span asp-validation-for="apellido" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="email">Email</label>
-		<input asp-for="email" type ="email" class="form-control"/>
-		<span asp-validation-for="email" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="email" class="form-label">Email</label>
+        <input asp-for="email" type="email" class="form-control" autocomplete="email" />
+        <span asp-validation-for="email" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="confirmarEmail">Confirmar Email</label>
-		<input asp-for="confirmarEmail" type="email" class="form-control" />
-		<span asp-validation-for="confirmarEmail" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="confirmarEmail" class="form-label">Confirmar Email</label>
+        <input asp-for="confirmarEmail" type="email" class="form-control" autocomplete="email" />
+        <span asp-validation-for="confirmarEmail" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="passwordHash">Contraseña</label>
-		<div class="input-group">
-			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
-			<span class="input-group-text">
-				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
-			</span>
-		</div>
-		<span asp-validation-for="passwordHash" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="passwordHash" class="form-label">Contraseña</label>
+        <div class="input-group">
+            <input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" autocomplete="new-password" />
+            <button type="button" class="input-group-text" id="togglePasswordReg" aria-label="Mostrar/ocultar contraseña">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+        </div>
+        <span asp-validation-for="passwordHash" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="confirmarPasswordHash">Confirmar Contraseña</label>
-		<div class="input-group">
-			<input asp-for="confirmarPasswordHash" type="password" class="form-control" id="confirmarPasswordHash" />
-			<span class="input-group-text">
-				<i class="bi bi-eye-slash" id="toggleConfirmPassword" style="cursor: pointer;"></i>
-			</span>
-		</div>
-		<span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="confirmarPasswordHash" class="form-label">Confirmar Contraseña</label>
+        <div class="input-group">
+            <input asp-for="confirmarPasswordHash" type="password" class="form-control" id="confirmarPasswordHash" autocomplete="new-password" />
+            <button type="button" class="input-group-text" id="toggleConfirmPassword" aria-label="Mostrar/ocultar confirmación">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+        </div>
+        <span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
+    </div>
 
+    @* Solo se muestra si el usuario actual es administrador *@
+    @if (Context.Session.GetString("Rol") == "Administrador")
+    {
+        <div class="mb-3">
+            <label asp-for="rol" class="form-label">Rol</label>
+            <select asp-for="rol" class="form-select">
+                <option value="Cliente">Cliente</option>
+                <option value="Administrador">Administrador</option>
+            </select>
+        </div>
+    }
 
-
-	@* Solo se muestra si el usuario actual es administrador *@
-	@if (Context.Session.GetString("Rol") == "Administrador")
-	{
-		<div class="mb-3">
-			<label asp-for="rol"></label>
-			<select asp-for="rol" class="form-control">
-				<option value="Cliente">Cliente</option>
-				<option value="Administrador">Administrador</option>
-			</select>
-		</div>
-	}
-
-	<button class="btn btn-primary">
-		<i class="bi bi-person-plus"></i>Registrarse
-	</button>
+    <button class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> Registrarse
+    </button>
 </form>
 
-@section Scripts{
-	<partial name="_ValidationScriptsPartial" />
+@section Scripts {
+    <script>
+        (function() {
+            const toggle1 = document.getElementById('togglePasswordReg');
+            const pwd1 = document.getElementById('passwordHash');
+            const toggle2 = document.getElementById('toggleConfirmPassword');
+            const pwd2 = document.getElementById('confirmarPasswordHash');
+
+            function hook(btn, input){
+                if (!btn || !input) return;
+                btn.addEventListener('click', function(){
+                    const isPwd = input.type === 'password';
+                    input.type = isPwd ? 'text' : 'password';
+                    this.innerHTML = isPwd ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+                });
+            }
+
+            hook(toggle1, pwd1);
+            hook(toggle2, pwd2);
+        })();
+    </script>
+    <partial name="_ValidationScriptsPartial" />
 }
