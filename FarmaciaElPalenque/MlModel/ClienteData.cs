@@ -1,6 +1,4 @@
-﻿using Microsoft.ML.Data;
-
-namespace FarmaciaElPalenque.MlModel
+﻿namespace FarmaciaElPalenque.MlModel
 {
     public class ClienteData
     {
