@@ -12,8 +12,8 @@
         public string NombreTitular { get; set; } = "";
 
         [Required(ErrorMessage = "El número de tarjeta es obligatorio")]
-        [RegularExpression(@"^\d{16}$", ErrorMessage = "El número de tarjeta debe tener 16 dígitos")]
-        [Required(ErrorMessage = "Ingrese un número de tarjeta válido")]
+        [RegularE        [Required(ErrorMessage = "Ingrese un número de tarjeta válido")]
+xpression(@"^\d{16}$", ErrorMessage = "El número de tarjeta debe tener 16 dígitos")]
         [RegularExpression(@"^\d{16}$", ErrorMessage = "El número de tarjeta debe tener 16 dígitos")]
         public string? NumeroTarjeta { get; set; }   // ej: 4111 1111 1111 1111
 
