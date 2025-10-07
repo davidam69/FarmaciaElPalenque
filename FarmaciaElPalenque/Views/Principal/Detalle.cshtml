@@ -29,7 +29,7 @@
 <p><strong>Precio:</strong> $@Model.precio.ToString("C")</p>
 <p><strong>Categoria:</strong> @Model?.Categoria?.nombre</p>
 <p>
-    <span class="badge bg-@(Model.Stock > 0 ? "success" : "secondary")">
+    <span class="badge bg-@(Model!.Stock > 0 ? "success" : "secondary")">
         Stock: @Model.Stock
     </span>
 </p>
