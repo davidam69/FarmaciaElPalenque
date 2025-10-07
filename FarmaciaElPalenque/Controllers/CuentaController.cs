@@ -23,7 +23,7 @@
             {
                 return View(usuario);
             }
-            usuario.email = usuario.email?.Trim().ToLowerInvariant();
+            usuario.email = usuario.email?.Trim().ToLowerInvariant()!;
             if (string.IsNullOrEmpty(usuario.rol))
             {
                 usuario.rol = "Cliente";
