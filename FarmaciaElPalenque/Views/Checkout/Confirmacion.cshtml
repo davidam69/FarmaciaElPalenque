@@ -1,6 +1,27 @@
-﻿<h2>¡Gracias por tu compra!</h2>
-<div class="alert alert-success">
-    @ViewBag.Mensaje
-</div>
-<a asp-controller="Principal" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
+﻿﻿@{
+ViewData["Title"] = "Compra realizada";
+}
 
+<h2>¡Gracias por tu compra!</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @Html.Raw(TempData["Error"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-info">@ViewBag.Mensaje</div>
+}
+
+<a asp-controller="Principal" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
