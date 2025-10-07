@@ -3,6 +3,7 @@ using Microsoft.ML.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace FarmaciaElPalenque.MlModel
 {
@@ -19,14 +20,26 @@ namespace FarmaciaElPalenque.MlModel
 
         public List<(ClienteData Cliente, uint Cluster, bool DeberiaAvisarse)> EjecutarClustering()
         {
-            // 1. Leer datos desde la base
             var clientes = new List<ClienteData>();
+
+            var query = @"
+                SELECT
+                    u.nombre,
+                    u.edad,
+                    COUNT(c.id) AS ComprasTotales,
+                    SUM(c.montoTotal) AS MontoGastado,
+                    DATEDIFF(day, MAX(c.fechaCompra), GETDATE()) AS DiasDesdeUltimaCompra,
+                    AVG(DATEDIFF(day, c_anterior.fechaCompra, c.fechaCompra)) AS PromedioDiasEntreCompras
+                FROM Usuarios u
+                LEFT JOIN Compras c ON u.id = c.usuarioId
+                LEFT JOIN Compras c_anterior ON c_anterior.usuarioId = u.id AND c_anterior.fechaCompra < c.fechaCompra
+                GROUP BY u.nombre, u.edad
+                HAVING COUNT(c.id) > 1;
+            ";
 
             using (var conexion = new SqlConnection(connectionString))
             {
                 conexion.Open();
-                var query = "SELECT Edad, ComprasMensuales, MontoGastado, DiasDesdeUltimaCompra FROM Clientes";
-
                 using (var comando = new SqlCommand(query, conexion))
                 using (var lector = comando.ExecuteReader())
                 {
@@ -34,47 +47,42 @@ namespace FarmaciaElPalenque.MlModel
                     {
                         clientes.Add(new ClienteData
                         {
-                            Edad = Convert.ToSingle(lector["Edad"]),
-                            ComprasMensuales = Convert.ToSingle(lector["ComprasMensuales"]),
-                            MontoGastado = Convert.ToSingle(lector["MontoGastado"]),
-                            DiasDesdeUltimaCompra = Convert.ToSingle(lector["DiasDesdeUltimaCompra"])
+                            Nombre = lector["nombre"].ToString(),
+                            Edad = lector["edad"] == DBNull.Value ? 0 : Convert.ToSingle(lector["edad"]),
+                            ComprasMensuales = lector["ComprasTotales"] == DBNull.Value ? 0 : Convert.ToSingle(lector["ComprasTotales"]),
+                            MontoGastado = lector["MontoGastado"] == DBNull.Value ? 0 : Convert.ToSingle(lector["MontoGastado"]),
+                            DiasDesdeUltimaCompra = lector["DiasDesdeUltimaCompra"] == DBNull.Value ? 0 : Convert.ToSingle(lector["DiasDesdeUltimaCompra"]),
+                            PromedioDiasEntreCompras = lector["PromedioDiasEntreCompras"] == DBNull.Value ? 0 : Convert.ToSingle(lector["PromedioDiasEntreCompras"])
                         });
                     }
                 }
             }
 
-            // 2. Cargar datos en ML.NET
             var dataView = mlContext.Data.LoadFromEnumerable(clientes);
-
-            // 3. Definir pipeline de clustering
             var pipeline = mlContext.Transforms.Concatenate("Features",
-                    nameof(ClienteData.Edad),
-                    nameof(ClienteData.ComprasMensuales),
-                    nameof(ClienteData.MontoGastado),
-                    nameof(ClienteData.DiasDesdeUltimaCompra))
-                .Append(mlContext.Transforms.NormalizeMinMax("Features"))
-                .Append(mlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
+                                    nameof(ClienteData.Edad),
+                                    nameof(ClienteData.ComprasMensuales),
+                                    nameof(ClienteData.MontoGastado),
+                                    nameof(ClienteData.DiasDesdeUltimaCompra))
+                                .Append(mlContext.Transforms.NormalizeMinMax("Features"))
+                                .Append(mlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
 
-            // 4. Entrenar el modelo
             var modelo = pipeline.Fit(dataView);
             var predicciones = modelo.Transform(dataView);
 
-            // 5. Obtener resultados de clustering
             var resultados = mlContext.Data
                 .CreateEnumerable<PrediccionCliente>(predicciones, reuseRowObject: false)
                 .ToList();
 
-            var hoy = DateTime.Today;
-
-            // 6. Combinar con la lógica de aviso personalizada
             var combinados = clientes.Zip(resultados, (cliente, prediccion) =>
             {
-                // Simula que la última compra fue hace X días
-                var fechaUltimaCompra = hoy.AddDays(-cliente.DiasDesdeUltimaCompra);
-                var diasDesdeUltimaCompra = (hoy - fechaUltimaCompra).TotalDays;
+                var tolerancia = 2.0f;
+                bool debeAvisarse = false;
 
-                // Si se pasó por más de 2 días de su frecuencia habitual, avisar
-                bool debeAvisarse = diasDesdeUltimaCompra > cliente.DiasDesdeUltimaCompra + 2;
+                if (cliente.PromedioDiasEntreCompras > 0)
+                {
+                    debeAvisarse = cliente.DiasDesdeUltimaCompra > (cliente.PromedioDiasEntreCompras + tolerancia);
+                }
 
                 return (cliente, prediccion.PredictedClusterId, debeAvisarse);
             }).ToList();
@@ -91,7 +99,6 @@ namespace FarmaciaElPalenque.MlModel
             foreach (var grupo in agrupados)
             {
                 Console.WriteLine($"Cluster {grupo.Key}:");
-
                 var dias = grupo
                     .Select(x => (int)x.Cliente.DiasDesdeUltimaCompra)
                     .GroupBy(d => d)
