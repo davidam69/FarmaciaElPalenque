@@ -20,7 +20,7 @@
                 var back = returnUrl ?? Request.Headers["Referer"].ToString();
                 return RedirectToAction("Login", "Cuenta", new { returnUrl = back });
             }
-        
+
             // no necesito el id del usuario por ahora solo para cuando necesite migrar el carrito a BD
             /* var usuarioId = _context.Usuarios
                 .Where(u => u.email == email)
@@ -95,7 +95,7 @@
 
             // redirigir a donde vino o al carrito
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
+                return Redirect("Ver");
 
             return RedirectToAction("Ver");
         }
@@ -105,11 +105,19 @@
         [HttpGet]
         public IActionResult Ver()
         {
-            // Requiere estar logueado para ver el carrito
-            var cart = HttpContext.Session.ObtenerCarrito();
+            var email = HttpContext.Session.GetString("Usuario");
+            if (string.IsNullOrEmpty(email))
+            {
+                TempData["Error"] = "Tenés que iniciar sesión para ver el carrito.";
+                var back = Url.Action("Ver", "Carrito");
+                return RedirectToAction("Login", "Cuenta", new { returnUrl = back });
+            }
+
+            var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             ViewBag.Total = cart.Sum(i => i.Subtotal);
             return View(cart);
         }
+
         #endregion
 
         #region Cambiar cantidad, Quitar, Vaciar
