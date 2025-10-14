@@ -62,5 +62,64 @@
 61. Desde sql server management studio se agregaron 100 productos de ejemplo con stock a la base de datos.
 62. Se borraron por error las migraciones y se volvio a crear la base de datos desde cero con el comando `Update-Database -Force` pero Stock nos marcaba error en la base de datos.
 63. se soluciono el error de stock con Ctrl + Shift + R en Visual Studio para actualizar el esquema de la base de datos.
+64 scripts base de datos
+*** Usuarios
 
+DELETE FROM dbo.Usuarios WHERE id BETWEEN 1 AND 10;
 
+SET IDENTITY_INSERT dbo.Usuarios ON;
+
+INSERT INTO dbo.Usuarios (id, nombre, apellido, passwordHash, rol, email) VALUES
+(1,  'admin',   'General',   'admin123',   'Administrador', 'admin@palenque.com'),
+(2,  'Juan',    'Perez',     '1234',       'Cliente',       'juan@correo.com'),
+(3,  'Maria',   'Garcia',    'clave123',   'Cliente',       'maria@correo.com'),
+(4,  'Carlos',  'Lopez',     'qwerty',     'Cliente',       'carlos@correo.com'),
+(5,  'Laura',   'Gonzalez',  'pass1234',   'Cliente',       'laura@correo.com'),
+(6,  'Ana',     'Fernandez', 'abc123',     'Cliente',       'ana@correo.com'),
+(7,  'Roberto', 'Alvarez',   'adminadmin', 'Administrador', 'roberto@palenque.com'),
+(8,  'Camila',  'Martinez',  'cami321',    'Cliente',       'camila@correo.com'),
+(9,  'Luciano', 'Ruiz',      '123456',     'Cliente',       'luciano@correo.com'),
+(10, 'Carolina','Mendez',    'securepass', 'Cliente',       'carolina@correo.com');
+
+SET IDENTITY_INSERT dbo.Usuarios OFF;
+
+SELECT * FROM dbo.Usuarios WHERE id BETWEEN 1 AND 10 ORDER BY id;
+
+*** Categorias
+
+DELETE FROM dbo.Categorias WHERE id IN (1,2,3);
+
+SET IDENTITY_INSERT dbo.Categorias ON;
+
+INSERT INTO dbo.Categorias (id, nombre) VALUES
+(1, N'Medicamentos'),
+(2, N'Perfumería'),
+(3, N'Cuidado personal');
+
+SET IDENTITY_INSERT dbo.Categorias OFF;
+
+SELECT * FROM dbo.Categorias WHERE id IN (1,2,3);
+
+*** Productos
+
+DELETE FROM dbo.Productos WHERE id BETWEEN 1 AND 14;
+
+SET IDENTITY_INSERT dbo.Productos ON;
+
+INSERT INTO dbo.Productos (id, nombre, precio, categoriaId, imagenUrl, Stock) VALUES
+(1,  N'Bayaspirina', 5728, 1, N'https://www.anikashop.com.ar/product_images/w/994/8024587__72227_zoom.jpg', 100),
+(2,  N'Ibu400', 15000, 1, N'https://www.centraloeste.com.ar/media/catalog/product/cache/9c821fce06d7004f361a4c419f8b1787/7/7/7790839980453.png', 100),
+(3,  N'Shampoo Pantene', 20000, 2, N'https://www.casaflorian.com.ar/wp-content/uploads/2023/03/391-525-01_C.jpg', 100),
+(4,  N'Jabón Rexona', 5000, 3, N'https://industriaslitoral.com.ar/wp-content/uploads/2022/05/3011150_f.jpg', 100),
+(5,  N'Paracetamol 500mg', 4300, 1, N'https://www.farmaciassanchezantoniolli.com.ar/10123-medium_default/tafirol-x30-comp.jpg', 100),
+(6,  N'Alcohol en gel', 2900, 3, N'https://farmacityar.vtexassets.com/arquivos/ids/207795/220120_alcohol-en-gel-bialcohol-con-glicerina-x-250-ml_imagen-1.jpg?v=637497071230100000', 100),
+(7,  N'Cepillo Dental Oral-B', 2200, 3, N'https://jumboargentina.vtexassets.com/arquivos/ids/768123/Cepillo-Dental-Oral-b-Complete-1-Un-1-223926.jpg?v=638114674058130000', 100),
+(8,  N'Toallitas Húmedas Pampers', 7800, 3, N'https://www.masfarmacias.com/wp-content/uploads/7500435148443.jpg', 100),
+(9,  N'Perfume Hugo Boss', 45200, 2, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-oxxY1Y9TdkG8WTow2jN6IedoE1mp_ZCMBg&s', 100),
+(10, N'Desodorante Dove', 6300, 2, N'https://farmaciadelpuebloar.vtexassets.com/arquivos/ids/166590/desodorante-dove-men-care.png?v=638163070782970000', 100),
+(11, N'Té de Hierbas Relax', 3600, 1, N'https://images.precialo.com/products/te-en-saquitos-green-hills-blend-relax-x-20-saquitos/3d1dbd48-bcf7-4b67-82e3-e93ca551527d.jpeg', 100),
+(12, N'Crema Nivea', 5400, 2, N'https://getthelookar.vtexassets.com/arquivos/ids/180043-800-auto?v=638484443678830000&width=800&height=auto&aspect=true', 100),
+(13, N'Algodón Estéril 100g', 2100, 3, N'https://jumboargentina.vtexassets.com/arquivos/ids/178407-800-600?v=636383362696400000&width=800&height=600&aspect=true', 100),
+(14, N'Jarabe para la Tos', 8700, 1, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTusKNNE2NSzobZCKl7bKeECu4bX403oEezKg&s', 100);
+
+SET IDENTITY_INSERT dbo.Productos OFF;
