@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Resultado del Test de Envío de Email";
+}
+
+<div class="container py-5">
+    <h1 class="display-4 fw-bold text-dark">Resultado del Test de Email</h1>
+    <hr />
+
+    @if (ViewBag.Resultado != null && ViewBag.Resultado.Contains("exitosamente"))
+    {
+        <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>¡Éxito!</strong> @ViewBag.Resultado
+        </div>
+        <p>Revisa la bandeja de entrada o la carpeta de spam de **joaquincomello@gmail.com**.</p>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-x-octagon-fill me-2"></i>
+            <strong>¡Error! No se pudo enviar el correo.</strong>
+
+            <hr />
+            <p class="mb-0"><strong>Detalle del Error:</strong></p>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;">@ViewBag.Resultado</pre>
+        </div>
+
+        <p>
+            Copia el mensaje completo de la caja roja de arriba y envíamelo para diagnosticar la causa exacta.
+        </p>
+    }
+
+    <a asp-controller="Principal" asp-action="Index" class="btn btn-secondary mt-3">Volver a la Página Principal</a>
+</div>
