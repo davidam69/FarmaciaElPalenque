@@ -1,13 +1,68 @@
-﻿namespace FarmaciaElPalenque.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore; // Necesario para .Include() y .FirstOrDefaultAsync()
+using System.Linq;
+using FarmaciaElPalenque.Models; // Necesario para los ViewModels
+using FarmaciaElPalenque.MlModel; // Necesario para ClienteClustering
+using FarmaciaElPalenque.Services; // Necesario para IEmailSender
+using System.Threading.Tasks;
+using System.Collections.Generic; // Necesario para List<>
+using System;
+
+namespace FarmaciaElPalenque.Controllers
 {
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
-        
+        // Asumiendo que AppDbContext está correctamente inyectado
         public AdminController(AppDbContext context)
         {
             _context = context;
         }
+
+        // =================================================================
+        // NUEVA ACCIÓN: RESULTADOS DEL ML Y ESTADO DE ENVÍO DE EMAILS
+        // =================================================================
+        public async Task<IActionResult> ResultadosClustering()
+        {
+            if (HttpContext.Session.GetString("Rol") != "Administrador")
+            {
+                TempData["Mensaje"] = "Acceso Denegado.";
+                return RedirectToAction("Index", "Principal");
+            }
+
+            
+            var connectionString = _context.Database.GetConnectionString();
+            var mlModel = new ClienteClustering(connectionString);
+            var resultadosMl = mlModel.EjecutarClustering();
+
+            var fechaInicioHoy = DateTime.Today;
+            var resultadosFinales = new List<AnalisisClienteViewModel>();
+
+          
+            foreach (var (Cliente, Cluster, DeberiaAvisarse) in resultadosMl)
+            {
+             
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.nombre == Cliente.Nombre);
+
+               
+                bool enviadoHoy = false;
+
+                
+
+                resultadosFinales.Add(new AnalisisClienteViewModel
+                {
+                    ClienteDatos = Cliente,
+                    ClusterId = Cluster,
+                    DeberiaAvisarse = DeberiaAvisarse,
+                    EmailCliente = usuario?.email ?? "N/A",
+                    AvisoEnviadoHoy = enviadoHoy
+                });
+            }
+
+            return View(resultadosFinales);
+        }
+        
 
         public IActionResult Panel()
         {
@@ -41,7 +96,7 @@
                 return RedirectToAction("ListaUsuarios");
             }
 
-            // Evitar que un administrador se elimine a sí mismo
+            
             if (usuario.email == HttpContext.Session.GetString("Usuario"))
             {
                 TempData["Error"] = "No puedes eliminar tu propio usuario mientras estás logueado.";
@@ -149,6 +204,5 @@
             TempData["Mensaje"] = "Productos actualizados correctamente.";
             return RedirectToAction("ListaProductos");
         }
-
     }
 }

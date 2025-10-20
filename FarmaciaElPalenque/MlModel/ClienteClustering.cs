@@ -22,10 +22,10 @@ namespace FarmaciaElPalenque.MlModel
         {
             var clientes = new List<ClienteData>();
 
+            // CAMBIO 1: SE ELIMINAN 'u.edad' DEL SELECT Y DEL GROUP BY EN EL QUERY SQL
             var query = @"
                 SELECT
                     u.nombre,
-                    u.edad,
                     COUNT(c.id) AS ComprasTotales,
                     SUM(c.montoTotal) AS MontoGastado,
                     DATEDIFF(day, MAX(c.fechaCompra), GETDATE()) AS DiasDesdeUltimaCompra,
@@ -33,7 +33,7 @@ namespace FarmaciaElPalenque.MlModel
                 FROM Usuarios u
                 LEFT JOIN Compras c ON u.id = c.usuarioId
                 LEFT JOIN Compras c_anterior ON c_anterior.usuarioId = u.id AND c_anterior.fechaCompra < c.fechaCompra
-                GROUP BY u.nombre, u.edad
+                GROUP BY u.nombre 
                 HAVING COUNT(c.id) > 1;
             ";
 
@@ -48,7 +48,7 @@ namespace FarmaciaElPalenque.MlModel
                         clientes.Add(new ClienteData
                         {
                             Nombre = lector["nombre"].ToString(),
-                            Edad = lector["edad"] == DBNull.Value ? 0 : Convert.ToSingle(lector["edad"]),
+                            // CAMBIO 2: SE ELIMINA LA LECTURA DE 'Edad'
                             ComprasMensuales = lector["ComprasTotales"] == DBNull.Value ? 0 : Convert.ToSingle(lector["ComprasTotales"]),
                             MontoGastado = lector["MontoGastado"] == DBNull.Value ? 0 : Convert.ToSingle(lector["MontoGastado"]),
                             DiasDesdeUltimaCompra = lector["DiasDesdeUltimaCompra"] == DBNull.Value ? 0 : Convert.ToSingle(lector["DiasDesdeUltimaCompra"]),
@@ -59,13 +59,14 @@ namespace FarmaciaElPalenque.MlModel
             }
 
             var dataView = mlContext.Data.LoadFromEnumerable(clientes);
+
+            // CAMBIO 3: SE ELIMINA 'Edad' DE LA TUBERÍA DE ML.NET (FEATURES)
             var pipeline = mlContext.Transforms.Concatenate("Features",
-                                    nameof(ClienteData.Edad),
-                                    nameof(ClienteData.ComprasMensuales),
-                                    nameof(ClienteData.MontoGastado),
-                                    nameof(ClienteData.DiasDesdeUltimaCompra))
-                                .Append(mlContext.Transforms.NormalizeMinMax("Features"))
-                                .Append(mlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
+                nameof(ClienteData.ComprasMensuales),
+                nameof(ClienteData.MontoGastado),
+                nameof(ClienteData.DiasDesdeUltimaCompra))
+                .Append(mlContext.Transforms.NormalizeMinMax("Features"))
+                .Append(mlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
 
             var modelo = pipeline.Fit(dataView);
             var predicciones = modelo.Transform(dataView);

@@ -7,14 +7,12 @@ namespace FarmaciaElPalenque.MlModel
         [LoadColumn(0)]
         public string? Nombre { get; set; }
         [LoadColumn(1)]
-        public float Edad { get; set; }
-        [LoadColumn(2)]
         public float ComprasMensuales { get; set; }
-        [LoadColumn(3)]
+        [LoadColumn(2)]
         public float MontoGastado { get; set; }
-        [LoadColumn(4)]
+        [LoadColumn(3)]
         public float DiasDesdeUltimaCompra { get; set; }
-        [LoadColumn(5)]
+        [LoadColumn(4)]
         public float PromedioDiasEntreCompras { get; set; }
     }
 }

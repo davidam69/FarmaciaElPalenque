@@ -32,14 +32,15 @@ namespace FarmaciaElPalenque.Services
                 Text = message
             };
 
-            using (var client = new MailKit.Net.Smtp.SmtpClient()) 
+            using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
                 var port = _configuration.GetValue<int>("SmtpSettings:Port");
 
+ 
                 await client.ConnectAsync(
                     _configuration["SmtpSettings:Server"],
                     port,
-                    MailKit.Security.SecureSocketOptions.StartTls);
+                    MailKit.Security.SecureSocketOptions.SslOnConnect); 
 
                 await client.AuthenticateAsync(
                     _configuration["SmtpSettings:Username"],
