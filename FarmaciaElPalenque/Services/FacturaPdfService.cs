@@ -7,6 +7,13 @@ namespace FarmaciaElPalenque.Services
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
+            // Ruta al logo (ajustá según tu estructura)
+            var headerLogoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "logo_header.png");
+            var watermarkPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "logo_watermark.png");
+
+            byte[]? headerLogoBytes = System.IO.File.Exists(headerLogoPath) ? System.IO.File.ReadAllBytes(headerLogoPath) : null;
+            byte[]? watermarkBytes = System.IO.File.Exists(watermarkPath) ? System.IO.File.ReadAllBytes(watermarkPath) : null;
+
             var doc = Document.Create(container =>
             {
                 container.Page(page =>
@@ -15,14 +22,32 @@ namespace FarmaciaElPalenque.Services
                     page.Size(PageSizes.A4);
                     page.DefaultTextStyle(x => x.FontSize(10));
 
+                    // ======== FONDO (marca de agua) ========
+                    if (watermarkBytes != null)
+                    {
+                        page.Background()
+                            .AlignCenter()
+                            .AlignMiddle()
+                            .Image(watermarkBytes)
+                            .FitWidth();
+
+                    }
+
+                    // ======== CABECERA ========
                     page.Header().Row(row =>
                     {
+                        if (headerLogoBytes != null)
+                        {
+                            row.ConstantItem(80).Image(headerLogoBytes).FitWidth(); // logo en cabecera (opcional)
+                        }
+
                         row.RelativeItem().Column(col =>
                         {
                             col.Item().Text("FARMACIA EL PALENQUE").SemiBold().FontSize(16);
                             col.Item().Text("CUIT: 20-12345678-9");
                             col.Item().Text("Av. Siempreviva 742");
                         });
+
                         row.ConstantItem(180).Column(col =>
                         {
                             col.Item().Text($"Factura: {f.Numero}").SemiBold();
@@ -30,6 +55,7 @@ namespace FarmaciaElPalenque.Services
                         });
                     });
 
+                    // ======== CUERPO ========
                     page.Content().PaddingVertical(10).Column(col =>
                     {
                         col.Spacing(8);
@@ -61,7 +87,9 @@ namespace FarmaciaElPalenque.Services
                                 h.Cell().Element(CellHeader).AlignRight().Text("Subtotal");
 
                                 static IContainer CellHeader(IContainer c) =>
-                                    c.DefaultTextStyle(x => x.SemiBold()).Background(Colors.Grey.Lighten2).Padding(6);
+                                    c.DefaultTextStyle(x => x.SemiBold())
+                                     .Background(Colors.Grey.Lighten2)
+                                     .Padding(6);
                             });
 
                             foreach (var it in f.Items)
@@ -82,6 +110,7 @@ namespace FarmaciaElPalenque.Services
                         col.Item().PaddingTop(10).Text("¡Gracias por su compra!").Italic();
                     });
 
+                    // ======== PIE ========
                     page.Footer().AlignCenter().Text(txt =>
                     {
                         txt.Span("Generado automáticamente - ");

@@ -3,9 +3,9 @@
     public class CompraConFecha
     {
 
-        public ClienteData Cliente;
+        public ClienteData? Cliente;
         public uint Cluster;
-        public float DiasDesdeUltimaCompra => Cliente.DiasDesdeUltimaCompra;
+        public float DiasDesdeUltimaCompra => Cliente!.DiasDesdeUltimaCompra;
 
     }
 }

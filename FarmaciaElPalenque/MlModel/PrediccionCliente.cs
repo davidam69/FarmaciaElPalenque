@@ -1,6 +1,4 @@
-﻿using Microsoft.ML.Data;
-
-namespace FarmaciaElPalenque.MlModel
+﻿namespace FarmaciaElPalenque.MlModel
 {
     public class PrediccionCliente
     {
@@ -8,6 +6,6 @@ namespace FarmaciaElPalenque.MlModel
         public uint PredictedClusterId;
 
         [ColumnName("Score")]
-        public float[] Distances;
+        public float[]? Distances;
     }
 }

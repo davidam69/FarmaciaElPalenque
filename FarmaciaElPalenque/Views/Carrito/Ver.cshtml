@@ -1,11 +1,34 @@
 ﻿@model List<Carrito>
+
 @{
     ViewData["Title"] = "Carrito";
-    decimal total = ViewBag.Total ?? 0m;
+    decimal total = ViewBag.Total is decimal d ? d : 0m; // cast seguro
 }
+
 <h2>Carrito</h2>
 
-@if (!Model.Any())
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @Html.Raw(TempData["Error"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+     @{
+        var referer = Context.Request.Headers["Referer"].ToString();
+        var backUrl = (!string.IsNullOrWhiteSpace(referer) && Url.IsLocalUrl(referer))
+            ? referer
+            : Url.Action("Index", "Principal");
+    }
+
+@if (Model == null || !Model.Any())
 {
     <div class="alert alert-info">Tu carrito está vacío.</div>
 }
@@ -27,23 +50,23 @@ else
             {
                 <tr>
                     <td>
-                        @if (!string.IsNullOrEmpty(i.ImagenUrl))
-                        {
-                            <img src="@i.ImagenUrl" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" />
-                        }
+                        <img src="@(string.IsNullOrWhiteSpace(i.ImagenUrl) ? "/images/default.png" : i.ImagenUrl)"
+                             alt="imagen" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" />
                     </td>
                     <td>@i.Nombre</td>
-                    <td>$ @i.Precio</td>
+                    <td>@i.Precio.ToString("C")</td>
                     <td>
                         <form asp-action="CambiarCantidad" method="post" class="d-flex gap-2">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@i.ProductoId" />
                             <input type="number" name="cantidad" value="@i.Cantidad" min="0" class="form-control form-control-sm" style="width:80px;" />
                             <button class="btn btn-sm btn-outline-primary" type="submit">Actualizar</button>
                         </form>
                     </td>
-                    <td>$ @i.Subtotal</td>
+                    <td>@i.Subtotal.ToString("C")</td>
                     <td>
-                        <form asp-action="Quitar" method="post">
+                        <form asp-action="Quitar" method="post" onsubmit="return confirm('¿Quitar este producto?');">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@i.ProductoId" />
                             <button class="btn btn-sm btn-outline-danger" type="submit">Quitar</button>
                         </form>
@@ -54,9 +77,10 @@ else
         <tfoot>
             <tr>
                 <th colspan="4" class="text-end">Total</th>
-                <th>$ @total</th>
+                <th>@total.ToString("C")</th>
                 <th>
-                    <form asp-action="Vaciar" method="post">
+                    <form asp-action="Vaciar" method="post" onsubmit="return confirm('¿Vaciar el carrito?');">
+                        @Html.AntiForgeryToken()
                         <button class="btn btn-sm btn-outline-secondary" type="submit">Vaciar</button>
                     </form>
                 </th>
@@ -64,6 +88,8 @@ else
         </tfoot>
     </table>
 
-    <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Ir a pagar</a>
+    <div class="d-flex gap-2 mt-3">
+        <a href="@backUrl" class="btn btn-outline-primary">← Seguir comprando</a>
+        <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Ir a pagar</a>
+    </div>
 }
-

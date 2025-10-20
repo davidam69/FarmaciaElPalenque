@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class CheckoutController : Controller
     {
@@ -137,13 +135,5 @@ namespace FarmaciaElPalenque.Controllers
 
             return File(pdf, "application/pdf", $"Factura_{pedido.numero}.pdf");
         }
-    
-        /*
-        [HttpGet]
-        public IActionResult Confirmacion()
-        {
-            ViewBag.Mensaje = TempData["Mensaje"] ?? "Pago procesado.";
-            return View();
-        }*/
     }
 }

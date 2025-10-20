@@ -1,13 +1,88 @@
-﻿@{
-    ViewData["Title"] = "Panel de Administrador";
+﻿﻿@{
+ViewData["Title"] = "Panel de Administración";
+var nombre = Context.Session.GetString("NombreCompleto") ?? "Administrador";
 }
 
-<h2>Panel de Administración</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/estilos.css" />
+}
 
-<p>Bienvenido, @Context.Session.GetString("NombreCompleto")</p>
 
-<ul>
-    <li><a asp-controller="Admin" asp-action="Usuarios">📋 Ver Usuarios Registrados</a></li>
-    <li><a asp-controller="Admin" asp-action="ListaProductos">🛒 Gestionar Productos</a></li>
-    <li><a asp-controller="Cuenta" asp-action="Registro">➕ Registrar Nuevo Usuario</a></li>
-</ul>
+<div class="container py-4">
+
+    <!-- Título -->
+    <div class="hero-panel text-center mb-4">
+        <h1 class="display-5 fw-bold mb-1">BIENVENIDO</h1>
+        <div class="lead text-muted">@nombre</div>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success text-center mb-4">@TempData["Mensaje"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center mb-4">@Html.Raw(TempData["Error"])</div>
+    }
+
+    <!-- Columnas -->
+    <div class="row g-4">
+        <!-- Usuarios -->
+        <div class="col-12 col-lg-6">
+            <div class="card dash-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-people-fill text-primary me-2 dash-icon"></i>
+                        <h3 class="h4 m-0">Usuarios</h3>
+                    </div>
+                    <p class="text-muted mb-4">
+                        Gestioná las cuentas de usuarios y administradores de la farmacia.
+                    </p>
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <!-- Listado de usuarios registrados -->
+                        <a asp-controller="Admin" asp-action="Usuarios"
+                           class="btn btn-outline-primary btn-fat">
+                            <i class="bi bi-list-ul me-1"></i> Usuarios registrados
+                        </a>
+
+                        <!-- Crear nuevo usuario -->
+                        <a asp-controller="Cuenta" asp-action="Registro"
+                           class="btn btn-primary btn-fat">
+                            <i class="bi bi-person-plus-fill me-1"></i> Agregar usuario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos -->
+        <div class="col-12 col-lg-6">
+            <div class="card dash-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-box-seam-fill text-success me-2 dash-icon"></i>
+                        <h3 class="h4 m-0">Productos</h3>
+                    </div>
+                    <p class="text-muted mb-4">
+                        Administrá el catálogo: altas, modificaciones y control de stock.
+                    </p>
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <!-- Agregar producto -->
+                        <a asp-controller="Admin" asp-action="CrearProducto"
+                           class="btn btn-success btn-fat">
+                            <i class="bi bi-plus-lg me-1"></i> Agregar producto
+                        </a>
+
+                        <!-- Modificar (lista con edición) -->
+                        <a asp-controller="Admin" asp-action="ListaProductos"
+                           class="btn btn-outline-success btn-fat">
+                            <i class="bi bi-pencil-square me-1"></i> Modificar productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

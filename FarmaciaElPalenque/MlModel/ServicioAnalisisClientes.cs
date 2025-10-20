@@ -1,15 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using FarmaciaElPalenque.MlModel;
-using FarmaciaElPalenque.Services;
-using System;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using FarmaciaElPalenque.Models;
-
-namespace FarmaciaElPalenque.Services
+﻿namespace FarmaciaElPalenque.Services
 {
     public class ServicioAnalisisClientes : BackgroundService
     {

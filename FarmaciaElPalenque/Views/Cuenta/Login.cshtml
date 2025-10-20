@@ -1,43 +1,66 @@
-﻿@model FarmaciaElPalenque.Models.Usuario
+﻿@model Usuario
 
 @{
-	var title = "Iniciar sesión";
+    var title = "Iniciar sesión";
+    ViewData["Title"] = title;
 }
 
 <h2>@title</h2>
 
-@if (ViewBag.Error != null)
+@if (TempData["Error"] != null)
 {
-	<div class="alert alert-danger">
-		@ViewBag.Error
-	</div>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @Html.Raw(TempData["Error"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+else if (ViewBag.Error != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @Html.Raw(ViewBag.Error)
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
 }
 
-<form asp-action="Login" method="post">
-	@Html.AntiForgeryToken()
-	<input type="hidden" name="returnUrl" value="@(ViewBag.ReturnUrl ?? string.Empty)" />
+<form asp-action="Login" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@(ViewBag.ReturnUrl ?? string.Empty)" />
 
-	<div asp-validation-summary="All" class="text-danger mb-2"></div>
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-	<div class="mb-3">
-		<label asp-for="email">Email</label>
-		<input asp-for="email" type ="email" class="form-control" />
-		<span asp-validation-for="email" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="email" class="form-label">Email</label>
+        <input asp-for="email" type="email" class="form-control" autocomplete="username" />
+        <span asp-validation-for="email" class="text-danger"></span>
+    </div>
 
-	<div class="mb-3">
-		<label asp-for="passwordHash">Contraseña</label>
-		<div class="input-group">
-			<input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" />
-			<span class="input-group-text">
-				<i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
-			</span>
-		</div>
-		<span asp-validation-for="passwordHash" class="text-danger"></span>
-	</div>
+    <div class="mb-3">
+        <label asp-for="passwordHash" class="form-label">Contraseña</label>
+        <div class="input-group">
+            <input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" autocomplete="current-password" />
+            <button type="button" class="input-group-text" id="togglePassword" aria-label="Mostrar/ocultar contraseña">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+        </div>
+        <span asp-validation-for="passwordHash" class="text-danger"></span>
+    </div>
 
-
-	<button type="submit" class="btn btn-primary">
-		Iniciar sesión
-	</button>
+    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
 </form>
+
+@section Scripts {
+    <script>
+        (function() {
+            const btn = document.getElementById('togglePassword');
+            const input = document.getElementById('passwordHash');
+            if (btn && input) {
+                btn.addEventListener('click', function () {
+                    const isPwd = input.type === 'password';
+                    input.type = isPwd ? 'text' : 'password';
+                    this.innerHTML = isPwd ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+                });
+            }
+        })();
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

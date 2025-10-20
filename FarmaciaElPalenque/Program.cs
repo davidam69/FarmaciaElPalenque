@@ -32,7 +32,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession(); // El uso de la sesión debe ser antes de UseAuthorization
+app.UseSession(); // El uso de la sesiï¿½n debe ser antes de UseAuthorization
 
 app.UseAuthorization();
 

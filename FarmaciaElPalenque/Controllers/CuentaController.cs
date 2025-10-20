@@ -23,7 +23,7 @@
             {
                 return View(usuario);
             }
-            usuario.email = usuario.email?.Trim().ToLowerInvariant();
+            usuario.email = usuario.email?.Trim().ToLowerInvariant()!;
             if (string.IsNullOrEmpty(usuario.rol))
             {
                 usuario.rol = "Cliente";
@@ -42,14 +42,10 @@
             {
                 // Si ya hay sesión activa, redirige según el rol
                 var rol = HttpContext.Session.GetString("Rol");
-                if (rol == "Administrador")
-                {
-                    return RedirectToAction("Panel", "Admin");
-                }
-
+                if (rol == "Administrador") return RedirectToAction("Panel", "Admin");
                 return RedirectToAction("Index", "Principal");
             }
-
+            if (TempData["Error"] != null) ViewBag.Error = TempData["Error"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -71,8 +67,16 @@
             HttpContext.Session.SetString("Rol", usuario.rol ?? "");
             HttpContext.Session.SetString("NombreCompleto", $"{usuario.nombre ?? ""} {usuario.apellido ?? ""}");
 
+            TempData.Remove("Error");
+
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
+
+            if (string.Equals(usuario.rol, "Administrador", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["Mensaje"] = $"Bienvenido {usuario.nombre} {usuario.apellido}";
+                return RedirectToAction("Panel", "Admin");
+            }
 
             TempData["Mensaje"] = $"Bienvenido {usuario.nombre} {usuario.apellido}";
             return RedirectToAction("Index", "Principal");

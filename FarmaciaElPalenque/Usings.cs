@@ -1,9 +1,13 @@
-﻿global using FarmaciaElPalenque.Models;
+﻿global using FarmaciaElPalenque.MlModel;
+global using FarmaciaElPalenque.Models;
 global using FarmaciaElPalenque.Services;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Rendering;
 global using Microsoft.Data.SqlClient;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.ML;
+global using Microsoft.ML.Data;
+global using MimeKit;
 global using QuestPDF.Fluent;
 global using QuestPDF.Helpers;
 global using QuestPDF.Infrastructure;

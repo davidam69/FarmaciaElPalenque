@@ -1,8 +1,56 @@
-﻿@model FarmaciaElPalenque.Models.Productos
+﻿@model Productos
+
+@{
+    ViewData["Title"] = "Detalle del Producto";
+    var back = Url.Action("Index", "Principal");
+}
 
 <h2>Detalle del Producto</h2>
-<img src="@Model.imagenUrl" width="150" />
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @Html.Raw(TempData["Error"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+<img src="@(string.IsNullOrWhiteSpace(Model.imagenUrl) ? "/images/default.png" : Model.imagenUrl)"
+     width="150" alt="@Model.nombre" class="mb-3" />
+
 <p><strong>Nombre:</strong> @Model.nombre</p>
-<p><strong>Precio:</strong> $@Model.precio.ToString("N0")</p>
+<p><strong>Precio:</strong> $@Model.precio.ToString("C")</p>
 <p><strong>Categoria:</strong> @Model?.Categoria?.nombre</p>
-<a asp-action="Index" class="btn btn-secondary mt-3">← Volver al catálogo</a>
+<p>
+    <span class="badge bg-@(Model!.Stock > 0 ? "success" : "secondary")">
+        Stock: @Model.Stock
+    </span>
+</p>
+
+@if (Model.Stock > 0)
+{
+    <form asp-controller="Carrito" asp-action="Agregar" method="post" class="mt-2 d-flex gap-2">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.id" />
+        <input type="hidden" name="returnUrl" value="@back" />
+        <input type="number" name="cantidad" value="1" min="1" max="@Model.Stock" class="form-control" style="width:100px;" />
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-cart-plus"></i> Agregar
+        </button>
+    </form>
+}
+else
+{
+    <button class="btn btn-secondary mt-2" disabled>
+        <i class="bi bi-cart-x"></i> Sin stock
+    </button>
+}
+
+<a asp-action="Index" class="btn btn-outline-secondary mt-3">← Volver al catálogo</a>
