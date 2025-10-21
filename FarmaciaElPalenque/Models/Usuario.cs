@@ -16,8 +16,8 @@
         [Display(Name = "Apellido")]
         public string  apellido { get; set; } = "";
 
-        [Required(ErrorMessage = "El email es obligatorio")]    
-        [StringLength(254, ErrorMessage = "El email no puede exceder los 254 caracteres")] 
+        [Required(ErrorMessage = "El email es obligatorio")]
+        [StringLength(252,ErrorMessage = "El email no puede excederse de 252 caracteres")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "El formato del email no es válido.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Debe ser una dirección de email válida")]
         public string? email { get; set; }
