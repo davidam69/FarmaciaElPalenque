@@ -20,7 +20,7 @@
         [StringLength(254, ErrorMessage = "El email no puede exceder los 254 caracteres")] 
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "El formato del email no es válido.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Debe ser una dirección de email válida")]
-        public string email { get; set; } = "";
+        public string? email { get; set; }
 
         [NotMapped] // NotMapped indica que este campo no se debe mapear a la base de datos
         [Required(ErrorMessage = "La confirmacion del correo es obligatoria")]

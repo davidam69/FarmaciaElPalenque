@@ -37,8 +37,8 @@ else if (ViewBag.Error != null)
     <div class="mb-3">
         <label asp-for="passwordHash" class="form-label">Contraseña</label>
         <div class="input-group">
-            <input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" autocomplete="current-password" />
-            <button type="button" class="input-group-text" id="togglePassword" aria-label="Mostrar/ocultar contraseña">
+            <input asp-for="passwordHash" type="password" class="form-control" id="passwordHash" autocomplete="new-password" />
+             <button type="button" class="input-group-text" id="togglePasswordReg" aria-label="Mostrar/ocultar contraseña">
                 <i class="bi bi-eye-slash"></i>
             </button>
         </div>
@@ -50,17 +50,18 @@ else if (ViewBag.Error != null)
 
 @section Scripts {
     <script>
-        (function() {
-            const btn = document.getElementById('togglePassword');
-            const input = document.getElementById('passwordHash');
-            if (btn && input) {
-                btn.addEventListener('click', function () {
-                    const isPwd = input.type === 'password';
-                    input.type = isPwd ? 'text' : 'password';
-                    this.innerHTML = isPwd ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
-                });
-            }
+        (function(){
+            const togglePasswordButton = document.getElementById('togglePasswordReg');
+            const passwordInput = document.getElementById('passwordHash');
+            togglePasswordButton.addEventListener('click', function(){
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
         })();
     </script>
+
     <partial name="_ValidationScriptsPartial" />
 }
+
