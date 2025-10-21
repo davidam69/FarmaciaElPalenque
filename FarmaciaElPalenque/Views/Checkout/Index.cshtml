@@ -28,13 +28,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
             <div class="mb-3">
-                <label asp-for="NombreTitular" class="form-label"></label>
+                <label asp-for="NombreTitular" class="form-label">Nombre del Titular</label>
                 <input asp-for="NombreTitular" class="form-control" autocomplete="cc-name" />
                 <span asp-validation-for="NombreTitular" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="NumeroTarjeta" class="form-label"></label>
+                <label asp-for="NumeroTarjeta" class="form-label">Numero de tarjeta</label>
                 <input asp-for="NumeroTarjeta" class="form-control"
                        placeholder="4111 1111 1111 1111"
                        inputmode="numeric" pattern="\d{16}"
@@ -45,21 +45,21 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <label asp-for="MesVenc" class="form-label"></label>
+                    <label asp-for="MesVenc" class="form-label">Mes de Vencimiento</label>
                     <input asp-for="MesVenc" class="form-control" placeholder="MM"
                            inputmode="numeric" pattern="(0[1-9]|1[0-2])"
                            autocomplete="cc-exp-month" />
                     <span asp-validation-for="MesVenc" class="text-danger"></span>
                 </div>
                 <div class="col">
-                    <label asp-for="AnioVenc" class="form-label"></label>
+                    <label asp-for="AnioVenc" class="form-label">Año de Vencimiento</label>
                     <input asp-for="AnioVenc" class="form-control" placeholder="YYYY"
                            inputmode="numeric" pattern="\d{4}"
                            autocomplete="cc-exp-year" />
                     <span asp-validation-for="AnioVenc" class="text-danger"></span>
                 </div>
                 <div class="col">
-                    <label asp-for="CVV" class="form-label"></label>
+                    <label asp-for="CVV" class="form-label">CVV</label>
                     <input asp-for="CVV" class="form-control"
                            inputmode="numeric" pattern="\d{3}"
                            autocomplete="cc-csc" />
@@ -68,7 +68,7 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="DireccionEnvio" class="form-label"></label>
+                <label asp-for="DireccionEnvio" class="form-label">Dirección de Envio</label>
                 <input asp-for="DireccionEnvio" class="form-control" autocomplete="shipping street-address" />
                 <span asp-validation-for="DireccionEnvio" class="text-danger"></span>
             </div>
@@ -84,7 +84,7 @@
             </div>
 
             <button type="submit" class="btn btn-success">
-                Confirmar pago $ @Model.Total.ToString("C")
+                Confirmar pago @Model.Total.ToString("C")
             </button>
             <a asp-controller="Carrito" asp-action="Ver" class="btn btn-outline-secondary ms-2">Volver al carrito</a>
         </form>
