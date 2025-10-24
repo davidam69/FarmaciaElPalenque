@@ -1,25 +1,26 @@
 ﻿@model List<Productos>
-
 <h2>Lista de Productos</h2>
 
 <p>
     <a asp-action="CrearProducto" class="btn btn-primary">Agregar Producto</a>
+    <a asp-action="Panel" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>Volver al Panel</a>
 </p>
-
 <form asp-action="ActualizarLista" method="post">
+    @Html.AntiForgeryToken()
     <table class="table">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Categoría</th>
-                <th>Imagen</th>
-                <th>Acciones</th>
+                <th style="width:140px;">Precio</th>
+                <th style="width:120px;">Stock</th>
+                <th style="width:220px;">Categoría</th>
+                <th style="width:320px;">Imagen</th>
+                <th style="width:110px;">Guardar</th>
+                <th style="width:110px;">Eliminar</th>
             </tr>
         </thead>
+
         <tbody>
-			@using System.Globalization
             @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
@@ -29,12 +30,13 @@
                     </td>
                 
                     <td>
-                        <input name="[@i].precio" type="number" value="@Model[i].precio" class="form-control" />
+                        <input name="[@i].precio" type="number" step="0.01" value="@Model[i].precio" class="form-control" />
                     </td>
 
                     <td>
-                        <input name="[@i].Stock" value="@Model[i].Stock" class="form-control" />
+                        <input name="[@i].Stock" type="number" value="@Model[i].Stock" class="form-control" />
                     </td>
+
                     <td>
                         <select name="[@i].categoriaId" class="form-select">
                             <option value="1" selected="@(Model[i].categoriaId == 1)">Medicamentos</option>
@@ -42,16 +44,22 @@
                             <option value="3" selected="@(Model[i].categoriaId == 3)">Cuidado Personal</option>
                         </select>
                     </td>
+
                     <td>
                         <input name="[@i].imagenUrl" value="@Model[i].imagenUrl" class="form-control mb-1" />
-                        <img src="@(!string.IsNullOrEmpty(Model[i].imagenUrl) ? Model[i].imagenUrl : "/Images/default.png")"
+                        <img src="@(!string.IsNullOrEmpty(Model[i].imagenUrl) ? "/Images/default.png" : Model[i].imagenUrl)"
                              width="80" height="80" />
                     </td>
+
                     <td>
                         <button type="submit" class="btn btn-success">Guardar</button>
                     </td>
+
                     <td>
-                        <a asp-action="EliminarProducto" asp-route-id="@Model[i].id" class="btn btn-danger">Eliminar</a>
+                        <form asp-action="EliminarProducto" asp-route-id="@Model[i].id" method="post" onsubmit="return confirm('¿Eliminar este producto?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
                     </td>
                 </tr>
             }

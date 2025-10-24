@@ -1,0 +1,69 @@
+﻿@model List<FarmaciaElPalenque.Models.AnalisisClienteViewModel>
+
+@{
+    ViewData["Title"] = "Análisis de Clientes y Estado de Avisos";
+}
+
+<div class="container my-5">
+    <h2 class="display-5 fw-bold text-dark mb-4">📊 Análisis de Clientes (ML)</h2>
+    <p class="lead text-muted">Segmentación por comportamiento de compra y estado de las notificaciones de re-engagement.</p>
+
+    <div class="card shadow-sm mt-5">
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Cliente (Nombre)</th>
+                        <th>Email</th>
+                        <th>Clúster</th>
+                        <th>Días Desde Última Compra</th>
+                        <th>Promedio Días Entre Compras</th>
+                        <th>Estado ML</th>
+                        <th>Aviso Enviado HOY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ClienteDatos.Nombre</td>
+                            <td>@item.EmailCliente</td>
+                            <td><span class="badge bg-secondary">@item.ClusterId</span></td>
+                            <td>@item.ClienteDatos.DiasDesdeUltimaCompra días</td>
+                            <td>@item.ClienteDatos.PromedioDiasEntreCompras.ToString("N0") días</td>
+
+                            <td>
+                                @if (item.DeberiaAvisarse)
+                                {
+                                    <span class="badge bg-danger">REQUIERE AVISO</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Comprando a Tiempo</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (item.AvisoEnviadoHoy)
+                                {
+                                    <span class="badge bg-primary">✅ ENVIADO</span>
+                                }
+                                else if (item.DeberiaAvisarse)
+                                {
+                                    <span class="badge bg-warning text-dark">❌ PENDIENTE</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-dark">No Requerido</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+}

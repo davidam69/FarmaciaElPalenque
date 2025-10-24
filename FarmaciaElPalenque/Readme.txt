@@ -63,4 +63,3 @@
 62. Se borraron por error las migraciones y se volvio a crear la base de datos desde cero con el comando `Update-Database -Force` pero Stock nos marcaba error en la base de datos.
 63. se soluciono el error de stock con Ctrl + Shift + R en Visual Studio para actualizar el esquema de la base de datos.
 
-

@@ -1,0 +1,123 @@
+﻿@model PagoViewModel
+
+@{
+    ViewData["Title"] = "Pagar";
+}
+
+<h2>Pagar</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @Html.Raw(TempData["Error"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Pagar" method="post" novalidate>
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="MetodoPago" class="form-label">Método de pago</label>
+                <select asp-for="MetodoPago" class="form-select">
+                    <option value="">Elegí un método</option>
+                    <option>Tarjeta de crédito</option>
+                    <option>Tarjeta de débito</option>
+                </select>
+                <span asp-validation-for="MetodoPago" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NombreTitular" class="form-label">Nombre del Titular</label>
+                <input asp-for="NombreTitular" class="form-control" autocomplete="cc-name" />
+                <span asp-validation-for="NombreTitular" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NumeroTarjeta" class="form-label">Numero de tarjeta</label>
+                <input asp-for="NumeroTarjeta" class="form-control"
+                       placeholder="4111 1111 1111 1111"
+                       inputmode="numeric" pattern="\d{16}"
+                       autocomplete="cc-number" />
+                <small class="text-muted">Usá un número de prueba (p. ej. 4111111111111111).</small>
+                <span asp-validation-for="NumeroTarjeta" class="text-danger"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label asp-for="MesVenc" class="form-label">Mes de Vencimiento</label>
+                    <input asp-for="MesVenc" class="form-control" placeholder="MM"
+                           inputmode="numeric" pattern="(0[1-9]|1[0-2])"
+                           autocomplete="cc-exp-month" />
+                    <span asp-validation-for="MesVenc" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="AnioVenc" class="form-label">Año de Vencimiento</label>
+                    <input asp-for="AnioVenc" class="form-control" placeholder="YYYY"
+                           inputmode="numeric" pattern="\d{4}"
+                           autocomplete="cc-exp-year" />
+                    <span asp-validation-for="AnioVenc" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="CVV" class="form-label">CVV</label>
+                    <input asp-for="CVV" class="form-control"
+                           inputmode="numeric" pattern="\d{3}"
+                           autocomplete="cc-csc" />
+                    <span asp-validation-for="CVV" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DireccionEnvio" class="form-label">Dirección de Envio</label>
+                <input asp-for="DireccionEnvio" class="form-control" autocomplete="shipping street-address" />
+                <span asp-validation-for="DireccionEnvio" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Confirmar pago @Model.Total.ToString("C")
+            </button>
+            <a asp-controller="Carrito" asp-action="Ver" class="btn btn-outline-secondary ms-2">Volver al carrito</a>
+        </form>
+    </div>
+
+    <div class="col-md-5">
+        <h5>Resumen</h5>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model.Items)
+                {
+                    <tr>
+                        <td>@i.Nombre x @i.Cantidad</td>
+                        <td class="text-end">@i.Subtotal.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th class="text-end">@Model.Total.ToString("C")</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

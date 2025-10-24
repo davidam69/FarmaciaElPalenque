@@ -1,10 +1,19 @@
-﻿@model IEnumerable<FarmaciaElPalenque.Models.Usuario>
+﻿@model IEnumerable<Usuario>
 
 @{
     ViewData["Title"] = "Lista de Usuarios";
 }
 
 <h2>Usuarios Registrados</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@Html.Raw(TempData["Error"])</div>
+}
 
 <table class="table table-bordered">
     <thead>
@@ -13,7 +22,7 @@
             <th>Apellido</th>
             <th>Email</th>
             <th>Rol</th>
-			<th>Acciones</th>
+            <th style="width:140px;">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -25,13 +34,12 @@
                 <td>@u.email</td>
                 <td>@u.rol</td>
                 <td>
-                    @* No permitir que un admin se elimine a sí mismo *@
                     @if (u.email != Context.Session.GetString("Usuario"))
                     {
-                        <form asp-controller="Admin" asp-action="EliminarUsuario" asp-route-id="@u.id" method="post" onsubmit="return confirm('¿Estás seguro de eliminar a este usuario?');">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                Eliminar
-                            </button>
+                        <form asp-controller="Admin" asp-action="EliminarUsuario" asp-route-id="@u.id"
+                              method="post" onsubmit="return confirm('¿Estás seguro de eliminar a este usuario?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     }
                     else

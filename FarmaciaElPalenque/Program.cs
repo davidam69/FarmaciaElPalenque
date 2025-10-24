@@ -1,13 +1,14 @@
+using FarmaciaElPalenque.Services;
+using Microsoft.EntityFrameworkCore; 
+using FarmaciaElPalenque; 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSession();
-//para guardar en memoria 30 minutos
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // tiempo de inactividad permitido
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -15,14 +16,23 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL")));
 
+
+builder.Services.AddScoped<IEmailSender, EmailSenderService>();
+
+
 var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+   
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession();
+app.UseSession(); // El uso de la sesi�n debe ser antes de UseAuthorization
 
 app.UseAuthorization();
 
