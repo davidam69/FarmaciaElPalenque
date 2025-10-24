@@ -28,6 +28,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
             <div class="mb-3">
+                <label asp-for="MetodoPago" class="form-label">Método de pago</label>
+                <select asp-for="MetodoPago" class="form-select">
+                    <option value="">Elegí un método</option>
+                    <option>Tarjeta de crédito</option>
+                    <option>Tarjeta de débito</option>
+                </select>
+                <span asp-validation-for="MetodoPago" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
                 <label asp-for="NombreTitular" class="form-label">Nombre del Titular</label>
                 <input asp-for="NombreTitular" class="form-control" autocomplete="cc-name" />
                 <span asp-validation-for="NombreTitular" class="text-danger"></span>
@@ -71,16 +81,6 @@
                 <label asp-for="DireccionEnvio" class="form-label">Dirección de Envio</label>
                 <input asp-for="DireccionEnvio" class="form-control" autocomplete="shipping street-address" />
                 <span asp-validation-for="DireccionEnvio" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="MetodoPago" class="form-label">Método de pago</label>
-                <select asp-for="MetodoPago" class="form-select">
-                    <option value="">Elegí un método</option>
-                    <option>Tarjeta de crédito</option>
-                    <option>Tarjeta de débito</option>
-                </select>
-                <span asp-validation-for="MetodoPago" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-success">

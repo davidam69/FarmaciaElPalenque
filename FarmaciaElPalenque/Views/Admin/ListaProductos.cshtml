@@ -3,8 +3,8 @@
 
 <p>
     <a asp-action="CrearProducto" class="btn btn-primary">Agregar Producto</a>
+    <a asp-action="Panel" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>Volver al Panel</a>
 </p>
-
 <form asp-action="ActualizarLista" method="post">
     @Html.AntiForgeryToken()
     <table class="table">

@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="~/Images/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="~/Images/favicon.png" />
     <title>@ViewData["Title"] - FarmaciaElPalenque</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/estilos.css" asp-append-version="true" />
@@ -16,8 +18,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Principal" asp-action="Index">
-                    <i class="bi bi-capsule-pill me-2"></i>Farmacia El Palenque
+                <a class="navbar-brand fw-bold d-flex align-items-center" asp-area="" asp-controller="Principal" asp-action="Index">
+                    <img src="~/Images/favicon.png" alt="Logo Farmacia El Palenque" class="me-2" style="height:30px; width:auto;">
+                    Farmacia Palenque
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

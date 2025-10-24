@@ -18,7 +18,8 @@
 
         [Required(ErrorMessage = "El email es obligatorio")]
         [StringLength(252,ErrorMessage = "El email no puede excederse de 252 caracteres")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "El formato del email no es válido.")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+\-]+@(hotmail\.com|outlook\.com|outlook\.com\.ar|gmail\.com|yahoo\.com|palenque\.com|correo\.com)$",
+        ErrorMessage = "Solo se permiten correos de dominios hotmail.com, outlook.com, outlook.com.ar, gmail.com, yahoo.com")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Debe ser una dirección de email válida")]
         public string? email { get; set; }
 
