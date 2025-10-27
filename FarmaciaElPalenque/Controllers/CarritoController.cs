@@ -18,7 +18,7 @@
                 TempData["Error"] = "Tenés que iniciar sesión para agregar productos al carrito.";
                 // Vuelvo al Login y, cuando se loguee, lo regreso donde estaba
                 var back = returnUrl ?? Request.Headers["Referer"].ToString();
-                return RedirectToAction("Login", "Cuenta", new { returnUrl = back });
+                return RedirectToAction("Acceso", "Cuenta", new { returnUrl = back });
             }
 
             // no necesito el id del usuario por ahora solo para cuando necesite migrar el carrito a BD
@@ -110,7 +110,7 @@
             {
                 TempData["Error"] = "Tenés que iniciar sesión para ver el carrito.";
                 var back = Url.Action("Ver", "Carrito");
-                return RedirectToAction("Login", "Cuenta", new { returnUrl = back });
+                return RedirectToAction("Acceso", "Cuenta", new { returnUrl = back });
             }
 
             var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();

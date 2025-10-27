@@ -51,7 +51,7 @@
 
             var email = HttpContext.Session.GetString("Usuario") ?? "";
             var user = _context.Usuarios.FirstOrDefault(u => u.email == email);
-            if (user == null) return RedirectToAction("Login", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
+            if (user == null) return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
 
             using var tx = _context.Database.BeginTransaction();
 
