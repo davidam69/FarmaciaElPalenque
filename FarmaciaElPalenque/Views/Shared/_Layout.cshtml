@@ -39,11 +39,10 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     @if (Context.Session.GetString("Usuario") == null)
                     {
-                        <li class="nav-item me-2">
-                            <a asp-area="" asp-controller="Cuenta" asp-action="Login" class="btn-moderno btn-login">Ingresar</a>
-                        </li>
                         <li class="nav-item">
-                            <a asp-area="" asp-controller="Cuenta" asp-action="Registro" class="btn-moderno btn-registro">Regístrate</a>
+                            <a class="nav-link text-dark" asp-controller="Cuenta" asp-action="Acceso">
+                                Iniciar sesión / Crear cuenta
+                            </a>
                         </li>
                     }
                     else

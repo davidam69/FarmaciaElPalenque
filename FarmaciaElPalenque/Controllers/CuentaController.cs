@@ -89,5 +89,16 @@
             TempData["Mensaje"] = "Has cerrado sesión correctamente.";
             return RedirectToAction("Index", "Principal");
         }
+
+        [HttpGet]
+        public IActionResult Acceso(string? returnUrl = null)
+        {
+            if (HttpContext.Session.GetString("Usuario") != null)
+                return RedirectToAction("Index", "Principal");
+
+            ViewBag.ReturnUrl = returnUrl;
+            return View(); // Views/Cuenta/Acceso.cshtml
+        }
+
     }
 }

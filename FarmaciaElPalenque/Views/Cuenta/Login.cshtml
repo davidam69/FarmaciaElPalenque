@@ -30,7 +30,7 @@ else if (ViewBag.Error != null)
 
     <div class="mb-3">
         <label asp-for="email" class="form-label">Email</label>
-        <input asp-for="email" type="email" class="form-control" autocomplete="username" />
+        <input asp-for="email" type="email" class="form-control" autocomplete="username" maxlength="254" />
         <span asp-validation-for="email" class="text-danger"></span>
     </div>
 
