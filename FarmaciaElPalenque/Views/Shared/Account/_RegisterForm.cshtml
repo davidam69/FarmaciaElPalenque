@@ -1,0 +1,83 @@
+﻿@model Usuario
+@{
+    var esAdminActual = Context.Session.GetString("Rol") == "Administrador";
+}
+
+
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+<form asp-controller="Cuenta" asp-action="Registro" method="post" novalidate>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="mb-3">
+        <label asp-for="nombre" class="form-label">Nombre</label>
+        <input asp-for="nombre" class="form-control" id="nombreReg" autocomplete="given-name" />
+        <span asp-validation-for="nombre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="apellido" class="form-label">Apellido</label>
+        <input asp-for="apellido" class="form-control" id="apellidoReg" autocomplete="family-name" />
+        <span asp-validation-for="apellido" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3" id="grupoEmailReg">
+        <label asp-for="email" class="form-label">Email</label>
+        <input asp-for="email" type="email" class="form-control" id="emailReg" autocomplete="email" />
+        <span asp-validation-for="email" class="text-danger"></span>
+        <small id="emailHintReg" class="text-muted d-none">El correo institucional se genera automáticamente con @@palenque.com</small>
+    </div>
+
+    <div class="mb-3" id="grupoConfirmEmailReg">
+        <label asp-for="confirmarEmail" class="form-label">Confirmar Email</label>
+        <input asp-for="confirmarEmail" type="email" class="form-control" id="confirmarEmailReg" autocomplete="email" />
+        <span asp-validation-for="confirmarEmail" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="passwordHash" class="form-label">Contraseña</label>
+        <div class="input-group">
+            <input asp-for="passwordHash" type="password" class="form-control" id="passwordHashReg" autocomplete="new-password" />
+            <button type="button" class="input-group-text" id="togglePasswordReg" aria-label="Mostrar/ocultar">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+        </div>
+        <span asp-validation-for="passwordHash" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="confirmarPasswordHash" class="form-label">Confirmar Contraseña</label>
+        <div class="input-group">
+            <input asp-for="confirmarPasswordHash" type="password" class="form-control" id="confirmarPasswordHashReg" autocomplete="new-password" />
+            <button type="button" class="input-group-text" id="toggleConfirmPassword" aria-label="Mostrar/ocultar confirmación">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+        </div>
+        <span asp-validation-for="confirmarPasswordHash" class="text-danger"></span>
+    </div>
+
+    @if (esAdminActual)
+    {
+        <div class="mb-3">
+            <label asp-for="rol" class="form-label">Rol</label>
+            <select asp-for="rol" class="form-select" id="rolSelectReg">
+                <option value="Cliente" selected>Cliente</option>
+                <option value="Administrador">Administrador</option>
+            </select>
+        </div>
+    }
+    else
+    {
+        <input type="hidden" asp-for="rol" value="Cliente" />
+    }
+
+    <button type="submit" class="btn btn-login">Crear cuenta</button>
+</form>
