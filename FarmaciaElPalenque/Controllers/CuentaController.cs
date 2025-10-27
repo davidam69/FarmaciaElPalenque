@@ -32,7 +32,7 @@
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Acceso");
         }
 
         [HttpGet]
