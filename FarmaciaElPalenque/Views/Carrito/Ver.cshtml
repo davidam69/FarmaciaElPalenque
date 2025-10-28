@@ -5,6 +5,10 @@
     decimal total = ViewBag.Total is decimal d ? d : 0m; // cast seguro
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/estilos.css" />
+}
+ 
 <h2>Carrito</h2>
 
 @if (TempData["Mensaje"] != null)
@@ -30,7 +34,23 @@
 
 @if (Model == null || !Model.Any())
 {
-    <div class="alert alert-info">Tu carrito está vacío.</div>
+    <div class="alert alert-info text-center py-4">
+        <p class="mb-3 fs-5">🛒 Tu carrito está vacío.</p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Principal" asp-action="Index"
+               class="btn btn-primary btn-equal btn-compact">
+                <i class="bi bi-shop"></i> Volver a comprar
+            </a>
+
+            <form asp-controller="Cuenta" asp-action="Logout" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger btn-lg btn-equal">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </div>
 }
 else
 {
