@@ -6,11 +6,19 @@
 
         public CarritoController(AppDbContext context) => _context = context;
 
+        private bool EsAdmin() => HttpContext.Session.GetString("Rol") == "Administrador";
+
         #region Agregar al carrito
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(int id, int cantidad = 1, string? returnUrl = null)
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden comprar.";
+                return RedirectToAction("panel", "Admin");
+            }
+
             // Requiere estar logueado para agregar al carrito
             var email = HttpContext.Session.GetString("Usuario");
             if (string.IsNullOrEmpty(email))
@@ -105,6 +113,12 @@
         [HttpGet]
         public IActionResult Ver()
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden usar el carrito.";
+                return RedirectToAction("Panel", "Admin");
+            }
+
             var email = HttpContext.Session.GetString("Usuario");
             if (string.IsNullOrEmpty(email))
             {
@@ -125,6 +139,11 @@
         [ValidateAntiForgeryToken]
         public IActionResult CambiarCantidad(int id, int cantidad)
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden comprar.";
+                return RedirectToAction("Panel", "Admin");
+            }
             // carrito solo para usuarios logueados
             var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             var item = cart.FirstOrDefault(i => i.ProductoId == id);
@@ -181,6 +200,11 @@
         [ValidateAntiForgeryToken]
         public IActionResult Quitar(int id)
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden comprar.";
+                return RedirectToAction("Panel", "Admin");
+            }
             // Requiere estar logueado para modificar el carrito
             var cart = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
             cart.RemoveAll(i => i.ProductoId == id);
@@ -192,6 +216,11 @@
         [ValidateAntiForgeryToken]
         public IActionResult Vaciar()
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden comprar.";
+                return RedirectToAction("Panel", "Admin");
+            }
             // Requiere estar logueado para modificar el carrito
             HttpContext.Session.BorrarCarrito();
             return RedirectToAction("Ver");

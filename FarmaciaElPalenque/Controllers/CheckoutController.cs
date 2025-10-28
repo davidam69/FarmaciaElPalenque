@@ -7,11 +7,18 @@
             _context = context;
         }
 
+        private bool EsAdmin() => HttpContext.Session.GetString("Rol") == "Administrador";
         private readonly AppDbContext _context;
 
         [HttpGet]
         public IActionResult Index()
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden realizar compras.";
+                return RedirectToAction("Panel", "Admin");
+            }
+
             var cart = HttpContext.Session.ObtenerCarrito() ?? new();
             if (!cart.Any()) return RedirectToAction("Ver", "Carrito");
 
@@ -44,8 +51,16 @@
             return View(vm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Pagar(PagoViewModel model)
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden realizar compras.";
+                return RedirectToAction("Panel", "Admin");
+            }
+
             var cart = HttpContext.Session.ObtenerCarrito() ?? new();
             if (!cart.Any()) return RedirectToAction("Ver", "Carrito");
 

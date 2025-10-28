@@ -93,12 +93,26 @@
         [HttpGet]
         public IActionResult Acceso(string? returnUrl = null)
         {
-            if (HttpContext.Session.GetString("Usuario") != null)
-                return RedirectToAction("Index", "Principal");
+            var rol = HttpContext.Session.GetString("Rol");
 
+            if (!string.IsNullOrEmpty(rol))
+            {
+                if (rol == "Administrador")
+                {
+                    // El admin SÍ puede ver la pantalla doble para registrar usuarios
+                    ViewBag.ReturnUrl = returnUrl;
+                    return View();
+                }
+
+                // Cualquier otro usuario ya logueado -> al inicio
+                return RedirectToAction("Index", "Principal");
+            }
+
+            // No logueado -> mostrar pantalla doble
             ViewBag.ReturnUrl = returnUrl;
-            return View(); // Views/Cuenta/Acceso.cshtml
+            return View();
         }
+
 
     }
 }
