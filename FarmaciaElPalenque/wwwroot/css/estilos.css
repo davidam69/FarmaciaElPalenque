@@ -251,3 +251,36 @@ body {
 .btn-lg {
     min-width: 200px;
 }
+
+.auth-wrap {
+    background: #f6f9fc;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.auth-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,.06);
+    padding: 1.5rem;
+}
+
+.benefit {
+    border: 1px solid #eef2f7;
+    border-radius: .75rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+    .benefit i {
+        font-size: 1.3rem;
+        margin-bottom: .25rem;
+        display: block;
+    }
+
+.btn-dark-pill {
+    background: #2f2f2f;
+    border: none;
+    border-radius: 2rem;
+    padding: .75rem 1.5rem;
+}

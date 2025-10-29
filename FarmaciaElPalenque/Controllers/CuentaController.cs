@@ -11,9 +11,7 @@
 
         [HttpGet]
         public IActionResult Registro()
-        {
-            return View();
-        }
+        => RedirectToAction("Acceso");
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,18 +35,7 @@
 
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
-        {
-            if (HttpContext.Session.GetString("Usuario") != null)
-            {
-                // Si ya hay sesión activa, redirige según el rol
-                var rol = HttpContext.Session.GetString("Rol");
-                if (rol == "Administrador") return RedirectToAction("Panel", "Admin");
-                return RedirectToAction("Index", "Principal");
-            }
-            if (TempData["Error"] != null) ViewBag.Error = TempData["Error"];
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
+        => RedirectToAction("Acceso", new { returnUrl });
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,7 +47,8 @@
             {
                 ModelState.AddModelError("", "Email o contraseña incorrectos.");
                 ViewBag.ReturnUrl = returnUrl;
-                return View();
+                var vm = new Usuario { email = mail };
+                return View("Acceso", vm);
             }
 
             HttpContext.Session.SetString("Usuario", usuario.email ?? "");
@@ -110,7 +98,7 @@
 
             // No logueado -> mostrar pantalla doble
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View(new Usuario());
         }
 
 
