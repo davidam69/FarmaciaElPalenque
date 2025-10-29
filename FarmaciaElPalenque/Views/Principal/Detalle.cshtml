@@ -3,7 +3,6 @@
     ViewData["Title"] = "Detalle del Producto";
     var esAdmin = Context.Session.GetString("Rol") == "Administrador";
     var hayStock = (Model?.Stock ?? 0) > 0;
-    // para volver a esta página después de agregar (si querés)
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 
@@ -18,10 +17,9 @@
             <div class="col-12 col-lg-6">
                 <div class="d-flex gap-3">
                     <div class="thumbs d-flex flex-lg-column gap-2 order-2 order-lg-1">
-                        <!-- Si tuvieras más imágenes, repetí <img> cambiando el src -->
+                        <!-- Si hubiera más imágenes, repetir <img> cambiando el src -->
                         <img id="hero" class="hero-img" src="@(!string.IsNullOrEmpty(Model?.imagenUrl) ? Model.imagenUrl : "/Images/default.png")"
                              alt="@Model?.nombre" onclick="document.getElementById('hero').src=this.src" />
-                        <!-- placeholders opcionales -->
                     </div>
                 </div>
             </div>
@@ -32,7 +30,7 @@
                 <h1 class="mt-1 mb-2 fw-bold">@Model?.nombre</h1>
 
                 <div class="d-flex align-items-baseline gap-3 mb-2">
-                    <!-- Si querés precio tachado/desc, poné un valor acá -->
+                    <!-- Si quiero precio tachado/desc, poné un valor acá -->
                     @* <div class="price-old h5 mb-0">$ 36.900,00</div> *@
                     <div class="price-big text-primary">$ @Model?.precio.ToString("N2")</div>
                 </div>
@@ -87,7 +85,7 @@
                                 <i class="bi bi-credit-card-2-front"></i>
                                 <strong>Métodos de pago</strong>
                             </div>
-                            <small class="text-muted">Tarjeta de crédito y débito (demo).</small>
+                            <small class="text-muted">Tarjeta de crédito y débito.</small>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -96,7 +94,7 @@
                                 <i class="bi bi-truck"></i>
                                 <strong>Métodos de envío</strong>
                             </div>
-                            <small class="text-muted">Envíos y retiro por sucursal (demo).</small>
+                            <small class="text-muted">Envíos y retiro por sucursal.</small>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
@@ -105,7 +103,7 @@
                                 <i class="bi bi-shop"></i>
                                 <strong>Retiro en farmacia</strong>
                             </div>
-                            <small class="text-muted">Gratis en sucursal (demo).</small>
+                            <small class="text-muted">Gratis en sucursal.</small>
                         </div>
                     </div>
                 </div>
