@@ -1,5 +1,6 @@
 ﻿global using FarmaciaElPalenque.MlModel;
 global using FarmaciaElPalenque.Models;
+global using FarmaciaElPalenque.Models.ViewModels;
 global using FarmaciaElPalenque.Services;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Rendering;
