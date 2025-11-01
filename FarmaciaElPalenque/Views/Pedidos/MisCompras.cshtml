@@ -1,9 +1,17 @@
 ﻿@model List<FarmaciaElPalenque.Models.ViewModels.PedidoResumenVM>
 @{
     ViewData["Title"] = "Mis compras";
+    bool esAdmin = Context.Session.GetString("Rol") == "Administrador";
 }
 
-<h2 class="mb-3">Mis compras</h2>
+@if (esAdmin)
+{
+    <h2 class="mb-3">Historial de compras de @ViewBag.NombreUsuario</h2>
+}
+else
+{
+    <h2 class="mb-3">Mis compras</h2>
+}
 
 @if (!Model.Any())
 {
@@ -33,12 +41,34 @@ else
                         <a asp-action="Detalle" asp-route-numero="@p.Numero" class="btn btn-sm btn-outline-primary">
                             Ver detalle
                         </a>
-                        <a asp-action="Descargar" asp-route-numero="@p.Numero" class="btn btn-sm btn-outline-secondary ms-1">
-                            PDF
-                        </a>
+                        @if (!esAdmin)
+                        {
+                            <a asp-action="Descargar" asp-route-numero="@p.Numero" class="btn btn-sm btn-outline-secondary ms-1">
+                                PDF
+                            </a>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+}
+
+@if (esAdmin)
+{
+    <div class="d-flex gap-2">
+        <a asp-controller="Admin" asp-action="Panel" class="btn btn-success">Volver al Panel</a>
+        <a asp-controller="Admin" asp-action="Usuarios" class="btn btn-outline-secondary">Volver a Usuarios</a>
+    </div>
+}
+else
+{
+    <!-- Botón "Volver atrás" solo para usuarios comunes -->
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+            <i class="bi bi-arrow-left me-1"></i>Volver atrás
+        </button>
+        <a asp-controller="Principal" asp-action="Index" class="btn btn-outline-secondary">Catalogo</a>
+
+    </div>
 }

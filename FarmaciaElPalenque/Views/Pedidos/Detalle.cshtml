@@ -1,9 +1,18 @@
 ﻿@model FarmaciaElPalenque.Models.ViewModels.PedidoDetalleVM
 @{
     ViewData["Title"] = "Detalle de compra";
+    bool esAdmin = Context.Session.GetString("Rol") == "Administrador";
 }
 
-<h2 class="mb-1">Detalle de compra</h2>
+@if (esAdmin)
+{
+    <h2 class="mb-1">Historial de compras del usuario</h2>
+}
+else
+{
+    <h2 class="mb-1">Detalle de compra</h2>
+}
+
 <p class="text-muted mb-3">
     <strong>N.º:</strong> @Model.Numero &nbsp;|&nbsp;
     <strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")
@@ -38,9 +47,21 @@
 </table>
 
 <div class="d-flex gap-2">
-    <a asp-action="Descargar" asp-route-numero="@Model.Numero" class="btn btn-primary">
-        Descargar factura (PDF)
-    </a>
-    <a asp-action="MisCompras" class="btn btn-outline-secondary">Volver</a>
+    @if (!esAdmin)
+    {
+        <a asp-action="Descargar" asp-route-numero="@Model.Numero" class="btn btn-primary">
+            Descargar factura (PDF)
+        </a>
+    }
+
+    @if (esAdmin)
+    {
+        <a asp-action="HistorialUsuario" asp-route-usuarioId="@ViewBag.UsuarioId" class="btn btn-outline-secondary">Volver al historial</a>
+        <a asp-controller="Admin" asp-action="Usuarios" class="btn btn-success">Volver a Usuarios</a>
+    }
+    else
+    {
+        <a asp-action="MisCompras" class="btn btn-outline-secondary">Volver</a>
+    }
 </div>
 

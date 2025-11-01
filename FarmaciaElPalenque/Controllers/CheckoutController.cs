@@ -77,6 +77,8 @@
             if (user == null) return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
 
             using var tx = _context.Database.BeginTransaction();
+            try
+            {
 
                 // Traer productos en tracking (¡sin AsNoTracking!)
                 var ids = cart.Select(i => i.ProductoId).ToList();
@@ -141,12 +143,14 @@
                 TempData["Mensaje"] = "Pago procesado correctamente.";
 
                 return RedirectToAction("Confirmacion", new { numero = pedido.numero });
-            
-            
+            }
+            catch
+            {
+
                 tx.Rollback();
                 TempData["Error"] = "Ocurrió un error al procesar el pago. Inténtalo nuevamente.";
                 return RedirectToAction("ver", "Carrito");
-            
+            }
         }
     
 

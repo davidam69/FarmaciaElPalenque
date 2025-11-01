@@ -67,6 +67,12 @@
                 }).ToList()
             };
 
+            // Si es admin, pasamos el usuarioId para el botón de volver
+            if (EsAdmin())
+            {
+                ViewBag.UsuarioId = pedido.usuarioId;
+            }
+
             return View(vm);
         }
 
@@ -74,8 +80,48 @@
         [HttpGet]
         public IActionResult Descargar(string numero)
         {
+            if (EsAdmin())
+            {
+                TempData["Error"] = "Los administradores no pueden descargar facturas.";
+                return RedirectToAction("Panel", "Admin");
+            }
+
             // Reutiliza tu acción existente de CheckoutController
             return RedirectToAction("DescargarFactura", "Checkout", new { numero });
+        }
+
+        [HttpGet]
+        public IActionResult HistorialUsuario(int usuarioId)
+        {
+            if (!EsAdmin())
+            {
+                TempData["Error"] = "No tenés permisos para ver esta información.";
+                return RedirectToAction("Index", "Principal");
+            }
+
+            var usuario = _context.Usuarios.Find(usuarioId);
+            if (usuario == null)
+            {
+                TempData["Error"] = "Usuario no encontrado.";
+                return RedirectToAction("Usuarios", "Admin");
+            }
+
+            ViewBag.NombreUsuario = $"{usuario.nombre} {usuario.apellido}";
+            ViewBag.UsuarioId = usuarioId;
+
+            var pedidos = _context.Pedidos
+                .Where(p => p.usuarioId == usuarioId)
+                .OrderByDescending(p => p.fecha)
+                .Select(p => new PedidoResumenVM
+                {
+                    Numero = p.numero,
+                    Fecha = p.fecha,
+                    Total = p.total,
+                    CantItems = p.Detalles.Count
+                })
+                .ToList();
+
+            return View("MisCompras", pedidos);
         }
     }
 }
