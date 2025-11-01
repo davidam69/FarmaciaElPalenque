@@ -1,15 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore; // Necesario para .Include() y .FirstOrDefaultAsync()
-using System.Linq;
-using FarmaciaElPalenque.Models; // Necesario para los ViewModels
-using FarmaciaElPalenque.MlModel; // Necesario para ClienteClustering
-using FarmaciaElPalenque.Services; // Necesario para IEmailSender
-using System.Threading.Tasks;
-using System.Collections.Generic; // Necesario para List<>
-using System;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class AdminController : Controller
     {

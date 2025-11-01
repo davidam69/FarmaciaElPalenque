@@ -59,7 +59,7 @@
             {
                 var carrito = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
                 model.Items = carrito;
-                model.Total = carrito.Sum(i => i.Subtotal);
+                model.Total = carrito.Sum(i => i.Subtotal);   // (Este total es sin promo; si querés mostrar el descuento en la vista de checkout, avísame y lo cambiamos en el GET Index)
                 return View("Index", model);
             }
 
@@ -74,13 +74,12 @@
 
             var email = HttpContext.Session.GetString("Usuario") ?? "";
             var user = _context.Usuarios.FirstOrDefault(u => u.email == email);
-            if (user == null) return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
+            if (user == null)
+                return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
 
             using var tx = _context.Database.BeginTransaction();
             try
             {
-
-                // Traer productos en tracking (¡sin AsNoTracking!)
                 var ids = cart.Select(i => i.ProductoId).ToList();
                 var productos = _context.Productos
                     .Where(p => ids.Contains(p.id))
@@ -88,7 +87,9 @@
 
                 var problemas = new List<string>();
                 decimal total = 0m;
+                bool huboDescuento = false;
 
+                // 1) Validación y cálculo del total con promo
                 foreach (var i in cart)
                 {
                     if (!productos.TryGetValue(i.ProductoId, out var prod))
@@ -96,10 +97,20 @@
                         problemas.Add($"Producto eliminado: {i.Nombre}");
                         continue;
                     }
+
                     if (i.Cantidad > prod.Stock)
+                    {
                         problemas.Add($"{prod.nombre}: stock {prod.Stock}, intentaste {i.Cantidad}.");
-                    else
-                        total += prod.precio * i.Cantidad;
+                        continue;
+                    }
+
+                    // --- PROMO 30% OFF por 3 o más unidades del mismo producto ---
+                    var cantidad = i.Cantidad;
+                    var precioUnitario = prod.precio;
+                    var factor = (cantidad >= 3) ? 0.70m : 1.00m;
+                    if (factor < 1m) huboDescuento = true;
+
+                    total += precioUnitario * cantidad * factor;  // acumula total con descuento si corresponde
                 }
 
                 if (problemas.Any())
@@ -109,27 +120,33 @@
                     return RedirectToAction("Ver", "Carrito");
                 }
 
-                // Descontar stock
+                // 2) Descontar stock
                 foreach (var i in cart)
                     productos[i.ProductoId].Stock -= i.Cantidad;
 
-                // Número simple (si no usás numerador)
                 var numero = $"F-{DateTime.Now:yyyyMMdd-HHmmss}";
 
+                // 3) Crear pedido con precio unitario ya descontado
                 var pedido = new Pedido
                 {
                     numero = numero,
                     fecha = DateTime.Now,
                     usuarioId = user.id,
-                    total = total,
+                    total = decimal.Round(total, 2, MidpointRounding.AwayFromZero),
                     Detalles = cart.Select(i =>
                     {
                         var prod = productos[i.ProductoId];
+
+                        var factor = (i.Cantidad >= 3) ? 0.70m : 1.00m; // mismo criterio de promo
+                        var precioUnitarioConPromo = decimal.Round(
+                            prod.precio * factor, 2, MidpointRounding.AwayFromZero
+                        );
+
                         return new PedidoDetalle
                         {
                             productoId = prod.id,
                             nombre = prod.nombre ?? "Producto",
-                            precioUnitario = prod.precio,
+                            precioUnitario = precioUnitarioConPromo, // guardamos ya con descuento si aplica
                             cantidad = i.Cantidad
                         };
                     }).ToList()
@@ -140,16 +157,17 @@
                 tx.Commit();
 
                 HttpContext.Session.BorrarCarrito();
-                TempData["Mensaje"] = "Pago procesado correctamente.";
+                TempData["Mensaje"] = huboDescuento
+                    ? "Pago procesado. Se aplicó el 30% OFF por llevar 3 o más unidades en al menos un producto."
+                    : "Pago procesado correctamente.";
 
                 return RedirectToAction("Confirmacion", new { numero = pedido.numero });
             }
             catch
             {
-
                 tx.Rollback();
                 TempData["Error"] = "Ocurrió un error al procesar el pago. Inténtalo nuevamente.";
-                return RedirectToAction("ver", "Carrito");
+                return RedirectToAction("Ver", "Carrito");
             }
         }
     
