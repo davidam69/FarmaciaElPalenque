@@ -33,6 +33,13 @@
                                 <i class="bi bi-fire me-1"></i> Ofertas
                             </a>
                         </li>
+                        @if (Context.Session.GetString("Rol") == "Administrador")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="ResultadosClustering">
+                                <i class="bi bi-tags me-1"></i> Predicciones IA</a>
+                            </li>
+                        }
                     </ul>
                 </div>
 

@@ -16,6 +16,7 @@
             var clientes = new List<ClienteData>();
 
             // CAMBIO 1: SE ELIMINAN 'u.edad' DEL SELECT Y DEL GROUP BY EN EL QUERY SQL
+            /*
             var query = @"
                 SELECT
                     u.nombre,
@@ -29,7 +30,32 @@
                 GROUP BY u.nombre 
                 HAVING COUNT(c.id) > 1;
             ";
+            */
+            var query = @"
+                SELECT 
+                    u.id as UsuarioId,
+                    u.nombre,
+                    COUNT(p.id) AS ComprasTotales,
+                    SUM(p.total) AS MontoGastado,
+                    DATEDIFF(day, MAX(p.fecha), GETDATE()) AS DiasDesdeUltimaCompra,
+                    CASE 
+                        WHEN COUNT(p.id) > 1 THEN 
+                            AVG(DATEDIFF(day, p_anterior.fecha, p.fecha))
+                        ELSE 0 
+                    END AS PromedioDiasEntreCompras
+                FROM Usuarios u
+                LEFT JOIN Pedidos p ON u.id = p.usuarioId
+                LEFT JOIN Pedidos p_anterior ON p_anterior.usuarioId = u.id 
+                    AND p_anterior.fecha = (
+                        SELECT MAX(fecha) 
+                        FROM Pedidos p2 
+                        WHERE p2.usuarioId = u.id AND p2.fecha < p.fecha
+                    )
+                GROUP BY u.id, u.nombre
+                HAVING COUNT(p.id) >= 1;  -- Incluye clientes con al menos 1 compra
+            ";
 
+            /*
             using (var conexion = new SqlConnection(connectionString))
             {
                 conexion.Open();
@@ -50,14 +76,34 @@
                     }
                 }
             }
+            */
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                using (var comando = new SqlCommand(query, conexion))
+                using (var lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        clientes.Add(new ClienteData
+                        {
+                            UsuarioId = Convert.ToInt32(lector["UsuarioId"]),
+                            Nombre = lector["nombre"].ToString(),
+                            ComprasTotales = lector["ComprasTotales"] == DBNull.Value ? 0 : Convert.ToSingle(lector["ComprasTotales"]),
+                            MontoGastado = lector["MontoGastado"] == DBNull.Value ? 0 : Convert.ToSingle(lector["MontoGastado"]),
+                            DiasDesdeUltimaCompra = lector["DiasDesdeUltimaCompra"] == DBNull.Value ? 0 : Convert.ToSingle(lector["DiasDesdeUltimaCompra"]),
+                            PromedioDiasEntreCompras = lector["PromedioDiasEntreCompras"] == DBNull.Value ? 0 : Convert.ToSingle(lector["PromedioDiasEntreCompras"])
+                        });
+                    }
+                }
+            }
 
             var dataView = mlContext.Data.LoadFromEnumerable(clientes);
 
-            // CAMBIO 3: SE ELIMINA 'Edad' DE LA TUBERÍA DE ML.NET (FEATURES)
             var pipeline = mlContext.Transforms.Concatenate("Features",
-                nameof(ClienteData.ComprasMensuales),
-                nameof(ClienteData.MontoGastado),
-                nameof(ClienteData.DiasDesdeUltimaCompra))
+                    nameof(ClienteData.ComprasTotales),
+                    nameof(ClienteData.MontoGastado),
+                    nameof(ClienteData.DiasDesdeUltimaCompra))
                 .Append(mlContext.Transforms.NormalizeMinMax("Features"))
                 .Append(mlContext.Clustering.Trainers.KMeans("Features", numberOfClusters: 3));
 

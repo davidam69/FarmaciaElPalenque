@@ -8,7 +8,6 @@
 
         private bool EsAdmin() => HttpContext.Session.GetString("Rol") == "Administrador";
 
-        #region Agregar al carrito
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(int id, int cantidad = 1, string? returnUrl = null)
@@ -28,12 +27,6 @@
                 var back = returnUrl ?? Request.Headers["Referer"].ToString();
                 return RedirectToAction("Acceso", "Cuenta", new { returnUrl = back });
             }
-
-            // no necesito el id del usuario por ahora solo para cuando necesite migrar el carrito a BD
-            /* var usuarioId = _context.Usuarios
-                .Where(u => u.email == email)
-                .Select(u => u.id)
-                .First(); */
 
             // buscar productos
             var p = _context.Productos.AsNoTracking().FirstOrDefault(x => x.id == id);
@@ -107,9 +100,7 @@
 
             return RedirectToAction("Ver");
         }
-        #endregion
 
-        #region Ver carrito
         [HttpGet]
         public IActionResult Ver()
         {
@@ -132,9 +123,6 @@
             return View(cart);
         }
 
-        #endregion
-
-        #region Cambiar cantidad, Quitar, Vaciar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CambiarCantidad(int id, int cantidad)
@@ -225,6 +213,5 @@
             HttpContext.Session.BorrarCarrito();
             return RedirectToAction("Ver");
         }
-        #endregion
     }
 }

@@ -1,7 +1,3 @@
-using FarmaciaElPalenque.Services;
-using Microsoft.EntityFrameworkCore; 
-using FarmaciaElPalenque; 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
@@ -16,15 +12,19 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL")));
 
-
-builder.Services.AddScoped<IEmailSender, EmailSenderService>();
-
+builder.Services.AddTransient<IEmailSender, EmailSenderService>();
+builder.Services.AddHostedService<ServicioAnalisisClientes>();
 
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-   
+    app.UseHsts();
+}
+else
+{
+    // En desarrollo, usa la página de errores detallada
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
