@@ -11,9 +11,7 @@
 
         [HttpGet]
         public IActionResult Registro()
-        {
-            return View();
-        }
+        => RedirectToAction("Acceso");
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -32,23 +30,12 @@
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Acceso");
         }
 
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
-        {
-            if (HttpContext.Session.GetString("Usuario") != null)
-            {
-                // Si ya hay sesión activa, redirige según el rol
-                var rol = HttpContext.Session.GetString("Rol");
-                if (rol == "Administrador") return RedirectToAction("Panel", "Admin");
-                return RedirectToAction("Index", "Principal");
-            }
-            if (TempData["Error"] != null) ViewBag.Error = TempData["Error"];
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
+        => RedirectToAction("Acceso", new { returnUrl });
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,7 +47,8 @@
             {
                 ModelState.AddModelError("", "Email o contraseña incorrectos.");
                 ViewBag.ReturnUrl = returnUrl;
-                return View();
+                var vm = new Usuario { email = mail };
+                return View("Acceso", vm);
             }
 
             HttpContext.Session.SetString("Usuario", usuario.email ?? "");
@@ -89,5 +77,30 @@
             TempData["Mensaje"] = "Has cerrado sesión correctamente.";
             return RedirectToAction("Index", "Principal");
         }
+
+        [HttpGet]
+        public IActionResult Acceso(string? returnUrl = null)
+        {
+            var rol = HttpContext.Session.GetString("Rol");
+
+            if (!string.IsNullOrEmpty(rol))
+            {
+                if (rol == "Administrador")
+                {
+                    // El admin SÍ puede ver la pantalla doble para registrar usuarios
+                    ViewBag.ReturnUrl = returnUrl;
+                    return View();
+                }
+
+                // Cualquier otro usuario ya logueado -> al inicio
+                return RedirectToAction("Index", "Principal");
+            }
+
+            // No logueado -> mostrar pantalla doble
+            ViewBag.ReturnUrl = returnUrl;
+            return View(new Usuario());
+        }
+
+
     }
 }

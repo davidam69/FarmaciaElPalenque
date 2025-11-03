@@ -29,25 +29,39 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Principal" asp-action="Index">
+                            <a class="nav-link text-dark" asp-controller="Principal" asp-action="Ofertas">
                                 <i class="bi bi-fire me-1"></i> Ofertas
                             </a>
                         </li>
+                        @if (Context.Session.GetString("Rol") == "Administrador")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="ResultadosClustering">
+                                <i class="bi bi-tags me-1"></i> Predicciones IA</a>
+                            </li>
+                        }
                     </ul>
                 </div>
 
                 <ul class="navbar-nav ms-auto align-items-center">
                     @if (Context.Session.GetString("Usuario") == null)
                     {
-                        <li class="nav-item me-2">
-                            <a asp-area="" asp-controller="Cuenta" asp-action="Login" class="btn-moderno btn-login">Ingresar</a>
-                        </li>
                         <li class="nav-item">
-                            <a asp-area="" asp-controller="Cuenta" asp-action="Registro" class="btn-moderno btn-registro">Regístrate</a>
+                            <a class="nav-link text-dark" asp-controller="Cuenta" asp-action="Acceso">
+                                Iniciar sesión / Crear cuenta
+                            </a>
                         </li>
                     }
                     else
                     {
+                        // Solo mostramos "Mis compras" si no es Administrador
+                        @if (Context.Session.GetString("Rol") != "Administrador")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Pedidos" asp-action="MisCompras">Mis compras</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <span class="nav-link">Hola, @Context.Session.GetString("NombreCompleto")</span>
                         </li>

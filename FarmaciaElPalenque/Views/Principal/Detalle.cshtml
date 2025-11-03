@@ -1,56 +1,162 @@
-﻿@model Productos
-
+﻿@model FarmaciaElPalenque.Models.Productos
 @{
     ViewData["Title"] = "Detalle del Producto";
-    var back = Url.Action("Index", "Principal");
+    var esAdmin = Context.Session.GetString("Rol") == "Administrador";
+    var hayStock = (Model?.Stock ?? 0) > 0;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 
-<h2>Detalle del Producto</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/estilos.css" />
+}
 
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["Mensaje"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+<div class="container my-4">
+    <div class="prod-wrap">
+        <div class="row g-4">
+            <!-- Galería izquierda -->
+            <div class="col-12 col-lg-6">
+                <div class="d-flex gap-3">
+                    <div class="thumbs d-flex flex-lg-column gap-2 order-2 order-lg-1">
+                        <!-- Si hubiera más imágenes, repetir <img> cambiando el src -->
+                        <img id="hero" class="hero-img" src="@(!string.IsNullOrEmpty(Model?.imagenUrl) ? Model.imagenUrl : "/Images/default.png")"
+                             alt="@Model?.nombre" onclick="document.getElementById('hero').src=this.src" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos derecha -->
+            <div class="col-12 col-lg-6 d-flex flex-column">
+                <small class="text-uppercase text-muted fw-bold">@Model?.Categoria?.nombre</small>
+                <h1 class="mt-1 mb-2 fw-bold">@Model?.nombre</h1>
+
+                <div class="d-flex align-items-baseline gap-3 mb-2">
+                    <!-- Si quiero precio tachado/desc, poné un valor acá -->
+                    @* <div class="price-old h5 mb-0">$ 36.900,00</div> *@
+                    <div class="price-big text-primary">$ @Model?.precio.ToString("N2")</div>
+                </div>
+
+                <div class="mb-3">
+                    @if (hayStock)
+                    {
+                        <span class="badge bg-success badge-stock">Stock: @Model!.Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary badge-stock">Sin stock</span>
+                    }
+                </div>
+
+                <!-- Comprar -->
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="input-group" style="width: 150px;">
+                        <button class="btn btn-outline-secondary qty-btn" type="button" id="qtyMinus">−</button>
+                        <input type="number" class="form-control text-center" id="qtyInput" value="1" min="1" max="@Model?.Stock">
+                        <button class="btn btn-outline-secondary qty-btn" type="button" id="qtyPlus">+</button>
+                    </div>
+
+                    @if (esAdmin || !hayStock)
+                    {
+                        <button class="btn btn-secondary pill-btn" disabled title="@(esAdmin ? "Los administradores no pueden comprar" : "Sin stock")">
+                            <i class="bi bi-cart-x me-1"></i> Agregar al carrito
+                        </button>
+                    }
+                    else
+                    {
+                        <form asp-controller="Carrito" asp-action="Agregar" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model!.id" />
+                            <input type="hidden" name="cantidad" id="cantidadHidden" value="1" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit" class="btn btn-dark pill-btn">
+                                <i class="bi bi-cart-plus me-1"></i> Agregar al carrito
+                            </button>
+                        </form>
+                    }
+                </div>
+
+                <!-- Descripción corta opcional -->
+                @* <p class="text-muted mb-4">Acá podrías colocar una breve descripción del producto…</p> *@
+
+                <!-- Cards de info -->
+                <div class="row g-3 mt-auto">
+                    <div class="row g-3 mt-auto">
+                        <div class="col-12 col-md-4">
+                            <div class="info-card">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <strong>Métodos de pago</strong>
+                                </div>
+                                <small class="text-muted d-block mb-2">Tarjeta de crédito, débito y Mercado pago.</small>
+
+                                <!-- Miniaturas de tarjetas -->
+                                <div class="d-flex justify-content-between gap-1">
+                                    <div class="d-flex justify-content-between gap-1">
+                                        <img src="~/Images/visa.png" alt="Visa Crédito" class="tarjeta-imagen" title="Visa Crédito">
+                                        <img src="~/Images/mastercard.png" alt="Visa Débito" class="tarjeta-imagen" title="Visa Débito">
+                                        <img src="~/Images/american-express.png" alt="American Express" class="tarjeta-imagen" title="American Express">
+                                        <img src="~/Images/mercadopago.png" alt="American Express" class="tarjeta-imagen" title="Mercado Pago">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Los demás métodos de envío etc... -->
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="info-card">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-truck"></i>
+                                <strong>Métodos de envío</strong>
+                            </div>
+                            <small class="text-muted">Envíos y retiro por sucursal.</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="info-card">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-shop"></i>
+                                <strong>Retiro en farmacia</strong>
+                            </div>
+                            <small class="text-muted">Gratis en sucursal.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        ← Volver al catálogo
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @Html.Raw(TempData["Error"])
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </div>
-}
+</div>
 
-<img src="@(string.IsNullOrWhiteSpace(Model.imagenUrl) ? "/images/default.png" : Model.imagenUrl)"
-     width="150" alt="@Model.nombre" class="mb-3" />
+@section Scripts {
+    <script>
+        (function () {
+            const input = document.getElementById('qtyInput');
+            const hidden = document.getElementById('cantidadHidden');
+            const minus = document.getElementById('qtyMinus');
+            const plus  = document.getElementById('qtyPlus');
 
-<p><strong>Nombre:</strong> @Model.nombre</p>
-<p><strong>Precio:</strong> $@Model.precio.ToString("C")</p>
-<p><strong>Categoria:</strong> @Model?.Categoria?.nombre</p>
-<p>
-    <span class="badge bg-@(Model!.Stock > 0 ? "success" : "secondary")">
-        Stock: @Model.Stock
-    </span>
-</p>
-
-@if (Model.Stock > 0)
-{
-    <form asp-controller="Carrito" asp-action="Agregar" method="post" class="mt-2 d-flex gap-2">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="id" value="@Model.id" />
-        <input type="hidden" name="returnUrl" value="@back" />
-        <input type="number" name="cantidad" value="1" min="1" max="@Model.Stock" class="form-control" style="width:100px;" />
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-cart-plus"></i> Agregar
-        </button>
-    </form>
+            function syncHidden() {
+                if (hidden) hidden.value = input.value;
+            }
+            minus?.addEventListener('click', () => {
+                const min = parseInt(input.min || '1', 10);
+                let v = parseInt(input.value || '1', 10);
+                v = isNaN(v) ? min : Math.max(min, v - 1);
+                input.value = v; syncHidden();
+            });
+            plus?.addEventListener('click', () => {
+                const max = parseInt(input.max || '9999', 10);
+                let v = parseInt(input.value || '1', 10);
+                v = isNaN(v) ? 1 : Math.min(max, v + 1);
+                input.value = v; syncHidden();
+            });
+            input?.addEventListener('input', syncHidden);
+            syncHidden();
+        })();
+    </script>
 }
-else
-{
-    <button class="btn btn-secondary mt-2" disabled>
-        <i class="bi bi-cart-x"></i> Sin stock
-    </button>
-}
-
-<a asp-action="Index" class="btn btn-outline-secondary mt-3">← Volver al catálogo</a>

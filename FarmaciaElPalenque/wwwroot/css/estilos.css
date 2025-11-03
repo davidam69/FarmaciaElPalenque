@@ -1,9 +1,25 @@
-﻿.table img {
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px gray;
+﻿/* ===== ESTILOS BASE ===== */
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
-/* Estilos para las cartas modernas */
 
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #f0f4f8;
+    background-image: radial-gradient(at 0% 0%, hsla(215, 100%, 75%, 0.4) 0, transparent 50%), radial-gradient(at 100% 100%, hsla(270, 100%, 75%, 0.4) 0, transparent 50%), linear-gradient(to top right, rgba(255, 255, 255, 0.2) 0, transparent 50%);
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+/* ===== COMPONENTES CARDS (UNIFICADO) ===== */
 .card-moderno {
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(8px);
@@ -13,11 +29,10 @@
     overflow: hidden;
 }
 
-.card-moderno:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
+    .card-moderno:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
 
 .card-img-container {
     width: 100%;
@@ -40,6 +55,38 @@
     padding: 1.5rem;
 }
 
+/* ===== BOTONES ===== */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.btn-equal {
+    min-width: 190px;
+    text-align: center;
+    font-weight: 500;
+    padding: 10px 0;
+}
+
+.btn-compact {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 1.25rem;
+    height: 53px;
+}
+
+
+.btn-moderno {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
+}
+
 .btn-card-moderno {
     font-weight: bold;
     border-radius: 50px;
@@ -52,7 +99,66 @@
         transform: translateY(-2px);
         box-shadow: 0 6px 10px rgba(0, 123, 255, 0.4);
     }
-/* Botón flotante del carrito de compras */
+
+.btn-login {
+    color: #6c757d;
+    background-color: transparent;
+    border: 2px solid #6c757d;
+}
+
+    .btn-login:hover {
+        color: #fff;
+        background-color: #6c757d;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+        transform: translateY(-2px);
+    }
+
+.btn-registro {
+    color: #fff;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+}
+
+    .btn-registro:hover {
+        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.5);
+        transform: translateY(-2px);
+        background-image: linear-gradient(45deg, #0056b3, #004085);
+    }
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-bottom: none !important;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #212529 !important;
+    transition: color 0.3s ease;
+}
+
+    .navbar-brand:hover {
+        color: #007bff !important;
+    }
+
+.nav-link {
+    transition: all 0.2s ease;
+}
+
+    .nav-link:hover {
+        transform: translateY(-2px);
+        color: #007bff !important;
+    }
+
+/* ===== COMPONENTES ESPECIALES ===== */
+.table img {
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px gray;
+}
+
 .cart-fab {
     position: fixed;
     right: 18px;
@@ -91,37 +197,6 @@
     box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
 
-html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-}
-
-body {
-    background-color: #f0f4f8;
-    background-image: radial-gradient(at 0% 0%, hsla(215, 100%, 75%, 0.4) 0, transparent 50%), radial-gradient(at 100% 100%, hsla(270, 100%, 75%, 0.4) 0, transparent 50%), linear-gradient(to top right, rgba(255, 255, 255, 0.2) 0, transparent 50%);
-    min-height: 100vh;
-    background-attachment: fixed;
-}
-
-/* Hero para el Panel */
 .hero-panel {
     background: linear-gradient(135deg, #f8fafc, #eef2ff);
     border-radius: 1.25rem;
@@ -129,98 +204,102 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,.05);
 }
 
-param ellipse layout body {
-    background-color: #f0f4f8;
-    min-height: 100vh;
-}
-
-
-.navbar {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    border-bottom: none !important;
-}
-
-.navbar-brand {
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: #212529 !important;
-    transition: color 0.3s ease;
-}
-
-    .navbar-brand:hover {
-        color: #007bff !important;
-    }
-
-.nav-link {
-    transition: all 0.2s ease;
-}
-
-    .nav-link:hover {
-        transform: translateY(-2px);
-        color: #007bff !important;
-    }
-
-
-.btn-moderno {
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.75rem 2rem;
-    border-radius: 50px;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease-in-out;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-login {
-    color: #6c757d;
-    background-color: transparent;
-    border: 2px solid #6c757d;
-}
-
-    .btn-login:hover {
-        color: #fff;
-        background-color: #6c757d;
-        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
-        transform: translateY(-2px);
-    }
-
-.btn-registro {
-    color: #fff;
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    border: none;
-}
-
-    .btn-registro:hover {
-        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.5);
-        transform: translateY(-2px);
-        background-image: linear-gradient(45deg, #0056b3, #004085);
-    }
-
-
-.card-hover:hover {
-    transform: translateY(-8px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 1rem 3rem rgba(0,0,0,.15) !important;
-}
-
-.card-img-container {
+.hero-img {
+    display: block;
     width: 100%;
-    height: 180px;
-    overflow: hidden;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    max-width: 700px; /* ✅ límite máximo más chico */
+    height: auto; /* ✅ mantiene proporción real */
+    aspect-ratio: 1 / 1; /* mantiene cuadrado si falta alto */
+    object-fit: contain; /* ✅ muestra todo el producto sin recortes */
+    margin: 0 auto; /* centra la imagen */
+    border-radius: 1rem;
+    border: 1px solid #e9ecef;
+    background: #fff;
+    padding: 10px;
 }
 
-    .card-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
+.confirm-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    min-height: 70vh;
+}
+
+.confirm-card {
+    background: #ffffffee;
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
 
-.card-hover:hover .card-img-container img {
-    transform: scale(1.1);
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+.btn-lg {
+    min-width: 200px;
+}
+
+.auth-wrap {
+    background: #f6f9fc;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.auth-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,.06);
+    padding: 1.5rem;
+}
+
+.benefit {
+    border: 1px solid #eef2f7;
+    border-radius: .75rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+    .benefit i {
+        font-size: 1.3rem;
+        margin-bottom: .25rem;
+        display: block;
+    }
+
+.btn-dark-pill {
+    background: #2f2f2f;
+    border: none;
+    border-radius: 2rem;
+    padding: .75rem 1.5rem;
+}
+
+.tarjeta-imagen {
+    width: 75px;
+    height: 55px;
+    object-fit: contain;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 3px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 0;
+}
+
+    .tarjeta-imagen:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        transition: all 0.2s ease;
+    }

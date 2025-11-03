@@ -1,28 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore; // Necesario para .Include() y .FirstOrDefaultAsync()
-using System.Linq;
-using FarmaciaElPalenque.Models; // Necesario para los ViewModels
-using FarmaciaElPalenque.MlModel; // Necesario para ClienteClustering
-using FarmaciaElPalenque.Services; // Necesario para IEmailSender
-using System.Threading.Tasks;
-using System.Collections.Generic; // Necesario para List<>
-using System;
-
-namespace FarmaciaElPalenque.Controllers
+﻿namespace FarmaciaElPalenque.Controllers
 {
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IEmailSender _emailSender;
         // Asumiendo que AppDbContext está correctamente inyectado
-        public AdminController(AppDbContext context)
+        public AdminController(AppDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         // =================================================================
         // NUEVA ACCIÓN: RESULTADOS DEL ML Y ESTADO DE ENVÍO DE EMAILS
         // =================================================================
+        /*
         public async Task<IActionResult> ResultadosClustering()
         {
             if (HttpContext.Session.GetString("Rol") != "Administrador")
@@ -62,7 +54,58 @@ namespace FarmaciaElPalenque.Controllers
 
             return View(resultadosFinales);
         }
-        
+        */
+
+        public async Task<IActionResult> ResultadosClustering()
+        {
+            if (HttpContext.Session.GetString("Rol") != "Administrador")
+            {
+                TempData["Mensaje"] = "Acceso Denegado.";
+                return RedirectToAction("Index", "Principal");
+            }
+
+            var connectionString = _context.Database.GetConnectionString();
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                TempData["Error"] = "No se pudo obtener la cadena de conexión a la base de datos.";
+                return RedirectToAction("Panel", "Admin");
+            }
+
+            try
+            {
+                var mlModel = new ClienteClustering(connectionString);
+                var resultadosMl = mlModel.EjecutarClustering();
+
+                var fechaInicioHoy = DateTime.Today;
+                var resultadosFinales = new List<AnalisisClienteViewModel>();
+
+                foreach (var (Cliente, Cluster, DeberiaAvisarse) in resultadosMl)
+                {
+                // BUSCAR POR ID EN LUGAR DE NOMBRE (MÁS PRECISO)
+                    var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.id == Cliente.UsuarioId);
+
+                // Verificar si ya se envió un aviso hoy (necesitarías una tabla de logs)
+                    bool enviadoHoy = false; // Implementar esta lógica
+
+                    resultadosFinales.Add(new AnalisisClienteViewModel
+                    {
+                        ClienteDatos = Cliente,
+                        ClusterId = Cluster,
+                        DeberiaAvisarse = DeberiaAvisarse,
+                        EmailCliente = usuario?.email ?? "N/A",
+                        AvisoEnviadoHoy = enviadoHoy
+                    });
+                }
+
+                return View(resultadosFinales);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error en el clustering: {ex.Message}";
+                return RedirectToAction("Panel", "Admin");
+            }
+        }
 
         public IActionResult Panel()
         {
@@ -203,6 +246,31 @@ namespace FarmaciaElPalenque.Controllers
             _context.SaveChanges();
             TempData["Mensaje"] = "Productos actualizados correctamente.";
             return RedirectToAction("ListaProductos");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> EnviarAvisoManual(int usuarioId)
+        {
+            try
+            {
+                var usuario = await _context.Usuarios.FindAsync(usuarioId);
+                if (usuario == null)
+                    return Json(new { success = false, message = "Usuario no encontrado" });
+
+                if (string.IsNullOrWhiteSpace(usuario.email))
+                    return Json(new { success = false, message = "El usuario no tiene un email válido" });
+
+                var asunto = "Te extrañamos en Farmacia El Palenque";
+                var mensaje = $"¡Hola {usuario.nombre}! Ha pasado un tiempo desde tu última visita a nuestra farmacia. Queríamos recordarte que estamos aquí para ayudarte. ¡Esperamos verte pronto!";
+
+                await _emailSender.SendEmailAsync(usuario.email, asunto, mensaje);
+
+                return Json(new { success = true, message = "Aviso enviado correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

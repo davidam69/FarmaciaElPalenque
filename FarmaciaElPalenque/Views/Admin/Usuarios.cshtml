@@ -14,6 +14,9 @@
 {
     <div class="alert alert-danger">@Html.Raw(TempData["Error"])</div>
 }
+<p>
+    <a asp-action="Panel" class="btn btn-success"><i class="bi bi-arrow-left me-1"></i>Volver al Panel</a>
+</p>
 
 <table class="table table-bordered">
     <thead>
@@ -23,6 +26,7 @@
             <th>Email</th>
             <th>Rol</th>
             <th style="width:140px;">Acciones</th>
+            <th style="width:160px;">Historial</th>
         </tr>
     </thead>
     <tbody>
@@ -41,6 +45,17 @@
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No disponible</span>
+                    }
+                </td>
+                <td>
+                    @if (u.rol != "Administrador")
+                    {
+                        <a asp-controller="Pedidos" asp-action="HistorialUsuario" asp-route-usuarioId="@u.id"
+                           class="btn btn-info btn-sm">Ver Compras</a>
                     }
                     else
                     {

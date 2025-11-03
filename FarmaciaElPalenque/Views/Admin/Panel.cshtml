@@ -25,6 +25,13 @@ var nombre = Context.Session.GetString("NombreCompleto") ?? "Administrador";
         <div class="alert alert-danger text-center mb-4">@Html.Raw(TempData["Error"])</div>
     }
 
+    @if (Context.Session.GetString("Rol") == "Administrador")
+    {
+        <div class="alert alert-info text-center mb-4">
+            Estás en modo <strong>Administrador</strong>. La compra y el carrito están deshabilitados.
+        </div>
+    }
+
     <!-- Columnas -->
     <div class="row g-4">
         <!-- Usuarios -->
@@ -47,7 +54,7 @@ var nombre = Context.Session.GetString("NombreCompleto") ?? "Administrador";
                         </a>
 
                         <!-- Crear nuevo usuario -->
-                        <a asp-controller="Cuenta" asp-action="Registro"
+                        <a asp-controller="Cuenta" asp-action="Acceso"
                            class="btn btn-primary btn-fat">
                             <i class="bi bi-person-plus-fill me-1"></i> Agregar usuario
                         </a>

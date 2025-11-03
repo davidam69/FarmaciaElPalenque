@@ -1,27 +1,46 @@
-﻿﻿@{
-ViewData["Title"] = "Compra realizada";
+﻿@{
+    ViewData["Title"] = "Compra realizada";
+    var numero = ViewBag.Numero as string ?? "";
 }
 
-<h2>¡Gracias por tu compra!</h2>
+<div class="confirm-container">
+    <div class="confirm-card">
 
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["Mensaje"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        <h2 class="text-center fw-bold mb-3">
+            🎉 ¡Gracias por tu compra!
+        </h2>
+
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Mensaje"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(numero))
+        {
+            <p class="text-center fs-5 mb-4">
+                N.º de factura: <strong>@numero</strong>
+            </p>
+        }
+
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-action="DescargarFactura" asp-route-numero="@numero"
+               class="btn btn-primary btn-lg shadow-sm">
+                <i class="bi bi-filetype-pdf"></i> Descargar factura (PDF)
+            </a>
+
+            <a asp-controller="Principal" asp-action="Index"
+               class="btn btn-outline-secondary btn-lg shadow-sm">
+                <i class="bi bi-house-door"></i> Volver al inicio
+            </a>
+
+            <a asp-controller="Pedidos" asp-action="MisCompras" 
+            class="btn btn-outline-primary ms-2">
+            <i class="bi bi-clock"></i>Ver historial
+            </a>
+        </div>
     </div>
+</div>
 }
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @Html.Raw(TempData["Error"])
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </div>
-}
-
-@if (ViewBag.Mensaje != null)
-{
-    <div class="alert alert-info">@ViewBag.Mensaje</div>
-}
-
-<a asp-controller="Principal" asp-action="Index" class="btn btn-primary">Volver al inicio</a>

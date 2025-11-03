@@ -1,54 +1,32 @@
-﻿@{
+﻿@model Usuario
+@{
     ViewData["Title"] = "Acceso";
-}
-
-@section Styles {
-    <style>
-        .auth-wrap {
-            background: #f6f9fc;
-            padding: 2rem;
-            border-radius: 1rem;
-        }
-
-        .auth-card {
-            background: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,.06);
-            padding: 1.5rem;
-        }
-
-        .benefit {
-            border: 1px solid #eef2f7;
-            border-radius: .75rem;
-            padding: 1rem;
-            text-align: center;
-        }
-
-            .benefit i {
-                font-size: 1.3rem;
-                margin-bottom: .25rem;
-                display: block;
-            }
-
-        .btn-dark-pill {
-            background: #2f2f2f;
-            border: none;
-            border-radius: 2rem;
-            padding: .75rem 1.5rem;
-        }
-    </style>
+    var returnUrl = Context.Request.Query["returnUrl"].ToString();
+    ViewData["ReturnUrl"] = string.IsNullOrEmpty(returnUrl) ? (ViewBag.ReturnUrl ?? "") : returnUrl;
 }
 
 <div class="container my-4">
     <div class="auth-wrap">
+        @{
+            var esAdmin = Context.Session.GetString("Rol") == "Administrador";
+        }
         <div class="row g-4">
             <div class="col-12 col-lg-6">
                 <div class="auth-card h-100">
                     <h4 class="mb-1">Ya tengo una cuenta</h4>
                     <p class="text-muted mb-3">Para iniciar sesión ingresá tu email y contraseña.</p>
 
-                    @await Html.PartialAsync("/Views/Shared/Account/_LoginForm.cshtml",
-                    new FarmaciaElPalenque.Models.Usuario())
+                    @if (!esAdmin)
+                    {
+                        @await Html.PartialAsync("/Views/Shared/Account/_LoginForm.cshtml",
+                        new FarmaciaElPalenque.Models.Usuario())
+                                        }
+                    else
+                    {
+                        <div class="alert alert-info mb-0">
+                            Estás logueado como <strong>Administrador</strong>. Solo se muestra el registro para crear nuevas cuentas.
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -56,6 +34,7 @@
                 <div class="auth-card h-100 d-flex flex-column">
                     <h4 class="mb-1">Crear cuenta</h4>
                     <p class="text-muted mb-3">Creá una cuenta y aprovechá los beneficios.</p>
+
                     <!--
                     <div class="row g-3 mb-3">
                         <div class="col-6 col-md-3"><div class="benefit"><i class="bi bi-basket"></i>Compra rápida</div></div>
@@ -64,6 +43,7 @@
                         <div class="col-6 col-md-3"><div class="benefit"><i class="bi bi-list-check"></i>Datos guardados</div></div>
                     </div>
                     -->
+
                     <div class="flex-grow-1">
                         @await Html.PartialAsync("/Views/Shared/Account/_RegisterForm.cshtml",
                                                 new FarmaciaElPalenque.Models.Usuario { rol = "Cliente" })

@@ -33,6 +33,19 @@
             return View(productoSeleccionado);
         }
 
+        public IActionResult Ofertas()
+        {
+            // Selecciono algunos productos “destacados” (ajustá el criterio a gusto)
+            var productos = _context.Productos
+                .AsNoTracking()
+                .Where(p => p.Stock > 0)
+                .OrderByDescending(p => p.Stock) // por ejemplo: los de mayor stock primero
+                .Take(12)                         // mostramos 12 cards
+                .ToList();
+
+            return View(productos);
+        }
+
         public async Task<IActionResult> TestEmail()
         {
           

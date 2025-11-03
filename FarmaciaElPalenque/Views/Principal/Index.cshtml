@@ -1,10 +1,7 @@
 ﻿@model List<Productos>
 ﻿@{
     ViewData["Title"] = "Nuestros Productos";
-}
-
-@{
-    ViewData["Title"] = "Nuestros Productos";
+    var esAdmin = Context.Session.GetString("Rol") == "Administrador";
 }
 
 @section Styles {
@@ -18,7 +15,11 @@
             <p class="lead text-muted">Calidad y variedad para tu bienestar.</p>
         </div>
     </div>
-
+    @*    
+    <div class="alert alert-info mt-3">
+        Estás en modo <strong>Administrador</strong>. El carrito y las compras están deshabilitados para este rol.
+    </div>
+    *@
     <!-- ✅ Bloque de mensajes -->
     @if (TempData["Mensaje"] != null)
     {
@@ -69,22 +70,33 @@
                                 @producto.precio.ToString("C")
                             </h4>
 
-                            @if (producto.Stock > 0)
+                            @* Si es admin, nunca mostramos el botón de agregar *@
+                            @if (esAdmin)
                             {
-                                <form asp-controller="Carrito" asp-action="Agregar" method="post" class="mt-1">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@producto.id" />
-                                    <input type="hidden" name="cantidad" value="1" />
-                                    <button type="submit" class="btn btn-primary btn-sm w-100 btn-card-moderno">
-                                        <i class="bi bi-cart-plus-fill me-1"></i> Agregar al carrito
-                                    </button>
-                                </form>
+                                <button class="btn btn-secondary btn-sm w-100 mt-1 btn-card-moderno" disabled>
+                                    <i class="bi bi-cart-x me-1"></i> Carrito deshabilitado (Admin)
+                                </button>
                             }
                             else
                             {
-                                <button class="btn btn-secondary btn-sm w-100 mt-1 btn-card-moderno" disabled>
-                                    <i class="bi bi-cart-x me-1"></i> Sin stock
-                                </button>
+                                @* Cliente: respetar stock *@
+                                @if (producto.Stock > 0)
+                                {
+                                    <form asp-controller="Carrito" asp-action="Agregar" method="post" class="mt-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@producto.id" />
+                                        <input type="hidden" name="cantidad" value="1" />
+                                        <button type="submit" class="btn btn-primary btn-sm w-100 btn-card-moderno">
+                                            <i class="bi bi-cart-plus-fill me-1"></i> Agregar al carrito
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary btn-sm w-100 mt-1 btn-card-moderno" disabled>
+                                        <i class="bi bi-cart-x me-1"></i> Sin stock
+                                    </button>
+                                }
                             }
                         </div>
                     </div>

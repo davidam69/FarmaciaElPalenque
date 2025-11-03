@@ -27,7 +27,8 @@
                     {
                         if (resultado.DeberiaAvisarse)
                         {
-                            var cliente = dbContext.Usuarios.FirstOrDefault(u => u.nombre == resultado.Cliente.Nombre);
+                            // BUSCAR POR ID EN LUGAR DE NOMBRE
+                            var cliente = dbContext.Usuarios.FirstOrDefault(u => u.id == resultado.Cliente.UsuarioId);
 
                             if (cliente != null && !string.IsNullOrEmpty(cliente.email))
                             {
