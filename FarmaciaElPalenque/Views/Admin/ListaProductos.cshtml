@@ -1,6 +1,15 @@
 ﻿@model List<Productos>
 <h2>Lista de Productos</h2>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@Html.Raw(TempData["Error"])</div>
+}
+
 <p>
     <a asp-action="CrearProducto" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Agregar Producto</a>
     <a asp-action="Panel" class="btn btn-success"><i class="bi bi-arrow-left me-1"></i>Volver al Panel</a>
@@ -47,8 +56,11 @@
 
                     <td>
                         <input name="[@i].imagenUrl" value="@Model[i].imagenUrl" class="form-control mb-1" />
-                        <img src="@(!string.IsNullOrEmpty(Model[i].imagenUrl) ? "/Images/default.png" : Model[i].imagenUrl)"
-                             width="80" height="80" />
+
+                        <img src="@(string.IsNullOrEmpty(Model[i].imagenUrl)
+                                             ? "/images/default.png"
+                                             : Model[i].imagenUrl)"
+                         width="80" height="80" />
                     </td>
 
                     <td>
@@ -56,13 +68,32 @@
                     </td>
 
                     <td>
-                        <form asp-action="EliminarProducto" asp-route-id="@Model[i].id" method="post" onsubmit="return confirm('¿Eliminar este producto?');">
+                        <form asp-action="EliminarProducto" asp-route-id="@Model[i].id" method="post" class="d-inline eliminar-form">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm eliminar-btn">Eliminar</button>
                         </form>
                     </td>
                 </tr>
             }
+            <script>
+                document.addEventListener('click', async (e) => {
+                  const btn = e.target.closest('.eliminar-btn');
+                  if (!btn) return;
+                  e.preventDefault();
+
+                  const form = btn.closest('form');
+                  const res = await Swal.fire({
+                    title: '¿Eliminar este producto?',
+                    text: 'Esta acción no se puede deshacer.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                  });
+
+                  if (res.isConfirmed) form.submit();
+                });
+            </script>
         </tbody>
     </table>
 </form>

@@ -41,9 +41,9 @@
                     @if (u.email != Context.Session.GetString("Usuario"))
                     {
                         <form asp-controller="Admin" asp-action="EliminarUsuario" asp-route-id="@u.id"
-                              method="post" onsubmit="return confirm('¿Estás seguro de eliminar a este usuario?');">
+                              method="post" class="form-eliminar-usuario">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm btn-eliminar-usuario">Eliminar</button>
                         </form>
                     }
                     else
@@ -66,3 +66,27 @@
         }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.btn-eliminar-usuario');
+        if (!btn) return;
+
+        e.preventDefault(); // Evita que se envíe el form automáticamente
+
+        const form = btn.closest('.form-eliminar-usuario');
+
+        const resultado = await Swal.fire({
+            title: '¿Eliminar usuario?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (resultado.isConfirmed) {
+            form.submit(); // Si confirma → se envía el formulario
+        }
+    });
+</script>
