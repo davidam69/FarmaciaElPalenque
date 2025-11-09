@@ -123,6 +123,8 @@ else
     <div class="grid-cards">
         @foreach (var p in Model)
         {
+            if (p == null) { continue; }
+
             var precio = p.precio;
             var precioUnidadLlevando3 = decimal.Round(precio * FactorDesc, 2);
             var totalPor3 = decimal.Round(precio * 3 * FactorDesc, 2);
@@ -135,7 +137,7 @@ else
                 </div>
                 <div class="p-3">
                     <div class="cat">@p?.Categoria?.nombre</div>
-                    <h5 class="fw-bold mb-1">@p.nombre</h5>
+                    <h5 class="fw-bold mb-1">@p?.nombre</h5>
 
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <span class="precio">@precio.ToString("C")</span>
@@ -153,7 +155,7 @@ else
                     <div class="d-flex gap-2">
                         <form asp-controller="Carrito" asp-action="Agregar" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@p.id" />
+                            <input type="hidden" name="id" value="@p?.id" />
                             <input type="hidden" name="cantidad" value="1" />
                             <button type="submit" class="btn btn-outline-primary btn-sm btn-outline-soft">
                                 <i class="bi bi-cart-plus me-1"></i> Agregar 1
@@ -162,14 +164,14 @@ else
 
                         <form asp-controller="Carrito" asp-action="Agregar" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@p.id" />
+                            <input type="hidden" name="id" value="@p?.id" />
                             <input type="hidden" name="cantidad" value="3" />
                             <button type="submit" class="btn btn-success btn-sm btn-soft">
                                 <i class="bi bi-3-circle me-1"></i> Llevar 3
                             </button>
                         </form>
 
-                        <a asp-action="Detalle" asp-route-id="@p.id" class="btn btn-light btn-sm ms-auto">
+                        <a asp-action="Detalle" asp-route-id="@p?.id" class="btn btn-light btn-sm ms-auto">
                             Ver detalle
                         </a>
                     </div>
@@ -178,4 +180,3 @@ else
         }
     </div>
 }
-
