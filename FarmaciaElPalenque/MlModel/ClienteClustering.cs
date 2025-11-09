@@ -1,62 +1,47 @@
-﻿namespace FarmaciaElPalenque.MlModel
+﻿public class ClienteClustering
 {
-    public class ClienteClustering
+    private readonly string _connectionString;
+
+    public ClienteClustering(string connectionString)
     {
-        private readonly string connectionString;
-        private readonly MLContext mlContext;
-
-        public ClienteClustering(string connectionString)
+        if (string.IsNullOrEmpty(connectionString))
         {
-            this.connectionString = connectionString;
-            this.mlContext = new MLContext();
+            throw new ArgumentException("La cadena de conexión no puede ser nula o vacía", nameof(connectionString));
         }
+        _connectionString = connectionString;
+    }
 
-        public List<(ClienteData Cliente, uint Cluster, bool DeberiaAvisarse)> EjecutarClustering()
+    public List<(ClienteData Cliente, uint PredictedClusterId, bool DeberiaAvisarse)> EjecutarClustering()
+    {
+        var mlContext = new MLContext();
+        var clientes = new List<ClienteData>();
+
+        var query = @"
+            SELECT 
+                u.id as UsuarioId,
+                u.nombre,
+                COUNT(p.id) AS ComprasTotales,
+                SUM(p.total) AS MontoGastado,
+                DATEDIFF(day, MAX(p.fecha), GETDATE()) AS DiasDesdeUltimaCompra,
+                CASE 
+                    WHEN COUNT(p.id) > 1 THEN 
+                        AVG(DATEDIFF(day, p_anterior.fecha, p.fecha))
+                    ELSE 0 
+                END AS PromedioDiasEntreCompras
+            FROM Usuarios u
+            LEFT JOIN Pedidos p ON u.id = p.usuarioId
+            LEFT JOIN Pedidos p_anterior ON p_anterior.usuarioId = u.id 
+                AND p_anterior.fecha = (
+                    SELECT MAX(fecha) 
+                    FROM Pedidos p2 
+                    WHERE p2.usuarioId = u.id AND p2.fecha < p.fecha
+                )
+            GROUP BY u.id, u.nombre
+            HAVING COUNT(p.id) >= 1;";
+
+        try
         {
-            var clientes = new List<ClienteData>();
-
-            // CAMBIO 1: SE ELIMINAN 'u.edad' DEL SELECT Y DEL GROUP BY EN EL QUERY SQL
-            /*
-            var query = @"
-                SELECT
-                    u.nombre,
-                    COUNT(c.id) AS ComprasTotales,
-                    SUM(c.montoTotal) AS MontoGastado,
-                    DATEDIFF(day, MAX(c.fechaCompra), GETDATE()) AS DiasDesdeUltimaCompra,
-                    AVG(DATEDIFF(day, c_anterior.fechaCompra, c.fechaCompra)) AS PromedioDiasEntreCompras
-                FROM Usuarios u
-                LEFT JOIN Compras c ON u.id = c.usuarioId
-                LEFT JOIN Compras c_anterior ON c_anterior.usuarioId = u.id AND c_anterior.fechaCompra < c.fechaCompra
-                GROUP BY u.nombre 
-                HAVING COUNT(c.id) > 1;
-            ";
-            */
-            var query = @"
-                SELECT 
-                    u.id as UsuarioId,
-                    u.nombre,
-                    COUNT(p.id) AS ComprasTotales,
-                    SUM(p.total) AS MontoGastado,
-                    DATEDIFF(day, MAX(p.fecha), GETDATE()) AS DiasDesdeUltimaCompra,
-                    CASE 
-                        WHEN COUNT(p.id) > 1 THEN 
-                            AVG(DATEDIFF(day, p_anterior.fecha, p.fecha))
-                        ELSE 0 
-                    END AS PromedioDiasEntreCompras
-                FROM Usuarios u
-                LEFT JOIN Pedidos p ON u.id = p.usuarioId
-                LEFT JOIN Pedidos p_anterior ON p_anterior.usuarioId = u.id 
-                    AND p_anterior.fecha = (
-                        SELECT MAX(fecha) 
-                        FROM Pedidos p2 
-                        WHERE p2.usuarioId = u.id AND p2.fecha < p.fecha
-                    )
-                GROUP BY u.id, u.nombre
-                HAVING COUNT(p.id) >= 1;  -- Incluye clientes con al menos 1 compra
-            ";
-
-            /*
-            using (var conexion = new SqlConnection(connectionString))
+            using (var conexion = new SqlConnection(_connectionString))
             {
                 conexion.Open();
                 using (var comando = new SqlCommand(query, conexion))
@@ -66,29 +51,8 @@
                     {
                         clientes.Add(new ClienteData
                         {
-                            Nombre = lector["nombre"].ToString(),
-                            // CAMBIO 2: SE ELIMINA LA LECTURA DE 'Edad'
-                            ComprasMensuales = lector["ComprasTotales"] == DBNull.Value ? 0 : Convert.ToSingle(lector["ComprasTotales"]),
-                            MontoGastado = lector["MontoGastado"] == DBNull.Value ? 0 : Convert.ToSingle(lector["MontoGastado"]),
-                            DiasDesdeUltimaCompra = lector["DiasDesdeUltimaCompra"] == DBNull.Value ? 0 : Convert.ToSingle(lector["DiasDesdeUltimaCompra"]),
-                            PromedioDiasEntreCompras = lector["PromedioDiasEntreCompras"] == DBNull.Value ? 0 : Convert.ToSingle(lector["PromedioDiasEntreCompras"])
-                        });
-                    }
-                }
-            }
-            */
-            using (var conexion = new SqlConnection(connectionString))
-            {
-                conexion.Open();
-                using (var comando = new SqlCommand(query, conexion))
-                using (var lector = comando.ExecuteReader())
-                {
-                    while (lector.Read())
-                    {
-                        clientes.Add(new ClienteData
-                        {
-                            UsuarioId = Convert.ToInt32(lector["UsuarioId"]),
-                            Nombre = lector["nombre"].ToString(),
+                            UsuarioId = lector["UsuarioId"] == DBNull.Value ? 0 : Convert.ToInt32(lector["UsuarioId"]),
+                            Nombre = lector["nombre"] == DBNull.Value ? string.Empty : lector["nombre"].ToString() ?? string.Empty,
                             ComprasTotales = lector["ComprasTotales"] == DBNull.Value ? 0 : Convert.ToSingle(lector["ComprasTotales"]),
                             MontoGastado = lector["MontoGastado"] == DBNull.Value ? 0 : Convert.ToSingle(lector["MontoGastado"]),
                             DiasDesdeUltimaCompra = lector["DiasDesdeUltimaCompra"] == DBNull.Value ? 0 : Convert.ToSingle(lector["DiasDesdeUltimaCompra"]),
@@ -96,6 +60,12 @@
                         });
                     }
                 }
+            }
+
+            // Validar que hay datos para procesar
+            if (!clientes.Any())
+            {
+                return new List<(ClienteData, uint, bool)>();
             }
 
             var dataView = mlContext.Data.LoadFromEnumerable(clientes);
@@ -129,26 +99,49 @@
 
             return combinados;
         }
-
-        public void AnalizarDiasDeCompra(List<(ClienteData Cliente, uint Cluster)> resultados)
+        catch (Exception ex)
         {
-            var agrupados = resultados
-                .Select(r => new { r.Cliente, r.Cluster })
-                .GroupBy(x => x.Cluster);
+            // Loggear el error (deberías usar ILogger en producción)
+            Console.WriteLine($"Error en EjecutarClustering: {ex.Message}");
+            throw;
+        }
+    }
 
-            foreach (var grupo in agrupados)
+    public void AnalizarDiasDeCompra(List<(ClienteData Cliente, uint Cluster)> resultados)
+    {
+        var agrupados = resultados
+            .Select(r => new { r.Cliente, r.Cluster })
+            .GroupBy(x => x.Cluster);
+
+        foreach (var grupo in agrupados)
+        {
+            Console.WriteLine($"Cluster {grupo.Key}:");
+            var dias = grupo
+                .Select(x => (int)x.Cliente.DiasDesdeUltimaCompra)
+                .GroupBy(d => d)
+                .OrderByDescending(g => g.Count());
+
+            foreach (var dia in dias)
             {
-                Console.WriteLine($"Cluster {grupo.Key}:");
-                var dias = grupo
-                    .Select(x => (int)x.Cliente.DiasDesdeUltimaCompra)
-                    .GroupBy(d => d)
-                    .OrderByDescending(g => g.Count());
-
-                foreach (var dia in dias)
-                {
-                    Console.WriteLine($"  Día {dia.Key}: {dia.Count()} clientes");
-                }
+                Console.WriteLine($"  Día {dia.Key}: {dia.Count()} clientes");
             }
         }
     }
+}
+
+// Clases de apoyo
+public class ClienteData
+{
+    public int UsuarioId { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+    public float ComprasTotales { get; set; }
+    public float MontoGastado { get; set; }
+    public float DiasDesdeUltimaCompra { get; set; }
+    public float PromedioDiasEntreCompras { get; set; }
+}
+
+public class PrediccionCliente
+{
+    [ColumnName("PredictedLabel")]
+    public uint PredictedClusterId { get; set; }
 }

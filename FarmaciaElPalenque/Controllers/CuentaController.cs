@@ -21,7 +21,40 @@
             {
                 return View(usuario);
             }
-            usuario.email = usuario.email?.Trim().ToLowerInvariant()!;
+
+            var rolUsuarioActual = HttpContext.Session.GetString("Rol");
+
+            // Validación para administradores creando otros administradores
+            if (rolUsuarioActual == "Administrador" && usuario.rol == "Administrador")
+            {
+                if (string.IsNullOrEmpty(usuario.email))
+                {
+                    ModelState.AddModelError("email", "El email es requerido para administradores");
+                    return View(usuario);
+                }
+
+                // Forzar dominio @palenque.com
+                var nombreUsuario = usuario.email.Contains('@')
+                    ? usuario.email.Split('@')[0].Trim()
+                    : usuario.email.Trim();
+
+                usuario.email = $"{nombreUsuario}@palenque.com".ToLowerInvariant();
+
+                // Validar que no exista otro administrador con el mismo email
+                var adminExistente = _context.Usuarios
+                    .Any(u => u.email == usuario.email && u.rol == "Administrador");
+
+                if (adminExistente)
+                {
+                    ModelState.AddModelError("email", "Ya existe un administrador con este email");
+                    return View(usuario);
+                }
+            }
+            else
+            {
+                usuario.email = usuario.email?.Trim().ToLowerInvariant()!;
+            }
+
             if (string.IsNullOrEmpty(usuario.rol))
             {
                 usuario.rol = "Cliente";
@@ -30,6 +63,7 @@
             _context.Usuarios.Add(usuario);
             _context.SaveChanges();
 
+            TempData["Mensaje"] = "Usuario creado exitosamente";
             return RedirectToAction("Acceso");
         }
 
