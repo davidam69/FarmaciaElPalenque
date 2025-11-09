@@ -11,7 +11,7 @@
         private readonly AppDbContext _context;
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Pago()
         {
             if (EsAdmin())
             {
@@ -53,14 +53,15 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Pagar(PagoViewModel model)
+        public IActionResult Pago(PagoViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 var carrito = HttpContext.Session.ObtenerCarrito() ?? new List<Carrito>();
                 model.Items = carrito;
                 model.Total = carrito.Sum(i => i.Subtotal);   // (Este total es sin promo; si querés mostrar el descuento en la vista de checkout, avísame y lo cambiamos en el GET Index)
-                return View("Index", model);
+                // return View("Index", model);
+                return View("Pago", model);
             }
 
             if (EsAdmin())
@@ -75,7 +76,7 @@
             var email = HttpContext.Session.GetString("Usuario") ?? "";
             var user = _context.Usuarios.FirstOrDefault(u => u.email == email);
             if (user == null)
-                return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Index", "Checkout") });
+                return RedirectToAction("Acceso", "Cuenta", new { returnUrl = Url.Action("Pago", "Checkout") });
 
             using var tx = _context.Database.BeginTransaction();
             try
