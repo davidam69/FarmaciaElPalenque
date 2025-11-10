@@ -1,0 +1,171 @@
+ESTRUCTURA DE TABLAS
+
+TABLA: Usuarios
+
+    id (PK, int) - Identificador único del usuario
+
+    nombre (nvarchar) - Nombre del usuario
+
+    apellido (nvarchar) - Apellido del usuario
+
+    email (nvarchar) - Correo electrónico
+
+    passwordHash (nvarchar) - Contraseña encriptada
+
+    rol (nvarchar) - Rol del usuario (Administrador/Cliente)
+
+
+TABLA: Categorias
+
+    id (PK, int) - Identificador único de categoría
+
+    nombre (nvarchar) - Nombre de la categoría
+
+
+TABLA: Productos
+
+    id (PK, int) - Identificador único del producto
+
+    nombre (nvarchar) - Nombre del producto
+
+    precio (decimal) - Precio actual del producto
+
+    categoriaId (FK, int) - Categoría a la que pertenece
+
+    imagenUrl (nvarchar) - URL de la imagen del producto
+
+    Stock (int) - Cantidad en inventario
+
+    EnOferta (bit) - Indica si está en oferta
+
+    FechaFinOferta (datetime) - Fecha fin de la oferta
+
+    PorcentajeDescuento (decimal) - Porcentaje de descuento
+
+    PrecioOriginal (decimal) - Precio original antes de oferta
+
+
+TABLA: Pedidos
+
+    id (PK, int) - Identificador único del pedido
+
+    numero (nvarchar) - Número único del pedido (formato F-YYYYMMDD-HHMMSS)
+
+    fecha (datetime) - Fecha y hora del pedido
+
+    usuarioId (FK, int) - Usuario que realizó el pedido
+
+    total (decimal) - Monto total del pedido
+
+
+TABLA: PedidoDetalles
+
+    id (PK, int) - Identificador único del detalle
+
+    pedidoId (FK, int) - Pedido al que pertenece
+
+    productoId (FK, int) - Producto incluido en el pedido
+
+    nombre (nvarchar) - Nombre del producto al momento del pedido
+
+    precioUnitario (decimal) - Precio unitario al momento del pedido
+
+    cantidad (int) - Cantidad solicitada
+
+
+RELACIONES ENTRE TABLAS
+
+RELACIÓN 1: Usuarios → Pedidos
+
+    Tipo: Uno a Muchos (1:N)
+
+    Descripción: Un usuario puede tener muchos pedidos
+
+    Clave Foránea: Pedidos.usuarioId → Usuarios.id
+
+    Restricción: FK_Pedidos_Usuarios_usuarioId
+
+RELACIÓN 2: Pedidos → PedidoDetalles
+
+    Tipo: Uno a Muchos (1:N)
+
+    Descripción: Un pedido puede tener muchos detalles/items
+
+    Clave Foránea: PedidoDetalles.pedidoId → Pedidos.id
+
+    Restricción: FK_PedidoDetalles_Pedidos_pedidoId
+
+RELACIÓN 3: Productos → PedidoDetalles
+
+    Tipo: Uno a Muchos (1:N)
+
+    Descripción: Un producto puede aparecer en muchos detalles de pedido
+
+    Clave Foránea: PedidoDetalles.productoId → Productos.id
+
+    Restricción: FK_PedidoDetalles_Productos_productoId
+
+RELACIÓN 4: Categorias → Productos
+
+    Tipo: Uno a Muchos (1:N)
+
+    Descripción: Una categoría puede contener muchos productos
+
+    Clave Foránea: Productos.categoriaId → Categorias.id
+
+    Restricción: FK_Productos_Categorias_categoriaId
+
+
+DIAGRAMA RELACIONAL
+
+Usuarios (1) ──────── (N) Pedidos (1) ──────── (N) PedidoDetalles (N) ──────── (1) Productos (N) ──────── (1) Categorias
+
+
+┌─────────────┐       ┌───────────┐       ┌─────────────────┐       ┌─────────────┐
+│   USUARIOS  │       │  PEDIDOS  │       │ PEDIDO_DETALLES │       │  PRODUCTOS  │
+├─────────────┤       ├───────────┤       ├─────────────────┤       ├─────────────┤
+│ id (PK)     │1    N │ id (PK)   │1     N│ id (PK)         │N     1│ id (PK)     │
+│ nombre      │────── │ usuarioId │────-──│ pedidoId (FK)   │───────│ nombre      │
+│ apellido    │       │ (FK)      │       │ productoId (FK) │       │ precio      │
+│ email       │       │ numero    │       │ nombre          │       │ categoriaId │
+│ passwordHash│       │ fecha     │       │ precioUnitario  │       │ (FK)        │
+│ rol         │       │ total     │       │ cantidad        │       │ imagenUrl   │
+└─────────────┘       └───────────┘       └─────────────────┘       │ Stock       │
+                                                                    │ EnOferta    │
+                                                                    │ FechaFinOferta│
+                                                                    │ PorcentajeDescuento│
+                                                                    │ PrecioOriginal│
+                                                                    └─────────────┘
+                                                                         │
+                                                                         │ N
+                                                                         │
+                                                                    ┌─────────────┐
+                                                                    │ CATEGORIAS  │
+                                                                    ├─────────────┤
+                                                                    │ id (PK)     │
+                                                                    │ nombre      │
+                                                                    └─────────────┘
+
+
+INTEGRIDAD REFERENCIAL
+
+    Todas las tablas tienen clave primaria autoincremental
+
+    Las claves foráneas garantizan la consistencia de datos
+
+    No se pueden eliminar registros referenciados
+
+    Las consultas JOIN son optimizadas por el motor de base de datos
+
+MIGRACIONES
+
+    Tabla: __EFMigrationsHistory
+
+    Campos: MigrationId, ProductVersion
+
+    Propósito: Control de versiones de Entity Framework
+
+Documentación generada para el proyecto académico Farmacia Palenque
+Base de datos: SQL Server
+ORM: Entity Framework Core
+*Fecha de generación: 2025-11-10*
