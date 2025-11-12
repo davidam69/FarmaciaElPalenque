@@ -46,6 +46,12 @@
             return View(productos);
         }
 
+        // AGREGADO DE SEBA - VISTA CONTACTO //
+        public IActionResult Contacto()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> TestEmail()
         {
           

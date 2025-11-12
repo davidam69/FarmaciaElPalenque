@@ -66,3 +66,18 @@
 -- cambio de seba --
 prueba de readme editado por seba
 
+-- CAMBIOS AGREGADOS PARA LA VISTA CONTACTO --
+
+- PrincipalControler.cs - linea 49
+  - Se agregó el método Contacto que retorna la vista Contacto.
+
+- En la carpeta Views/Principal se creó un archivo llamado Contacto.cshtml.
+
+- cambios en _layout.cshtml - linea 42
+  - Se agregó un enlace en el menú de navegación que apunta a la vista Contacto.
+
+- Program.cs - linea 35
+  - correcion de comentario.
+
+  -- fin cambios vista contacto --
+
