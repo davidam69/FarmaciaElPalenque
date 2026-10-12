@@ -1,0 +1,9 @@
+@model List<FarmaciaElPalenque.Models.Categoria>
+
+<h2>Categorías disponibles</h2>
+<ul>
+@foreach (var categoria in Model)
+{
+    <li>@categoria.nombre (@(categoria.Productos?.Count ?? 0) productos)</li>
+}
+</ul>

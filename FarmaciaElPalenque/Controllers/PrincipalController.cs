@@ -31,5 +31,14 @@
             }
             return View(productoSeleccionado);
         }
+
+        public IActionResult VistaDinamica()
+        {
+            var categorias = _context.Categorias
+                .Include(c => c.Productos)
+                .ToList();
+
+            return View(categorias);
+        }
     }
 }
